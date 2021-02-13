@@ -4,6 +4,10 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using EmbedIO;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Serilog;
+using Serilog.Extensions.Logging;
 using SIPSorcery.Net;
 using SIPSorceryMedia.Abstractions;
 
@@ -32,6 +36,8 @@ namespace webrtc_echo
                     }
                 }
             }
+
+            AddConsoleLogger();
 
             // Start the web server.
             using (var server = CreateWebServer(url))
@@ -73,6 +79,19 @@ namespace webrtc_echo
                     await JsonSerializer.SerializeAsync(responseStm, answer, jsonOptions);
                 }
             }
+        }
+
+        private static Microsoft.Extensions.Logging.ILogger AddConsoleLogger(
+            Serilog.Events.LogEventLevel logLevel = Serilog.Events.LogEventLevel.Debug)
+        {
+            var serilogLogger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .MinimumLevel.Is(logLevel)
+                .WriteTo.Console()
+                .CreateLogger();
+            var factory = new SerilogLoggerFactory(serilogLogger);
+            SIPSorcery.LogFactory.Set(factory);
+            return factory.CreateLogger<Program>();
         }
     }
 
