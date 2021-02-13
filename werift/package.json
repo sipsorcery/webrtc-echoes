@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node-dev main",
+    "server": "ts-node-dev server",
     "client": "ts-node-dev client"
   },
   "dependencies": {
