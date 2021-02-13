@@ -6,17 +6,12 @@
 
         "use strict";
 
-        function Signaler(signalUrl) {
+        function RestSignaler(signalUrl) {
 
             this.sendOffer = async function (offer) {
                 return (await fetch(signalUrl, {
                     method: 'POST',
                     body: JSON.stringify(offer),
-                    /* body: JSON.stringify({
-                        sdp: offer.sdp,
-                        type: offer.type,
-                        video_transform: 'none'
-                    }), */
                     headers: { 'Content-Type': 'application/json' }
                 })).json();
             }
@@ -31,9 +26,12 @@
         const STUN_SERVER = "stun:stun.sipsorcery.com";
         const NOISE_FRAME_WIDTH = 80;
         const NOISE_FRAME_HEIGHT = 60;
+        const ICE_GATHERING_TIMEOUT = 3000;
 
         var pc;
+        var signaler;
         var isClosed = true;
+        var isOfferSent = false;
 
         window.onload = () => {
             let host = window.location.hostname.concat(window.location.port ? `:${window.location.port}` : "");
@@ -47,7 +45,7 @@
                 await closePeer();
             }
 
-            isClosed = false;
+            isOfferSent = false;
 
             let signalingUrl = document.getElementById('signalingUrl').value;
 
@@ -55,7 +53,7 @@
             let noiseStm = whiteNoise(NOISE_FRAME_WIDTH, NOISE_FRAME_HEIGHT);
             document.getElementById("localVideoCtl").srcObject = noiseStm;
 
-            let signaler = new Signaler(signalingUrl);
+            signaler = new RestSignaler(signalingUrl);
 
             // Create the peer connections.
             pc = createPeer("echoVideoCtl", noiseStm);
@@ -63,40 +61,52 @@
             pc.onicegatheringstatechange = async () => {
                 console.log(`onicegatheringstatechange: ${pc.iceGatheringState}.`);
 
-                if(pc.iceGatheringState === 'complete') {
-                    var offerWithIce = pc.localDescription;
-                    console.log(offerWithIce);
-                    var answer = await signaler.sendOffer(offerWithIce);
-
-                    if (answer != null) {
-                        console.log(answer.sdp)
-                        await pc.setRemoteDescription(answer);
-                    }
-                    else {
-                        console.log("Failed to get an answer from the Echo Test server.")
-                        pc.close();
-                    }
+                if (pc.iceGatheringState === 'complete') {
+                    sendOffer();
                 }
             }
 
             let offer = await pc.createOffer();
             await pc.setLocalDescription(offer);
+
+            setTimeout(sendOffer, ICE_GATHERING_TIMEOUT);
+        }
+
+        async function sendOffer() {
+
+            if (!isOfferSent) {
+                isOfferSent = true;
+
+                var offerWithIce = pc.localDescription;
+                console.log(offerWithIce);
+                var answer = await signaler.sendOffer(offerWithIce);
+
+                if (answer != null) {
+                    console.log(answer.sdp)
+                    await pc.setRemoteDescription(answer);
+                }
+                else {
+                    console.log("Failed to get an answer from the Echo Test server.")
+                    pc.close();
+                }
+            }
         }
 
         function createPeer(videoCtlID, noiseStm) {
 
             console.log("Creating peer ...");
+            isClosed = false;
 
             let pc = new RTCPeerConnection({ iceServers: [{ urls: STUN_SERVER }] });
             noiseStm.getTracks().forEach(track => pc.addTrack(track, noiseStm));
             pc.ontrack = evt => document.getElementById(videoCtlID).srcObject = evt.streams[0];
+            pc.onicecandidate = evt => evt.candidate && console.log(evt.candidate);
 
             // Diagnostics.
-            //pc.onicegatheringstatechange = () => console.log(`onicegatheringstatechange: ${pc.iceGatheringState}.`);
+            pc.onicegatheringstatechange = () => console.log(`onicegatheringstatechange: ${pc.iceGatheringState}.`);
             pc.oniceconnectionstatechange = () => console.log(`oniceconnectionstatechange: ${pc.iceConnectionState}.`);
             pc.onsignalingstatechange = () => console.log(`onsignalingstatechange: ${pc.signalingState}.`);
             pc.onconnectionstatechange = () => console.log(`onconnectionstatechange: ${pc.connectionState}.`);
-            pc.onicecandidate = evt => evt.candidate && console.log(evt.candidate);
 
             return pc;
         }
