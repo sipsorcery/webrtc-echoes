@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["esnext"],
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "pretty": true,
+    "noUnusedLocals": false,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": false
+  },
+  "include": ["."]
+}

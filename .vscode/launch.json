@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "werift:server",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/werift/node_modules/ts-node-dev/lib/bin.js",
+      "protocol": "inspector",
+      "args": [
+        "--project",
+        "${workspaceRoot}/werift/tsconfig.json",
+        "${workspaceRoot}/werift/server.ts",
+        "--static",
+        "${workspaceRoot}/aiortc"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "name": "werift:client",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/werift/node_modules/ts-node-dev/lib/bin.js",
+      "protocol": "inspector",
+      "args": [
+        "--project",
+        "${workspaceRoot}/werift/tsconfig.json",
+        "${workspaceRoot}/werift/client.ts"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}
