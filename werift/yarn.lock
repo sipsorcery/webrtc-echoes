@@ -54,11 +54,6 @@
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-1.3.2.tgz#93e25bf9ee75fe0fd80b594bc4feb0e862111b5a"
   integrity sha512-YATxVxgRqNH6nHEIsvg6k2Boc1JHI9ZbH5iWFFv/MTkchz3b1ieGDa5T0a9RznNdI0KhVbdbWSN+KWWrQZRxTw==
 
-"@types/minimist@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.1.tgz#283f669ff76d7b8260df8ab7a4262cc83d988256"
-  integrity sha512-fZQQafSREFyuZcdWFAExYjBiCL7AUCdgsk80iO0q4yihYYdcIiH28CcuPTGFgLOCC8RlW49GSQxdHwZP+I7CNg==
-
 "@types/node@*":
   version "14.14.27"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.27.tgz#c7127f8da0498993e13b1a42faf1303d3110d2f2"
@@ -1306,10 +1301,10 @@ vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
-werift@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/werift/-/werift-0.2.0.tgz#013084ac8c3f8e739bd1c286fea99d306f3b0063"
-  integrity sha512-mmudBr43s5yn1vWcgrtSYJ6ChTxorQ2R56HpjSIDy0m+skty2NDtSwxB9BTq8DK/DDDwZO1sylcyPSebRChQVw==
+werift@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/werift/-/werift-0.2.1.tgz#13da80b2bbda5053a1e0a66efcf679710c321523"
+  integrity sha512-F7/J/3T3JexxRdICK1NLfiqQpV7YGpfc/zt0ebs9B1WJxJ3Jddb5yJWLUUUBU7jIUDk3m+hR01g1JKg94Am8ZQ==
   dependencies:
     "@fidm/x509" "^1.2.1"
     aes-js "^3.1.2"
