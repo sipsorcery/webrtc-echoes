@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using EmbedIO;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Serilog;
 using Serilog.Extensions.Logging;
 using SIPSorcery.Net;
@@ -43,8 +43,17 @@ namespace webrtc_echo
             using (var server = CreateWebServer(url))
             {
                 server.RunAsync();
-                Console.WriteLine("Press any key to exit...");
-                Console.ReadKey(true);
+
+                Console.WriteLine("<ctrl>-c to exit.");
+                var mre = new ManualResetEvent(false);
+                Console.CancelKeyPress += (sender, eventArgs) =>
+                {
+                    // cancel the cancellation to allow the program to shutdown cleanly
+                    eventArgs.Cancel = true;
+                    mre.Set();
+                };
+
+                mre.WaitOne();
             }
         }
 
