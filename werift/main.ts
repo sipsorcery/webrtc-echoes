@@ -15,6 +15,7 @@ const args = yargs
   })
   .option("cert-file", { description: "SSL certificate file (for HTTPS)" })
   .option("key-file", { description: "SSL key file (for HTTPS)" })
+  .option("static", {})
   .help().argv;
 
 const app = express();
@@ -32,7 +33,7 @@ if (args["cert-file"] && args["key-file"]) {
 } else {
   app.listen(args.port, args.host);
 }
-app.use(express.static("../aiortc"));
+app.use(express.static((args.static as string) || "../aiortc"));
 
 app.post("/offer", async (req, res) => {
   const offer = req.body;

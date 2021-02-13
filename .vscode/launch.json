@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "werift",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/werift/node_modules/ts-node-dev/lib/bin.js",
+      "protocol": "inspector",
+      "args": [
+        "--project",
+        "${workspaceRoot}/werift/tsconfig.json",
+        "${workspaceRoot}/werift/main.ts",
+        "--static",
+        "${workspaceRoot}/aiortc"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}
