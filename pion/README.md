@@ -4,7 +4,7 @@ A Go application that runs a WebRTC Echo Server.
 
 **Prerequisites**
 
- - Install teh Go language SDK https://golang.org/doc/install
+ - Install the Go language SDK https://golang.org/doc/install
 
 **Usage**
 
