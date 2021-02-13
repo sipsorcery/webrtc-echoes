@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30524.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "webrtc-echo", "webrtc-echo.csproj", "{FCB6D8B1-6788-4560-B10F-3238C6A2DF98}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIPSorcery", "..\..\sipsorcery-core\src\SIPSorcery.csproj", "{0E18553B-A1E0-4DE2-8982-82A1A423CA6B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FCB6D8B1-6788-4560-B10F-3238C6A2DF98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCB6D8B1-6788-4560-B10F-3238C6A2DF98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCB6D8B1-6788-4560-B10F-3238C6A2DF98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCB6D8B1-6788-4560-B10F-3238C6A2DF98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E18553B-A1E0-4DE2-8982-82A1A423CA6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E18553B-A1E0-4DE2-8982-82A1A423CA6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E18553B-A1E0-4DE2-8982-82A1A423CA6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E18553B-A1E0-4DE2-8982-82A1A423CA6B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {633A2FEE-1E6C-46B7-877F-F516797D79CA}
+	EndGlobalSection
+EndGlobal
