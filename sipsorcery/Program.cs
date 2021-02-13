@@ -15,7 +15,7 @@ namespace webrtc_echo
 {
     class Program
     {
-        private const string DEFAULT_WEBSERVER_LISTEN_URL = "http://*:9696/";
+        private const string DEFAULT_WEBSERVER_LISTEN_URL = "http://*:8080/";
 
         private static List<IPAddress> _icePresets = new List<IPAddress>();
 
