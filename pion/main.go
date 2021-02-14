@@ -118,7 +118,7 @@ func main() {
 
 	pcs = []*webrtc.PeerConnection{}
 
-	http.Handle("/", http.FileServer(http.Dir("../aiortc")))
+	http.Handle("/", http.FileServer(http.Dir("../html")))
 	http.HandleFunc("/offer", offer)
 
 	addr := fmt.Sprintf("%s:%d", *host, *port)

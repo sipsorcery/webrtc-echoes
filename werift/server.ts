@@ -33,7 +33,7 @@ if (args["cert-file"] && args["key-file"]) {
 } else {
   app.listen(args.port, args.host);
 }
-app.use(express.static((args.static as string) || "../aiortc"));
+app.use(express.static((args.static as string) || "../html"));
 
 app.post("/offer", async (req, res) => {
   const offer = req.body;

@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Serilog;
+using Serilog.Events;
 using Serilog.Extensions.Logging;
 using SIPSorcery.Media;
 using SIPSorcery.Net;
@@ -27,7 +25,7 @@ namespace webrtc_echo
         {
             Console.WriteLine("Starting webrtc echo test client.");
 
-            logger = AddConsoleLogger();
+            logger = AddConsoleLogger(LogEventLevel.Debug);
 
             var pc = CreatePeerConnection();
             var offer = pc.createOffer(null);
@@ -51,7 +49,7 @@ namespace webrtc_echo
                 Console.WriteLine("Failed to parse SDP answer from echo server.");
             }
 
-            Console.WriteLine("<ctrl>-c to exit.");
+            Console.WriteLine("ctrl-c to exit.");
             var mre = new ManualResetEvent(false);
             Console.CancelKeyPress += (sender, eventArgs) =>
             {
@@ -81,9 +79,13 @@ namespace webrtc_echo
                 audioSource.SetAudioSourceFormat(formats.First());
 
             pc.onicecandidateerror += (candidate, error) => logger.LogWarning($"Error adding remote ICE candidate. {error} {candidate}");
+            pc.OnTimeout += (mediaType) => logger.LogWarning($"Timeout for {mediaType}.");
+            pc.oniceconnectionstatechange += (state) => logger.LogInformation($"ICE connection state changed to {state}.");
+            pc.onsignalingstatechange += () => logger.LogInformation($"Signaling state changed to {pc.signalingState}.");
+
             pc.onconnectionstatechange += async (state) =>
             {
-                logger.LogDebug($"Peer connection state changed to {state}.");
+                logger.LogInformation($"Peer connection state changed to {state}.");
 
                 if (state == RTCPeerConnectionState.disconnected || state == RTCPeerConnectionState.failed)
                 {
@@ -102,18 +104,17 @@ namespace webrtc_echo
             pc.OnReceiveReport += (re, media, rr) => logger.LogDebug($"RTCP Receive for {media} from {re}\n{rr.GetDebugSummary()}");
             pc.OnSendReport += (media, sr) => logger.LogDebug($"RTCP Send for {media}\n{sr.GetDebugSummary()}");
             pc.OnRtcpBye += (reason) => logger.LogDebug($"RTCP BYE receive, reason: {(string.IsNullOrWhiteSpace(reason) ? "<none>" : reason)}.");
-            pc.oniceconnectionstatechange += (state) => logger.LogDebug($"ICE connection state change to {state}.");
 
             pc.onsignalingstatechange += () =>
             {
                 if (pc.signalingState == RTCSignalingState.have_remote_offer)
                 {
-                    logger.LogDebug("Remote SDP:");
+                    logger.LogTrace("Remote SDP:");
                     logger.LogTrace(pc.remoteDescription.sdp.ToString());
                 }
                 else if (pc.signalingState == RTCSignalingState.have_local_offer)
                 {
-                    logger.LogDebug("Local SDP:");
+                    logger.LogTrace("Local SDP:");
                     logger.LogTrace(pc.localDescription.sdp.ToString());
                 }
             };
@@ -122,7 +123,7 @@ namespace webrtc_echo
         }
 
         private static Microsoft.Extensions.Logging.ILogger AddConsoleLogger(
-            Serilog.Events.LogEventLevel logLevel = Serilog.Events.LogEventLevel.Debug)
+            LogEventLevel logLevel = LogEventLevel.Debug)
         {
             var serilogLogger = new LoggerConfiguration()
                 .Enrich.FromLogContext()

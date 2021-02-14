@@ -6,7 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using EmbedIO;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Serilog;
+using Serilog.Events;
 using Serilog.Extensions.Logging;
 using SIPSorcery.Net;
 using SIPSorceryMedia.Abstractions;
@@ -16,6 +18,8 @@ namespace webrtc_echo
     class Program
     {
         private const string DEFAULT_WEBSERVER_LISTEN_URL = "http://*:8080/";
+
+        private static Microsoft.Extensions.Logging.ILogger logger = NullLogger.Instance;
 
         private static List<IPAddress> _icePresets = new List<IPAddress>();
 
@@ -37,14 +41,14 @@ namespace webrtc_echo
                 }
             }
 
-            AddConsoleLogger();
+            logger = AddConsoleLogger(LogEventLevel.Information);
 
             // Start the web server.
             using (var server = CreateWebServer(url))
             {
                 server.RunAsync();
 
-                Console.WriteLine("<ctrl>-c to exit.");
+                Console.WriteLine("ctrl-c to exit.");
                 var mre = new ManualResetEvent(false);
                 Console.CancelKeyPress += (sender, eventArgs) =>
                 {
@@ -64,7 +68,7 @@ namespace webrtc_echo
                     .WithMode(HttpListenerMode.EmbedIO))
                 .WithCors("*", "*", "*")
                 .WithAction("/offer", HttpVerbs.Post, Offer)
-                .WithStaticFolder("/", ".", false);
+                .WithStaticFolder("/", "../../html", false);
             server.StateChanged += (s, e) => Console.WriteLine($"WebServer New State - {e.NewState}");
 
             return server;
@@ -108,17 +112,20 @@ namespace webrtc_echo
     {
         private const int VP8_PAYLOAD_ID = 96;
 
+        private static Microsoft.Extensions.Logging.ILogger logger = NullLogger.Instance;
+
         private List<IPAddress> _presetIceAddresses;
 
         public WebRTCEchoServer(List<IPAddress> presetAddresses)
         {
+            logger = SIPSorcery.LogFactory.CreateLogger<WebRTCEchoServer>();
             _presetIceAddresses = presetAddresses;
         }
 
         public async Task<RTCSessionDescriptionInit> GotOffer(RTCSessionDescriptionInit offer)
         {
-            Console.WriteLine($"SDP offer received.");
-            //Console.WriteLine($"Offer SDP:\n{offer.sdp}");
+            logger.LogTrace($"SDP offer received.");
+            logger.LogTrace(offer.sdp);
 
             var pc = new RTCPeerConnection();
 
@@ -142,12 +149,12 @@ namespace webrtc_echo
                 pc.SendRtpRaw(media, rtpPkt.Payload, rtpPkt.Header.Timestamp, rtpPkt.Header.MarkerBit, rtpPkt.Header.PayloadType);
             };
 
-            pc.OnTimeout += (mediaType) => Console.WriteLine($"Timeout for {mediaType}.");
-            pc.oniceconnectionstatechange += (state) => Console.WriteLine($"ICE connection state changed to {state}.");
-            pc.onsignalingstatechange += () => Console.WriteLine($"Signaling state changed to {pc.signalingState}.");
+            pc.OnTimeout += (mediaType) => logger.LogWarning($"Timeout for {mediaType}.");
+            pc.oniceconnectionstatechange += (state) => logger.LogInformation($"ICE connection state changed to {state}.");
+            pc.onsignalingstatechange += () => logger.LogInformation($"Signaling state changed to {pc.signalingState}.");
             pc.onconnectionstatechange += (state) =>
             {
-                Console.WriteLine($"Peer connection state changed to {state}.");
+                logger.LogInformation($"Peer connection state changed to {state}.");
                 if (state == RTCPeerConnectionState.failed)
                 {
                     pc.Close("ice failure");
@@ -161,15 +168,15 @@ namespace webrtc_echo
                 await pc.setLocalDescription(offerSdp);
 
                 var answer = pc.createAnswer(null);
-                await pc.setLocalDescription(answer);
 
-                //Console.WriteLine($"Answer SDP:\n{answer.sdp}");
+                logger.LogTrace($"SDP answer created.");
+                logger.LogTrace(answer.sdp);
 
                 return answer;
             }
             else
             {
-                Console.WriteLine($"Failed to set remote description {setResult}.");
+                logger.LogWarning($"Failed to set remote description {setResult}.");
                 return null;
             }
         }

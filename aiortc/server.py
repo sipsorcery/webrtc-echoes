@@ -35,7 +35,7 @@ class EchoTrack(MediaStreamTrack):
         return frame
 
 async def index(request):
-    content = open(os.path.join(ROOT, "index.html"), "r").read()
+    content = open(os.path.join(ROOT, "../html/index.html"), "r").read()
     return web.Response(content_type="text/html", text=content)
 
 async def offer(request):
