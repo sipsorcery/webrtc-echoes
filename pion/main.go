@@ -36,6 +36,8 @@ func offer(w http.ResponseWriter, r *http.Request) {
 	// // Set the handler for ICE connection state
 	// // This will notify you when the peer has connected/disconnected
 	pc.OnICEConnectionStateChange(func(connectionState webrtc.ICEConnectionState) {
+		fmt.Printf("ICE connection state has changed to %s.\n", connectionState.String())
+
 		if connectionState == webrtc.ICEConnectionStateFailed {
 			pcsLock.Lock()
 			defer pcsLock.Unlock()
@@ -68,6 +70,7 @@ func offer(w http.ResponseWriter, r *http.Request) {
 			outTrack = audioTrack
 		}
 
+		fmt.Printf("Track has started, of type %d: %s \n", track.PayloadType(), track.Codec().MimeType)
 		for {
 			rtp, _, err := track.ReadRTP()
 			if err != nil {
@@ -84,6 +87,14 @@ func offer(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
+	})
+
+	pc.OnConnectionStateChange(func(state webrtc.PeerConnectionState) {
+		fmt.Printf("Peer connection state has changed to %s.\n", state.String())
+	})
+
+	pc.OnSignalingStateChange(func(state webrtc.SignalingState) {
+		fmt.Printf("Signaling state has changed to %s.\n", state.String())
 	})
 
 	if err := pc.SetRemoteDescription(offer); err != nil {
@@ -122,6 +133,9 @@ func main() {
 	http.HandleFunc("/offer", offer)
 
 	addr := fmt.Sprintf("%s:%d", *host, *port)
+
+	fmt.Printf("Listening on %s...\n", addr)
+
 	if *keyFile != "" && *certFile != "" {
 		log.Fatal(http.ListenAndServeTLS(addr, *certFile, *keyFile, nil))
 	} else {
