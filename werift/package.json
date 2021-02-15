@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "server": "ts-node-dev server",
-    "client": "ts-node-dev client"
+    "client": "ts-node-dev client",
+    "server": "ts-node-dev server"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -22,5 +22,8 @@
     "ts-node-dev": "^1.1.1",
     "tslib": "^2.1.0",
     "typescript": "^4.1.5"
+  },
+  "engines": {
+    "node": ">=14"
   }
 }
