@@ -13,7 +13,6 @@ import (
 
 	"github.com/pion/rtcp"
 	"github.com/pion/webrtc/v3"
-	//"github.com/pion/webrtc/v3/examples/internal/signal"
 )
 
 //var ECHO_TEST_SERVER_URL = "https://sipsorcery.cloud/janus/echo/offer"
@@ -74,6 +73,13 @@ func main() {
 			}
 		}
 	}()
+
+	// Add ICE candidates to the local offer (simulates non-trickle).
+	peerConnection.OnICECandidate(func(c *webrtc.ICECandidate) {
+		if c == nil {
+			fmt.Println(peerConnection.LocalDescription())
+		}
+	})
 
 	offer, err := peerConnection.CreateOffer(nil)
 	if err != nil {
