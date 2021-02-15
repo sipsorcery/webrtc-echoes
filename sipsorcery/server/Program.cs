@@ -41,7 +41,7 @@ namespace webrtc_echo
                 }
             }
 
-            logger = AddConsoleLogger(LogEventLevel.Information);
+            logger = AddConsoleLogger(LogEventLevel.Verbose);
 
             // Start the web server.
             using (var server = CreateWebServer(url))

@@ -15,7 +15,6 @@ import (
 	"github.com/pion/webrtc/v3"
 )
 
-//var ECHO_TEST_SERVER_URL = "https://sipsorcery.cloud/janus/echo/offer"
 var ECHO_TEST_SERVER_URL = "http://localhost:8080/offer"
 
 func main() {
@@ -77,7 +76,7 @@ func main() {
 	// Add ICE candidates to the local offer (simulates non-trickle).
 	peerConnection.OnICECandidate(func(c *webrtc.ICECandidate) {
 		if c == nil {
-			fmt.Println(peerConnection.LocalDescription())
+			//fmt.Println(peerConnection.LocalDescription())
 		}
 	})
 
@@ -85,8 +84,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Println("Offer:\n" + offer.SDP)
 
 	// Sets the LocalDescription, and starts our UDP listeners
 	if err = peerConnection.SetLocalDescription(offer); err != nil {
@@ -152,8 +149,9 @@ func main() {
 	fmt.Printf("Attempting to POST offer to %s.\n", ECHO_TEST_SERVER_URL)
 
 	// POST the offer to the echo server.
+	offerWithIce := peerConnection.LocalDescription()
 	offerBuf := new(bytes.Buffer)
-	json.NewEncoder(offerBuf).Encode(offer)
+	json.NewEncoder(offerBuf).Encode(offerWithIce)
 	req, err := http.NewRequest("POST", ECHO_TEST_SERVER_URL, offerBuf)
 	req.Header.Set("Content-Type", "application/json")
 
@@ -164,10 +162,10 @@ func main() {
 	}
 	defer resp.Body.Close()
 
-	fmt.Println("response Status:", resp.Status)
-	fmt.Println("response Headers:", resp.Header)
+	fmt.Println("POST offer response Status:", resp.Status)
+	//fmt.Println("response Headers:", resp.Header)
 	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println("response Body:", string(body))
+	//fmt.Println("response Body:", string(body))
 
 	// Set the remote SessionDescription
 	var answer webrtc.SessionDescription
