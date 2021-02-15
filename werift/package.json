@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "client": "ts-node-dev client",
-    "server": "ts-node-dev server"
+    "client": "DEBUG=werift* ts-node-dev client",
+    "server": "DEBUG=werift* ts-node-dev server"
   },
   "dependencies": {
     "axios": "^0.21.1",
     "express": "^4.17.1",
-    "werift": "^0.2.4",
+    "werift": "^0.2.5",
     "yargs": "^16.2.0"
   },
   "devDependencies": {
