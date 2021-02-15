@@ -25,7 +25,7 @@ namespace webrtc_echo
         {
             Console.WriteLine("Starting webrtc echo test client.");
 
-            logger = AddConsoleLogger(LogEventLevel.Debug);
+            logger = AddConsoleLogger(LogEventLevel.Verbose);
 
             var pc = CreatePeerConnection();
             var offer = pc.createOffer(null);
