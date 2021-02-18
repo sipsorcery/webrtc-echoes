@@ -47,11 +47,11 @@ Results of manual testing:
 
 Automated testing is currently being worked on.
 
-The idea is for each implementation to create a Docker image that can execute its Echo Test Server and/or Client and then test each against the other implementations. The requirements for an Echo Test Docker image are available [here](doc/EchoTestSpecification).
+The idea is for each implementation to create a Docker image that can execute its Echo Test Server and/or Client and then test each against the other implementations. The requirements for an Echo Test Docker image are available [here](doc/EchoTestDockerRequirements.md).
 
 ## Help Wanted
 
-Implementations for any additional libraries would be extremely welcome.
+Implementations for any other libraries would be very welcome.
 
 The libraries below have been identified as being good candidates:
 

@@ -6,13 +6,13 @@ The "Echo" part of the test is the ability of the `Server Peer` to reflect any a
 
 ## View the Code
 
-The following descriptions outline how the Echo Test Server and Client work. Often it can be easier to read the code and at the time of writing there are already a number of implementations in different languages that can be used together with or instead of the descriptions below.
+The descriptions in the following sections outline how the Echo Test Server and Client work. Often it can be easier to read the code and at the time of writing there are already a number of implementations in different languages that can be reviewed.
 
   - Python: [aiortc Echo Test Server](../aiortc/server.py)
   - Go: [Pion Echo Test Server](../pion/main.go)
   - Go: [Pion Echo Test Client](../pion/client/main.go)
-  - C#: [SIPSorcery Echo Test Server](../sipsorcery/server/program.cs)
-  - C#: [SIPSorcery Echo Test Client](../sipsorcery/client/program.cs)
+  - C#: [SIPSorcery Echo Test Server](../sipsorcery/server/Program.cs)
+  - C#: [SIPSorcery Echo Test Client](../sipsorcery/client/Program.cs)
   - TypeScript: [werift Echo Test Server](../werift/server.ts)
   - TypeScript: [werift Echo Test Client](../werift/client.ts)
 
@@ -28,7 +28,7 @@ The required flow for a `Server Peer` is:
 
  - Listen on TCP port `8080` for HTTP POST requests. The URL that the HTTP server must listen on for POST requests is:
    - http://*:8080/offer (if a wildcard IP address cannot be used any address that the client can reach is suitable).
- - POST requests from teh client will have a body that is a JSON encoded [RTCSessionDescriptionInit](https://www.w3.org/TR/webrtc/#dom-rtcsessiondescriptioninit) object.
+ - POST requests from the client will have a body that is a JSON encoded [RTCSessionDescriptionInit](https://www.w3.org/TR/webrtc/#dom-rtcsessiondescriptioninit) object.
  - When an SDP offer is received create a new `Peer Connection` and set the remote offer.
  - Generate an SDP answer and return it as a JSON encoded [RTCSessionDescriptionInit](https://www.w3.org/TR/webrtc/#dom-rtcsessiondescriptioninit) object in the HTTP POST response.
  - Perform the `Peer Connection` initialisation.

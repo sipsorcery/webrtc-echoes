@@ -1,6 +1,6 @@
 ## Overview
 
-Once an Echo Test Server or Client has succeeded in one or more manual tests with other implementations it is worth creating a `Dockerfile` so that it can be included in the automated tests.
+Once an Echo Test Server or Client has succeeded in one or more manual tests with another implementation it is worth creating a Docker image so that it can be included in the automated tests.
 
 This document outlines the requirements for an automated Echo Test Docker image.
 
