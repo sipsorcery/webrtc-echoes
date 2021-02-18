@@ -1,0 +1,66 @@
+name: WebRTC Peer Connection Echo Interopability Test
+on: push
+
+jobs:
+
+  # Job Description: Builds docker images for each participating library.
+  build-docker-images:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        library: [ "sipsorcery" ]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build ${{ matrix.library }} and push to GitHub container registry.
+      run: |
+        echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+        docker build -t ghcr.io/sipsorcery/${{ matrix.library }}-webrtc-echo -f ${{ matrix.library }}/Dockerfile .
+        docker push ghcr.io/sipsorcery/${{ matrix.library }}-webrtc-echo
+    - name: List docker images (diagnostics).
+      run: docker image ls
+   
+  # Job Description: Performs the WebRTC Echo Test between each combination of the client and server for each library.
+  interop-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        server: [ "sipsorcery" ]
+        client: [ "sipsorcery" ]
+    needs: [build-docker-images]
+    services:
+      sipsorcery-echo:
+        image: ghcr.io/sipsorcery/${{ matrix.server }}-webrtc-echo
+        credentials:
+          username: ${{ github.actor }}
+          password: ${{ secrets.CR_PAT }}
+        ports:
+          - 8080:8080
+        options: "--name echo-server"
+
+    steps:
+      - name: Check ${{ matrix.server }} server is up
+        run: |
+          uname -a
+          docker container ls
+          status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
+          echo "Response status for http://localhost:8080 $status."
+          echo "job container network ${{ job.container.network }}."
+        continue-on-error: true     
+      - name: Peer connection test for server ${{ matrix.server }} and ${{ matrix.client }} client
+        id: check_connection
+        run: |
+          docker run --entrypoint "/client.sh" --network ${{ job.container.network }} ghcr.io/sipsorcery/${{ matrix.client }}-webrtc-echo http://echo-server:8080/offer
+          result=$?
+          echo "Check connection for ${{ matrix.server }} server and ${{ matrix.client }} client result $result."
+          echo "::set-output name=TEST_RESULT::$result"
+        continue-on-error: true
+      - name: Record result
+        run: | 
+          echo "Result for ${{ matrix.server }} server and ${{ matrix.client }} client, outcome ${{ steps.check_connection.outcome }}, result ${{ steps.check_connection.outputs.TEST_RESULT }}."
+          echo "${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> ${{ matrix.server }}_${{ matrix.client }}_result.csv
+      - name: Upload result
+        uses: actions/upload-artifact@v2
+        with:
+          name: results
+          path: |
+            ${{ matrix.server }}_${{ matrix.client }}_result.csv
