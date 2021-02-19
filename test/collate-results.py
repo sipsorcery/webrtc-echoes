@@ -34,7 +34,7 @@ sorted(clientKeys)
 #print("len(clientKeys)=%i" % len(clientKeys))
 
 print('Echo Test Interoperability Results')
-print('Test run at %s' % datetime.now())
+print('`Test run at %s`' % datetime.now())
 
 # Print Table header row.
 print(f'| {"Server": <{COL_WIDTH}}| {"Client": <{COL_WIDTH}}', end='')
