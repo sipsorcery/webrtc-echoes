@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -9,21 +8,29 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Serilog;
 using Serilog.Events;
 using Serilog.Extensions.Logging;
-using SIPSorcery.Media;
 using SIPSorcery.Net;
 using SIPSorceryMedia.Abstractions;
 
-namespace webrtc_echo
+namespace webrtc_echo_client
 {
     class Program
     {
+        private const int SUCCESS_RESULT = 0;
+        private const int FAILURE_RESULT = 1;
+
         private const string DEFAULT_ECHO_SERVER_URL = "http://localhost:8080/offer";
 
         private static Microsoft.Extensions.Logging.ILogger logger = NullLogger.Instance;
 
-        static async Task Main(string[] args)
+        static async Task<int> Main(string[] args)
         {
             Console.WriteLine("Starting webrtc echo test client.");
+
+            string echoServerUrl = DEFAULT_ECHO_SERVER_URL;
+            if (args?.Length > 0)
+            {
+                echoServerUrl = args[0];
+            }
 
             logger = AddConsoleLogger(LogEventLevel.Verbose);
 
@@ -31,59 +38,10 @@ namespace webrtc_echo
             var offer = pc.createOffer(null);
             await pc.setLocalDescription(offer);
 
-            var httpClient = new HttpClient();
-            var content = new StringContent(offer.toJSON(), Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync(DEFAULT_ECHO_SERVER_URL, content);
-            var answerStr = await response.Content.ReadAsStringAsync();
+            bool didConnect = false;
+            TaskCompletionSource<int> connectResult = new TaskCompletionSource<int>();
 
-            if (RTCSessionDescriptionInit.TryParse(answerStr, out var answerInit))
-            {
-                var setAnswerResult = pc.setRemoteDescription(answerInit);
-                if (setAnswerResult != SetDescriptionResultEnum.OK)
-                {
-                    Console.WriteLine($"Set remote description failed {setAnswerResult}.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Failed to parse SDP answer from echo server.");
-            }
-
-            Console.WriteLine("ctrl-c to exit.");
-            var mre = new ManualResetEvent(false);
-            Console.CancelKeyPress += (sender, eventArgs) =>
-            {
-                    // cancel the cancellation to allow the program to shutdown cleanly
-                    eventArgs.Cancel = true;
-                mre.Set();
-            };
-
-            mre.WaitOne();
-
-            Console.WriteLine("Exiting...");
-            pc?.close();
-        }
-
-        private static RTCPeerConnection CreatePeerConnection()
-        {
-            var pc = new RTCPeerConnection();
-
-            // Add a send-only audio track (this doesn't require any native libraries for encoding so is good for x-platform testing).
-            AudioExtrasSource audioSource = new AudioExtrasSource(new AudioEncoder(), new AudioSourceOptions { AudioSource = AudioSourcesEnum.Music });
-            audioSource.OnAudioSourceEncodedSample += pc.SendAudio;
-
-            MediaStreamTrack audioTrack = new MediaStreamTrack(SDPWellKnownMediaFormatsEnum.PCMU);
-            pc.addTrack(audioTrack);
-
-            pc.OnAudioFormatsNegotiated += (formats) =>
-                audioSource.SetAudioSourceFormat(formats.First());
-
-            pc.onicecandidateerror += (candidate, error) => logger.LogWarning($"Error adding remote ICE candidate. {error} {candidate}");
-            pc.OnTimeout += (mediaType) => logger.LogWarning($"Timeout for {mediaType}.");
-            pc.oniceconnectionstatechange += (state) => logger.LogInformation($"ICE connection state changed to {state}.");
-            pc.onsignalingstatechange += () => logger.LogInformation($"Signaling state changed to {pc.signalingState}.");
-
-            pc.onconnectionstatechange += async (state) =>
+            pc.onconnectionstatechange += (state) =>
             {
                 logger.LogInformation($"Peer connection state changed to {state}.");
 
@@ -91,16 +49,55 @@ namespace webrtc_echo
                 {
                     pc.Close("remote disconnection");
                 }
-
-                if (state == RTCPeerConnectionState.connected)
+                else if (state == RTCPeerConnectionState.connected)
                 {
-                    await audioSource.StartAudio();
+                    didConnect = true;
+                    pc.Close("normal");
                 }
                 else if (state == RTCPeerConnectionState.closed)
                 {
-                    await audioSource.CloseAudio();
+                    connectResult.SetResult(didConnect ? SUCCESS_RESULT : FAILURE_RESULT);
                 }
             };
+
+            logger.LogInformation($"Posting offer to {echoServerUrl}.");
+
+            var httpClient = new HttpClient();
+            var content = new StringContent(offer.toJSON(), Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync(echoServerUrl, content);
+            var answerStr = await response.Content.ReadAsStringAsync();
+
+            if (RTCSessionDescriptionInit.TryParse(answerStr, out var answerInit))
+            {
+                var setAnswerResult = pc.setRemoteDescription(answerInit);
+                if (setAnswerResult != SetDescriptionResultEnum.OK)
+                {
+                    logger.LogWarning($"Set remote description failed {setAnswerResult}.");
+                }
+            }
+            else
+            {
+                logger.LogWarning("Failed to parse SDP answer from echo server.");
+            }
+
+            var result = await connectResult.Task;
+
+            logger.LogInformation($"Connection result {result}.");
+
+            return result;
+        }
+
+        private static RTCPeerConnection CreatePeerConnection()
+        {
+            var pc = new RTCPeerConnection();
+
+            MediaStreamTrack audioTrack = new MediaStreamTrack(SDPWellKnownMediaFormatsEnum.PCMU);
+            pc.addTrack(audioTrack);
+
+            pc.onicecandidateerror += (candidate, error) => logger.LogWarning($"Error adding remote ICE candidate. {error} {candidate}");
+            pc.OnTimeout += (mediaType) => logger.LogWarning($"Timeout for {mediaType}.");
+            pc.oniceconnectionstatechange += (state) => logger.LogInformation($"ICE connection state changed to {state}.");
+            pc.onsignalingstatechange += () => logger.LogInformation($"Signaling state changed to {pc.signalingState}.");
             pc.OnReceiveReport += (re, media, rr) => logger.LogDebug($"RTCP Receive for {media} from {re}\n{rr.GetDebugSummary()}");
             pc.OnSendReport += (media, sr) => logger.LogDebug($"RTCP Send for {media}\n{sr.GetDebugSummary()}");
             pc.OnRtcpBye += (reason) => logger.LogDebug($"RTCP BYE receive, reason: {(string.IsNullOrWhiteSpace(reason) ? "<none>" : reason)}.");
