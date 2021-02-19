@@ -68,7 +68,7 @@ for serverKey in serverKeys:
     print(f'| {serverKey: <{COL_WIDTH}}', end='')
     for clientKey in clientKeys:
         if serverKey in results.keys() and clientKey in results[serverKey].keys():
-            resultChar = '&#9745;' if results[serverKey][clientKey] == 0 else '&#x2612;'
+            resultChar = '&#9745;' if results[serverKey][clientKey] == '0' else '&#x2612;'
             print(f'| {resultChar:<{COL_WIDTH}}', end='')
         else:
             print(f'| {" ":<{COL_WIDTH}}', end='')
