@@ -1,3 +1,20 @@
+#-----------------------------------------------------------------------------
+# Filename: collate-results.py
+#
+# Description: This script collates the results from a set of csv files that
+# each contain the result of a single interoperability WebRTC Echo Test. The
+# results are combined into a markdown table.
+#
+# Author(s):
+# Aaron Clauson (aaron@sipsorcery.com)
+#
+# History:
+# 19 Feb 2021	Aaron Clauson	Created, Dublin, Ireland.
+#
+# License: 
+# BSD 3-Clause "New" or "Revised" License, see included LICENSE.md file.
+#-----------------------------------------------------------------------------
+
 import os
 import glob
 from collections import defaultdict
@@ -5,8 +22,6 @@ from datetime import datetime
 
 # The character width of each cell in the results markdown table.
 COL_WIDTH = 12
-
-#print("Collating Test Results")
 
 resultFiles = glob.glob("./*.csv")
 
@@ -26,12 +41,6 @@ for resFile in resultFiles:
 
 sorted(serverKeys)
 sorted(clientKeys)
-
-#print(serverKeys)
-#print(clientKeys)
-#print(results)
-
-#print("len(clientKeys)=%i" % len(clientKeys))
 
 print('## Echo Test Interoperability Results')
 print('Test run at %s\n' % datetime.now())

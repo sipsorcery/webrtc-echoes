@@ -1,7 +1,23 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------------
+// Filename: Program.cs
+//
+// Description: Implements a WebRTC Echo Test Client suitable for interoperability
+// testing as per specification at:
+// https://github.com/sipsorcery/webrtc-echoes/blob/master/doc/EchoTestSpecification.md
+//
+// Author(s):
+// Aaron Clauson (aaron@sipsorcery.com)
+//
+// History:
+// 19 Feb 2021	Aaron Clauson	Created, Dublin, Ireland.
+//
+// License: 
+// BSD 3-Clause "New" or "Revised" License, see included LICENSE.md file.
+//-----------------------------------------------------------------------------
+
+using System;
 using System.Net.Http;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -11,7 +27,7 @@ using Serilog.Extensions.Logging;
 using SIPSorcery.Net;
 using SIPSorceryMedia.Abstractions;
 
-namespace webrtc_echo_client
+namespace webrtc_echo
 {
     class Program
     {

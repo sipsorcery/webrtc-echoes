@@ -1,4 +1,21 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------------
+// Filename: Program.cs
+//
+// Description: Implements a WebRTC Echo Test Server suitable for interoperability
+// testing as per specification at:
+// https://github.com/sipsorcery/webrtc-echoes/blob/master/doc/EchoTestSpecification.md
+//
+// Author(s):
+// Aaron Clauson (aaron@sipsorcery.com)
+//
+// History:
+// 19 Feb 2021	Aaron Clauson	Created, Dublin, Ireland.
+//
+// License: 
+// BSD 3-Clause "New" or "Revised" License, see included LICENSE.md file.
+//-----------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text.Json;
@@ -95,7 +112,7 @@ namespace webrtc_echo
         }
 
         private static Microsoft.Extensions.Logging.ILogger AddConsoleLogger(
-            Serilog.Events.LogEventLevel logLevel = Serilog.Events.LogEventLevel.Debug)
+            LogEventLevel logLevel = LogEventLevel.Debug)
         {
             var serilogLogger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
