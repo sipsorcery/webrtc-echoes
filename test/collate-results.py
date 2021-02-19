@@ -1,6 +1,7 @@
 import os
 import glob
 from collections import defaultdict
+from datetime import datetime
 
 # The character width of each cell in the results markdown table.
 COL_WIDTH = 12
