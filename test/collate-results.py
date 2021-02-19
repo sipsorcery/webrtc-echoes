@@ -5,7 +5,7 @@ from collections import defaultdict
 # The character width of each cell in the results markdown table.
 COL_WIDTH = 12
 
-print("Collating Test Results")
+#print("Collating Test Results")
 
 resultFiles = glob.glob("./*.csv")
 
@@ -26,11 +26,14 @@ for resFile in resultFiles:
 sorted(serverKeys)
 sorted(clientKeys)
 
-print(serverKeys)
-print(clientKeys)
-print(results)
+#print(serverKeys)
+#print(clientKeys)
+#print(results)
 
-print("len(clientKeys)=%i" % len(clientKeys))
+#print("len(clientKeys)=%i" % len(clientKeys))
+
+print('Echo Test Interoperability Results')
+print('Test run at %s' % datetime.now())
 
 # Print Table header row.
 print(f'| {"Server": <{COL_WIDTH}}| {"Client": <{COL_WIDTH}}', end='')
