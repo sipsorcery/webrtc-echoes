@@ -1,8 +1,5 @@
-Collating Test Results
-['sipsorcery']
-['sipsorcery']
-defaultdict(<class 'dict'>, {'sipsorcery': {'sipsorcery': '0'}})
-len(clientKeys)=1
+Echo Test Interoperability Results
+Test run at 2021-02-19 20:36:12.155865
 | Server      | Client      |
 |-------------|-------------|
 |             | sipsorcery  |
