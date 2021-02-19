@@ -1,7 +1,7 @@
 ## Echo Test Interoperability Results
-Test run at 2021-02-19 21:05:37.620077
+Test run at 2021-02-19 21:28:58.748016
 
 | Server      | Client      |
 |-------------|-------------|
 |             | sipsorcery  |
-| sipsorcery  | 0           |
+| sipsorcery  | &#x2612;    |
