@@ -71,6 +71,9 @@ jobs:
     needs: [ interop-tests ]
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
       - name: Download results
         uses: actions/download-artifact@v2
         with:
@@ -78,6 +81,7 @@ jobs:
       - name: Collate result files
         run: |
           ls
+          python --version
           python test/collate-results.py
           python test/collate-results.py > test/echo-test-results.md
       - name: Commit the updated markdown file
