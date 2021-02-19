@@ -1,5 +1,5 @@
 Echo Test Interoperability Results
-Test run at 2021-02-19 20:36:12.155865
+Test run at 2021-02-19 20:44:20.804170
 | Server      | Client      |
 |-------------|-------------|
 |             | sipsorcery  |
