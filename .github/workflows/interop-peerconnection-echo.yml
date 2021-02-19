@@ -64,3 +64,25 @@ jobs:
           name: results
           path: |
             ${{ matrix.server }}_${{ matrix.client }}_result.csv
+
+  # Job Description: Collates the results of the interop tests into a mark down table.
+  collate:
+    runs-on: ubuntu-latest
+    needs: [ interop-tests ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download results
+        uses: actions/download-artifact@v2
+        with:
+          name: results
+      - name: Collate result files
+        run: |
+          ls
+          python test/collate-results.py
+          python test/collate-results.py > test/echo-test-results.md
+      - name: Commit the updated markdown file
+        run: |
+          cat test/echo-test-results.md
+          git config --global user.name "GitHub Action (echo test)"
+          git commit test/echo-test-results.md -m "Automated echo test results."
+          git push
