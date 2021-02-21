@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        library: [ "sipsorcery", "aiortc", "werift" ]
+        library: [ "sipsorcery", "aiortc", "werift", "pion" ]
     steps:
     - uses: actions/checkout@v2
     - name: Build ${{ matrix.library }} and push to GitHub container registry.
@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        server: [ "sipsorcery", "aiortc", "werift" ]
+        server: [ "sipsorcery", "aiortc", "werift", "pion" ]
         client: [ "sipsorcery" ]
     needs: [build-docker-images]
     services:
@@ -45,16 +45,6 @@ jobs:
         options: "--name echo-server"
 
     steps:
-      - name: Check ${{ matrix.server }} server is up
-        run: |
-          uname -a
-          docker container ls
-          # Give the echo server container a bit of extr time to initialise.
-          sleep 2
-          status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
-          echo "Response status for http://localhost:8080 $status."
-          echo "job container network ${{ job.container.network }}."
-        continue-on-error: true     
       - name: Peer connection test for server ${{ matrix.server }} and ${{ matrix.client }} client
         id: check_connection
         run: |
