@@ -35,7 +35,7 @@ jobs:
         client: [ "sipsorcery" ]
     needs: [build-docker-images]
     services:
-      sipsorcery-echo:
+      echo-test-server:
         image: ghcr.io/sipsorcery/${{ matrix.server }}-webrtc-echo
         credentials:
           username: ${{ github.actor }}
@@ -49,6 +49,7 @@ jobs:
         run: |
           uname -a
           docker container ls
+          curl http://localhost:8080
           status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
           echo "Response status for http://localhost:8080 $status."
           echo "job container network ${{ job.container.network }}."
