@@ -49,6 +49,8 @@ jobs:
         run: |
           uname -a
           docker container ls
+          # Give the echo server container a bit of extr time to initialise.
+          sleep 2
           curl http://localhost:8080
           status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
           echo "Response status for http://localhost:8080 $status."
