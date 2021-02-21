@@ -58,7 +58,7 @@ docker run -it --rm -p 8080:8080 ghcr.io/sipsorcery/sipsorcery-webrtc-echo
 |            | aiortc | pion    | sipsorcery | werift   | chrome  | firefox |
 | aiortc     |        | &#9745; | &#9745;    | &#9745;  | &#9745; | &#9745; |
 | pion       |        | &#9745; | &#9745;    | &#9745;  | &#9745; | &#9745; |
-| sipsorcery |        | &#9745; | &#9745;    | &#x2612; | &#9745; | &#9745; |
+| sipsorcery |        | &#9745; | &#9745;    | &#9745;  | &#9745; | &#9745; |
 | werift     |        | &#9745; | &#9745;    | &#9745;  | &#9745; | &#9745; |
 
 ## Automated Testing
