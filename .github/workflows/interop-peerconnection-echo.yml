@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        library: [ "sipsorcery", "aiortc" ]
+        library: [ "sipsorcery", "aiortc", "werift" ]
     steps:
     - uses: actions/checkout@v2
     - name: Build ${{ matrix.library }} and push to GitHub container registry.
@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        server: [ "sipsorcery", "aiortc" ]
+        server: [ "sipsorcery", "aiortc", "werift" ]
         client: [ "sipsorcery" ]
     needs: [build-docker-images]
     services:
@@ -51,7 +51,6 @@ jobs:
           docker container ls
           # Give the echo server container a bit of extr time to initialise.
           sleep 2
-          curl http://localhost:8080
           status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
           echo "Response status for http://localhost:8080 $status."
           echo "job container network ${{ job.container.network }}."
