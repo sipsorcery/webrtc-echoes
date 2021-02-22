@@ -45,5 +45,6 @@ The required flow for a `Server Peer` is:
   - Set the remote offer on the `Peer Connection`.
   - Perform the `Peer Connection` initialisation.
   - Optionally send any audio or video to the server and have it echoed back.
+  - Once the client has determined the `Peer Connection` has been successfully connected it shoudl close the connetion adn **Return 0**. If the connection fails or times out the client should **Return 1**.
 
  In addition to the various implementations listed above a javascript application that functions as an Echo Test `Client Peer` is available [here](../html/index.html). 
