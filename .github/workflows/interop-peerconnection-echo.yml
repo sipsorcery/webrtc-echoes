@@ -7,6 +7,8 @@ on:
   pull_request:
     branches: 
       - master
+  repository_dispatch:
+    types: [echo-test]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
