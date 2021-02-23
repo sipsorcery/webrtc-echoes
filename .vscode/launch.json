@@ -10,10 +10,9 @@
       "args": [
         "--project",
         "${workspaceRoot}/werift/tsconfig.json",
-        "${workspaceRoot}/werift/server.ts",
-        "--static",
-        "${workspaceRoot}/aiortc"
+        "${workspaceRoot}/werift/server.ts"
       ],
+      "env": { "DEBUG": "werift*" },
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
     },
@@ -28,6 +27,7 @@
         "${workspaceRoot}/werift/tsconfig.json",
         "${workspaceRoot}/werift/client.ts"
       ],
+      "env": { "DEBUG": "werift*" },
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
     }

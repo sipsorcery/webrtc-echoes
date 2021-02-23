@@ -17,12 +17,11 @@ new Promise<void>(async (r, f) => {
   const { data } = await axios.post(url, pc.localDescription);
   pc.setRemoteDescription(data);
 
-  await transceiver.sender.onReady.asPromise();
-  r();
-
   setTimeout(() => {
     f();
   }, 30_000);
+
+  transceiver.sender.onReady.once(r);
 })
   .then(() => {
     console.log("done");
