@@ -22,6 +22,14 @@ async def send_offer(
 
 
 async def run(*, pc, player, recorder, url):
+    connected = asyncio.Event()
+
+    @pc.on("connectionstatechange")
+    def on_connectionstatechange():
+        print("Connection state %s" % pc.connectionState)
+        if pc.connectionState == "connected":
+            connected.set()
+
     @pc.on("track")
     def on_track(track):
         print("Receiving %s" % track.kind)
@@ -42,6 +50,9 @@ async def run(*, pc, player, recorder, url):
 
     # apply answer
     await pc.setRemoteDescription(answer)
+
+    # wait for connected state
+    await connected.wait()
 
 
 if __name__ == "__main__":
@@ -76,14 +87,18 @@ if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(
-            run(
-                pc=pc,
-                player=player,
-                recorder=recorder,
-                url=args.url,
+            asyncio.wait_for(
+                run(
+                    pc=pc,
+                    player=player,
+                    recorder=recorder,
+                    url=args.url,
+                ),
+                timeout=10,
             )
         )
-        loop.run_forever()
+        if args.play_from or args.record_to:
+            loop.run_forever()
     except KeyboardInterrupt:
         pass
     finally:
