@@ -7,11 +7,11 @@ const url = process.argv[2] || "http://localhost:8080/offer";
 const udp = createSocket("udp4");
 udp.bind(5000);
 
-new Promise<void>(async (r, f) => {
+new Promise<any>(async (r, f) => {
   const pc = new RTCPeerConnection({
     iceConfig: { stunServer: ["stun.l.google.com", 19302] },
   });
-  const transceiver = pc.addTransceiver("video", "sendrecv");
+  pc.addTransceiver("video", "sendrecv");
 
   await pc.setLocalDescription(pc.createOffer());
   const { data } = await axios.post(url, pc.localDescription);
@@ -21,7 +21,7 @@ new Promise<void>(async (r, f) => {
     f();
   }, 30_000);
 
-  transceiver.sender.onReady.once(r);
+  pc.connectionStateChange.watch((state) => state === "connected").then(r);
 })
   .then(() => {
     console.log("done");
