@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build ${{ matrix.library }} and push to GitHub container registry.
         run: |
-          echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+          echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u sipsorcery --password-stdin
           docker build -t ghcr.io/sipsorcery/${{ matrix.library }}-webrtc-echo -f ${{ matrix.library }}/Dockerfile .
           docker push ghcr.io/sipsorcery/${{ matrix.library }}-webrtc-echo
       - name: List docker images (diagnostics).
