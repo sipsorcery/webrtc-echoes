@@ -38,15 +38,15 @@ jobs:
         server: ["sipsorcery", "aiortc", "werift", "pion"]
         client: ["sipsorcery", "aiortc", "werift"]
     needs: [build-docker-images]
-    services:
-      echo-test-server:
-        image: ghcr.io/sipsorcery/${{ matrix.server }}-webrtc-echo
-        credentials:
-          username: ${{ github.actor }}
-          password: ${{ secrets.CR_PAT }}
-        ports:
-          - 8080:8080
-        options: "--name echo-server"
+    #services:
+    #  echo-test-server:
+    #    image: ghcr.io/sipsorcery/${{ matrix.server }}-webrtc-echo
+    #    credentials:
+    #      username: ${{ github.actor }}
+    #      password: ${{ secrets.CR_PAT }}
+    #    ports:
+    #      - 8080:8080
+    #    options: "--name echo-server"
 
     steps:
       - name: Peer connection test for server ${{ matrix.server }} and ${{ matrix.client }} client
