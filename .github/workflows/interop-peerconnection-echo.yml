@@ -44,9 +44,9 @@ jobs:
         credentials:
           username: ${{ github.actor }}
           password: ${{ secrets.CR_PAT }}
-        ports:
-          - 8080:8081
-        options: "--name echo-server"
+        #ports:
+        #  - 8080:8080
+        options: "--name echo-server-x"
 
     steps:
       - name: Peer connection test for server ${{ matrix.server }} and ${{ matrix.client }} client
