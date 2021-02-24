@@ -46,7 +46,7 @@ jobs:
           password: ${{ secrets.CR_PAT }}
         #ports:
         #  - 8080:8080
-        options: "--name echo-server-x"
+        options: "--name echo-server"
 
     steps:
       - name: Peer connection test for server ${{ matrix.server }} and ${{ matrix.client }} client
