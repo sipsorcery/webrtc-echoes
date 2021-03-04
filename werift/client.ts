@@ -17,7 +17,7 @@ new Promise<any>(async (r, f) => {
   });
   pc.addTransceiver("video", "sendrecv");
 
-  await pc.setLocalDescription(pc.createOffer()).catch((e) => f(e));
+  await pc.setLocalDescription(await pc.createOffer()).catch((e) => f(e));
   const { data } = await axios.post(url, pc.localDescription).catch((e) => {
     f(e);
     throw e;
