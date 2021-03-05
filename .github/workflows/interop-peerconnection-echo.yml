@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        server: ["sipsorcery", "aiortc", "werift", "pion"]
+        server: ["sipsorcery", "aiortc", "werift", "pion", "gst"]
         client: ["sipsorcery", "aiortc", "werift"]
     needs: [build-docker-images]
     services:
