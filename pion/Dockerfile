@@ -11,5 +11,6 @@ COPY --from=build /src/main .
 COPY --from=build /src/client/client .
 COPY ["html", "../html/"]
 COPY ["./pion/client.sh", "/client.sh"]
+RUN chmod +x /client.sh
 EXPOSE 8080
 ENTRYPOINT /app/main
