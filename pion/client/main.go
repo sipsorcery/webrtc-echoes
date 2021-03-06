@@ -4,20 +4,44 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
-	"github.com/pion/rtcp"
 	"github.com/pion/webrtc/v3"
 )
 
 var ECHO_TEST_SERVER_URL = "http://localhost:8080/offer"
+var CONNECTION_ATTEMPT_TIMEOUT_SECONDS = 10
+var SUCCESS_RETURN_VALUE = 0
+var ERROR_RETURN_VALUE = 1
 
 func main() {
+
+	echoTestServerURL := ECHO_TEST_SERVER_URL
+	if len(os.Args) > 1 {
+		echoTestServerURL = os.Args[1]
+		println("Echo test server URL set to:", echoTestServerURL)
+	}
+
+	connectResult := false
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println("Panic returning status:", ERROR_RETURN_VALUE)
+		os.Exit(ERROR_RETURN_VALUE)
+	}()
+
+	ctx, cancel := context.WithTimeout(context.Background(),
+		time.Duration(CONNECTION_ATTEMPT_TIMEOUT_SECONDS)*time.Second)
+	defer cancel()
+
 	// Everything below is the Pion WebRTC API! Thanks for using it ❤️.
 
 	// Create a MediaEngine object to configure the supported codec
@@ -90,34 +114,6 @@ func main() {
 		panic(err)
 	}
 
-	// Set a handler for when a new remote track starts, this handler copies inbound RTP packets,
-	// replaces the SSRC and sends them back
-	peerConnection.OnTrack(func(track *webrtc.TrackRemote, receiver *webrtc.RTPReceiver) {
-		// Send a PLI on an interval so that the publisher is pushing a keyframe every rtcpPLIInterval
-		// This is a temporary fix until we implement incoming RTCP events, then we would push a PLI only when a viewer requests it
-		go func() {
-			ticker := time.NewTicker(time.Second * 3)
-			for range ticker.C {
-				errSend := peerConnection.WriteRTCP([]rtcp.Packet{&rtcp.PictureLossIndication{MediaSSRC: uint32(track.SSRC())}})
-				if errSend != nil {
-					fmt.Println(errSend)
-				}
-			}
-		}()
-
-		fmt.Printf("Track has started, of type %d: %s \n", track.PayloadType(), track.Codec().MimeType)
-		for {
-			// Read RTP packets being sent to Pion
-			rtp, _, readErr := track.ReadRTP()
-			if readErr != nil {
-				panic(readErr)
-			}
-
-			if writeErr := outputTrack.WriteRTP(rtp); writeErr != nil {
-				panic(writeErr)
-			}
-		}
-	})
 	// Set the handler for ICE connection state
 	// This will notify you when the peer has connected/disconnected
 	peerConnection.OnICEConnectionStateChange(func(connectionState webrtc.ICEConnectionState) {
@@ -126,6 +122,16 @@ func main() {
 
 	peerConnection.OnConnectionStateChange(func(state webrtc.PeerConnectionState) {
 		fmt.Printf("Peer connection state has changed to %s.\n", state.String())
+		if state == webrtc.PeerConnectionStateConnected {
+			connectResult = true
+			peerConnection.Close()
+			cancel()
+		} else if state == webrtc.PeerConnectionStateDisconnected ||
+			state == webrtc.PeerConnectionStateFailed ||
+			state == webrtc.PeerConnectionStateClosed {
+			connectResult = true
+			cancel()
+		}
 	})
 
 	peerConnection.OnSignalingStateChange(func(state webrtc.SignalingState) {
@@ -146,16 +152,17 @@ func main() {
 	// in a production application you should exchange ICE Candidates via OnICECandidate
 	<-gatherComplete
 
-	fmt.Printf("Attempting to POST offer to %s.\n", ECHO_TEST_SERVER_URL)
+	fmt.Printf("Attempting to POST offer to %s.\n", echoTestServerURL)
 
 	// POST the offer to the echo server.
 	offerWithIce := peerConnection.LocalDescription()
 	offerBuf := new(bytes.Buffer)
 	json.NewEncoder(offerBuf).Encode(offerWithIce)
-	req, err := http.NewRequest("POST", ECHO_TEST_SERVER_URL, offerBuf)
+	req, err := http.NewRequest("POST", echoTestServerURL, offerBuf)
 	req.Header.Set("Content-Type", "application/json")
 
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: time.Duration(CONNECTION_ATTEMPT_TIMEOUT_SECONDS) * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
 		panic(err)
@@ -182,6 +189,16 @@ func main() {
 	// Output the answer in base64 so we can paste it in browser
 	//fmt.Println(signal.Encode(*peerConnection.LocalDescription()))
 
-	// Block forever
-	select {}
+	select {
+	case <-ctx.Done():
+		fmt.Println("Context done.")
+	}
+
+	if connectResult {
+		fmt.Println("Connection attempt successful returning status:", SUCCESS_RETURN_VALUE)
+		os.Exit(SUCCESS_RETURN_VALUE)
+	} else {
+		fmt.Println("Connection attempt failed returning status:", ERROR_RETURN_VALUE)
+		os.Exit(ERROR_RETURN_VALUE)
+	}
 }

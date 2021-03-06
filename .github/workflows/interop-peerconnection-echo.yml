@@ -36,7 +36,7 @@ jobs:
     strategy:
       matrix:
         server: ["sipsorcery", "aiortc", "werift", "pion", "gst"]
-        client: ["sipsorcery", "aiortc", "werift"]
+        client: ["sipsorcery", "aiortc", "werift", "pion"]
     needs: [build-docker-images]
     services:
       echo-test-server:
