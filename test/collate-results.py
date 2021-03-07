@@ -5,6 +5,9 @@
 # each contain the result of a single interoperability WebRTC Echo Test. The
 # results are combined into a markdown table.
 #
+# Prerequisites:
+# pip install weasyprint
+#
 # Author(s):
 # Aaron Clauson (aaron@sipsorcery.com)
 #
@@ -17,11 +20,29 @@
 
 import os
 import glob
+#import pandas as pd
+#import dataframe_image as dfi
+import weasyprint as wsp
+import PIL as pil
+
 from collections import defaultdict
 from datetime import datetime
 
 # The character width of each cell in the results markdown table.
 COL_WIDTH = 12
+RESULTS_FILE_PATH = "echo_test_results.png"
+
+def trim(source_filepath, target_filepath=None, background=None):
+    if not target_filepath:
+        target_filepath = source_filepath
+    img = pil.Image.open(source_filepath)
+    if background is None:
+        background = img.getpixel((0, 0))
+    border = pil.Image.new(img.mode, img.size, background)
+    diff = pil.ImageChops.difference(img, border)
+    bbox = diff.getbbox()
+    img = img.crop(bbox) if bbox else img
+    img.save(target_filepath)
 
 resultFiles = glob.glob("./*.csv")
 
@@ -42,11 +63,24 @@ for resFile in resultFiles:
 sorted(serverKeys)
 sorted(clientKeys)
 
-print('## Echo Test Interoperability Results')
+html = """<html>
+ <body>"""
+
+print('## Echo Test Results')
 print('Test run at %s\n' % datetime.now())
+
+html += "<h3>Echo Test Results</h3>"
+html += "<p>Test run at %s.</p>" % datetime.now()
 
 # Print Table header row.
 print(f'| {"Server": <{COL_WIDTH}}| {"Client": <{COL_WIDTH}}', end='')
+html += """<table>
+ <tr>
+   <th>Server</th>
+   <th colspan='%d'>Client</th>
+ </tr>  
+""" % COL_WIDTH
+
 for i in range(0, (len(clientKeys) - 1)):
     print(f'| {" ":<{COL_WIDTH}}', end='')
 print('|')
@@ -59,17 +93,38 @@ print('|')
 
 # Print Client column headings.
 print(f'| {" ":<{COL_WIDTH}}', end='')
+html += """<tr>
+ <td/>"""
 for clientKey in clientKeys:
     print(f'| {clientKey: <{COL_WIDTH}}', end='')
+    html += "<td>%s</td>" % clientKey
 print('|')
+html += "</tr>"
 
 # Print Server rows.
 for serverKey in serverKeys:
     print(f'| {serverKey: <{COL_WIDTH}}', end='')
+    html += "<tr><td>%s</td>" % serverKey
     for clientKey in clientKeys:
         if serverKey in results.keys() and clientKey in results[serverKey].keys():
             resultChar = '&#9745;' if results[serverKey][clientKey] == '0' else '&#x2612;'
             print(f'| {resultChar:<{COL_WIDTH}}', end='')
+            html += "<td>%s</td>" % resultChar
         else:
             print(f'| {" ":<{COL_WIDTH}}', end='')
+            html += "<td/>"
     print('|')
+    html += "</tr>"
+
+html += """ </body
+</html"""
+
+#df = pd.DataFrame(results, columns=clientKeys)
+#print(df)
+#dfi.export(df, "results.png")
+
+#html = wsp.HTML(string=df.to_html())
+#print(html)
+html = wsp.HTML(string=html)
+html.write_png(RESULTS_FILE_PATH)
+trim(RESULTS_FILE_PATH)
