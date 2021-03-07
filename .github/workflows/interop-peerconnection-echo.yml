@@ -98,5 +98,5 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git commit test/echo_test_results.md -m "Automated echo test results."
+          git commit test/echo_test_results.md test/echo_test_results.png -m "Automated echo test results."
           git push
