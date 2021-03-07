@@ -88,14 +88,12 @@ jobs:
           name: results
       - name: Collate result files
         run: |
-          ls
           python --version
           pip install weasyprint
           python test/collate-results.py
           python test/collate-results.py > test/echo_test_results.md
           cat test/echo_test_results.md
-          ls
-      - name: Commit the updated markdown file
+      - name: Commit the results to the git repository
         if: github.event_name != 'pull_request' && github.event_name != 'repository_dispatch'
         run: |
           git config user.name github-actions

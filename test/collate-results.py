@@ -30,7 +30,7 @@ from datetime import datetime
 
 # The character width of each cell in the results markdown table.
 COL_WIDTH = 12
-RESULTS_FILE_PATH = "echo_test_results.png"
+RESULTS_FILE_PATH = "test/echo_test_results.png"
 
 def trim(source_filepath, target_filepath=None, background=None):
     if not target_filepath:
