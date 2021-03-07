@@ -5,7 +5,11 @@ A Python console application that runs a WebRTC Echo Server.
 **Prerequisites**
 
  - python3
- - `pip install aiohttp aiortc`
+ - `pip install aiohttp aiortc --upgrade`
+ 
+The latest version of aiortc can be found on [pypi.org](https://pypi.org/project/aiort). To check version of the aiortc module:
+
+ - pip freeze | grep aiortc
 
 **Usage**
 
