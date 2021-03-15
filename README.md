@@ -10,16 +10,17 @@ The developers likely to interested are those involved in WebRTC projects.
 
 ## Participating Libraries
 
-The libraries that currently have a WebRTC Echo Test Server and/or Client implementation are:
+The libraries that currently have a Client and Server implementation are:
 
  - [aiortc](https://github.com/aiortc/aiortc): WebRTC and ORTC implementation for Python using asyncio.
  - [Pion](https://github.com/pion/webrtc): Pure Go implementation of the WebRTC API.
  - [SIPSorcery](https://github.com/sipsorcery-org/sipsorcery) - A WebRTC, SIP and VoIP library for C# and .NET Core. Designed for real-time communications apps.
  - [werift-webrtc](https://github.com/shinyoshiaki/werift-webrtc): WebRTC Implementation for TypeScript (Node.js)
 
- Coming Soon:
+The libraries that currently have a Server implementation are:
 
-  - [libdatachannel](https://github.com/paullouisageneau/libdatachannel): C/C++ WebRTC Data Channels and Media Transport standalone library.
+  - [gstreamer](https://gstreamer.freedesktop.org/).
+  - [libwebrtc](https://webrtc.googlesource.com/src/).
 
 ## Interoperability Tests
 
@@ -49,14 +50,3 @@ docker run -it --rm -p 8080:8080 ghcr.io/sipsorcery/sipsorcery-webrtc-echo
 - Repeat the process for an [Echo Test Server](doc/EchoTestSpecification.md#server-peer-operation).
 
 - Create a [Dockerfile](doc/EchoTestDockerRequirements.md) and add a Pull Request for it so your Echo Test application(s) can be included in the automated testing.
-
-## Help Wanted
-
-Implementations for any other libraries would be very welcome.
-
-The libraries below have been identified as good candidates:
-
- - [gstreamer](https://gstreamer.freedesktop.org/).
- - [Google's WebRTC library](https://webrtc.googlesource.com/src/),
- - [webrtc-rs](https://github.com/webrtc-rs/webrtc): A pure Rust implementation of WebRTC API.
- - [Amazon's Kinesis Video](https://docs.aws.amazon.com/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html)

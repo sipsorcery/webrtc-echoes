@@ -83,6 +83,8 @@ namespace webrtc_echo
             var response = await httpClient.PostAsync(echoServerUrl, content);
             var answerStr = await response.Content.ReadAsStringAsync();
 
+            logger.LogDebug($"SDP answer: {answerStr}");
+
             if (RTCSessionDescriptionInit.TryParse(answerStr, out var answerInit))
             {
                 var setAnswerResult = pc.setRemoteDescription(answerInit);
