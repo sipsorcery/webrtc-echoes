@@ -29,6 +29,7 @@ new Promise<void>(async (r, f) => {
     f(e);
     throw e;
   });
+  console.log("server answer sdp", data?.sdp);
   pc.setRemoteDescription(data).catch((e) => f(e));
 
   await pc.connectionStateChange.watch((state) => state === "connected");
