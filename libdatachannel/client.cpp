@@ -24,6 +24,7 @@
 #include <future>
 #include <iostream>
 #include <memory>
+#include <string>
 
 namespace http = httplib;
 using json = nlohmann::json;
@@ -60,7 +61,7 @@ int main(int argc, char **argv) try {
 
 				auto parsed = json::parse(res->body);
 				rtc::Description remote(parsed["sdp"].get<std::string>(),
-				                             parsed["type"].get<std::string>());
+				                        parsed["type"].get<std::string>());
 				pc.setRemoteDescription(std::move(remote));
 
 			} catch (...) {

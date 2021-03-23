@@ -21,6 +21,7 @@
 #include <rtc/rtc.hpp>
 
 #include <chrono>
+#include <string>
 #include <future>
 #include <iostream>
 #include <memory>
@@ -32,7 +33,7 @@ using namespace std::chrono_literals;
 
 int main(int argc, char **argv) try {
 	const std::string host = "0.0.0.0";
-	const int port = 8080;
+	const int port = argc > 1 ? std::atoi(argv[1]) :  8080;
 
 	rtc::InitLogger(rtc::LogLevel::Warning);
 
