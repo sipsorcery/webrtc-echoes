@@ -1,0 +1,144 @@
+## Common set up steps:
+
+sudo apt update && DEBIAN_FRONTEND="noninteractive" apt install -y curl git \
+  lsb-release python sudo wget
+  
+# Get depot_tools
+mkdir /src && chown $USER:$USER /src && cd /src
+git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git --depth 1 depot_tools
+export PATH="/src/depot_tools:${PATH}"
+
+# Get libwebrtc source.
+mkdir /src/webrtc-checkout && cd /src/webrtc-checkout
+fetch --nohooks webrtc
+cd /src/webrtc-checkout/src
+git pull origin master
+gclient sync
+build/install-build-deps.sh
+
+## Run build tests on Ubuntu Xenial 16.04:
+
+ # xenial.1: Test default build steps
+   $ gn gen out/Default
+   $ ninja all -C out/Default
+   $ out/Default/webrtc_lib_link_test
+   
+   result: OK
+   
+  # xenial.2: Test default steps followed by re-build webrtc_lib_link_test
+    $ gn gen out/Default
+    $ ninja all -C out/Default
+    $ out/Default/webrtc_lib_link_test
+	$ ar crs out/Default/libwebrtc-full.a $(find out/Default/obj -name '*\.o')
+	$ export PATH="/src/webrtc-checkout/src/third_party/llvm-build/Release+Asserts/bin":${PATH}
+    $ clang++ -D_LIBCPP_HAS_NO_VENDOR_AVAILABILITY_ANNOTATIONS -D_LIBCPP_DEBUG=0 -D_DEBUG -DWEBRTC_POSIX -DWEBRTC_LINUX -I/src/webrtc-checkout/src -I/src/webrtc-checkout/src/third_party/abseil-cpp -fstack-protector -funwind-tables -fPIC -O0 -g2 -ggnu-pubnames -std=c++14 -fno-trigraphs -nostdinc++ -isystem/src/webrtc-checkout/src/buildtools/third_party/libc++/trunk/include --sysroot=/src/webrtc-checkout/src/build/linux/debian_sid_amd64-sysroot -c webrtc_lib_link_test.cc -o webrtc_lib_link_test.o
+	$ clang++ -fuse-ld=lld -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now  -Wl,-z,defs -Wl,--as-needed --sysroot=/src/webrtc-checkout/src/build/linux/debian_sid_amd64-sysroot -L/src/webrtc-checkout/src/build/linux/debian_sid_amd64-sysroot/lib/x86_64-linux-gnu -L/src/webrtc-checkout/src/build/linux/debian_sid_amd64-sysroot/usr/lib/x86_64-linux-gnu -L/src/webrtc-checkout/src/out/Default -pie -o webrtc_lib_link_test webrtc_lib_link_test.o -lwebrtc-full -ldl -lpthread -lX11 -lglib-2.0
+	$ ./webrtc_lib_link_test
+	
+	result: Segmentation fault
+	$ ./webrtc_lib_link_test
+	(audio_device_impl.cc:84): CreateForTest
+    Segmentation fault (core dumped)
+	
+  # xenial.3: Test no custom libcxx build
+    $ gn gen out/Default --args="is_component_build=false use_custom_libcxx=false use_custom_libcxx_for_host=false rtc_enable_protobuf=false"
+	$ ninja all -C out/Default
+	
+	result: build fails, compilation error.
+	
+  # xenial.4: Test no custom libcxx build with patch
+    $ git apply patch-nocustomlibcxx.diff
+	$ pushd base; git apply ../patch-base-nocustomlibcxx.diff; popd
+	$ gn gen out/Default --args="is_component_build=false use_custom_libcxx=false use_custom_libcxx_for_host=false rtc_enable_protobuf=false"
+	$ ninja all -C out/Default
+	$ out/Default/webrtc_lib_link_test
+	
+	result: webrtc_lib_link_test execution fails: out/Default/webrtc_lib_link_test: /usr/lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.22' not found (required by out/Default/webrtc_lib_link_test)
+	
+  # xenial.5: Test no custom libcxx build with patch and libstdc++ update
+    $ git apply patch-nocustomlibcxx.diff
+	$ pushd base; git apply ../patch-base-nocustomlibcxx.diff; popd
+	$ gn gen out/Default --args="is_component_build=false use_custom_libcxx=false use_custom_libcxx_for_host=false rtc_enable_protobuf=false"
+	$ ninja all -C out/Default
+	$ sudo apt install software-properties-common
+    $ sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+    $ sudo apt update
+    $ sudo apt install libstdc++-9-dev
+	$ out/Default/webrtc_lib_link_test
+	
+	result: OK
+	
+  # xenial.6: Test no custom libcxx build with patch and libstdc++ update followed by re-build webrtc_lib_link_test 
+    $ git apply patch-nocustomlibcxx.diff
+	$ pushd base; git apply ../patch-base-nocustomlibcxx.diff; popd
+	$ gn gen out/Default --args="is_component_build=false use_custom_libcxx=false use_custom_libcxx_for_host=false rtc_enable_protobuf=false"
+	$ ninja all -C out/Default
+	$ sudo apt install software-properties-common
+    $ sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+    $ sudo apt update
+    $ sudo apt install libstdc++-9-dev
+	$ out/Default/webrtc_lib_link_test
+	$ ar crs out/Default/libwebrtc-full.a $(find out/Default/obj -name '*\.o')
+	$ export PATH="/src/webrtc-checkout/src/third_party/llvm-build/Release+Asserts/bin":${PATH}
+	$ clang++ -D_LIBCPP_ABI_UNSTABLE -D_LIBCPP_HAS_NO_VENDOR_AVAILABILITY_ANNOTATIONS -D_DEBUG -DWEBRTC_POSIX -DWEBRTC_LINUX -I/src/webrtc-checkout/src -I/src/webrtc-checkout/src/third_party/abseil-cpp -fstack-protector -funwind-tables -fPIC -O0 -g2 -std=c++14 -c webrtc_lib_link_test.cc -o webrtc_lib_link_test.o
+	$ clang++ -fuse-ld=lld -Wl,-z,noexecstack -Wl,-z,relro -L/src/webrtc-checkout/src/out/Default -pie -o webrtc_lib_link_test webrtc_lib_link_test.o -lwebrtc-full -ldl -lpthread -lX11 -lglib-2.0 -lstdc++ -latomic
+	$ ./webrtc_lib_link_test
+	
+	result: OK
+	
+  # xenial.7:  Test no custom libcxx build with patch and libstdc++ update followed by re-build webrtc_lib_link_test including libevent dependency
+    $ git apply patch-nocustomlibcxx.diff
+	$ pushd base; git apply ../patch-base-nocustomlibcxx.diff; popd
+	$ gn gen out/Default --args="is_component_build=false use_custom_libcxx=false use_custom_libcxx_for_host=false rtc_enable_protobuf=false"
+	$ ninja all -C out/Default
+	$ sudo apt install software-properties-common
+    $ sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+    $ sudo apt update
+    $ sudo apt install libstdc++-9-dev
+	$ out/Default/webrtc_lib_link_test
+	$ ar crs out/Default/libwebrtc-full.a $(find out/Default/obj -name '*\.o')
+	$ export PATH="/src/webrtc-checkout/src/third_party/llvm-build/Release+Asserts/bin":${PATH}
+	$ apt install libevent-dev
+    $ clang++ -D_LIBCPP_ABI_UNSTABLE -D_LIBCPP_HAS_NO_VENDOR_AVAILABILITY_ANNOTATIONS -D_DEBUG -DWEBRTC_POSIX -DWEBRTC_LINUX -I/src/webrtc-checkout/src -I/src/webrtc-checkout/src/third_party/abseil-cpp -fstack-protector -funwind-tables -fPIC -O0 -g2 -std=c++14 -c webrtc_lib_link_test_libevent.cc -o webrtc_lib_link_test_libevent.o
+	$ clang++ -fuse-ld=lld -Wl,-z,noexecstack -Wl,-z,relro -L/src/webrtc-checkout/src/out/Default -pie -o webrtc_lib_link_test_libevent webrtc_lib_link_test_libevent.o -levent -lwebrtc-full -ldl -lpthread -lX11 -lglib-2.0 -lstdc++ -latomic
+	$ ./webrtc_lib_link_test
+	
+	result: OK
+	  (audio_device_impl.cc:319): ~AudioDeviceModuleImpl
+      (audio_device_buffer.cc:75): AudioDeviceBuffer::~dtor
+      libevent version 1.4.13-stable.
+	
+# Note this patch adds single include of, #include <cstdint>, to modules/video_coding/decoding_state.h.
+cat patch-nocustomlibcxx.diff
+diff --git a/modules/video_coding/decoding_state.h b/modules/video_coding/decoding_state.h
+index b87fb2d..ec97294 100644
+--- a/modules/video_coding/decoding_state.h
++++ b/modules/video_coding/decoding_state.h
+@@ -11,6 +11,7 @@
+ #ifndef MODULES_VIDEO_CODING_DECODING_STATE_H_
+ #define MODULES_VIDEO_CODING_DECODING_STATE_H_
+
++#include <cstdint>
+ #include <map>
+ #include <set>
+ #include <vector>
+
+# Note this patch adds single include of, #include <cstring>, to base/profiler/stack_copier_signal.cc.
+cat patch-base-nocustomlibcxx.diff
+diff --git a/profiler/stack_copier_signal.cc b/profiler/stack_copier_signal.cc
+index cd3133d..047db3b 100644
+--- a/profiler/stack_copier_signal.cc
++++ b/profiler/stack_copier_signal.cc
+@@ -10,6 +10,7 @@
+ #include <syscall.h>
+
+ #include <atomic>
++#include <cstring>
+
+ #include "base/notreached.h"
+ #include "base/profiler/register_context.h"
+ 
+Misc Notes:
+ - Ubuntu Xenial 16.04 is mentioned as the main Chromium develoment platform https://chromium.googlesource.com/chromium/src/+/master/docs/linux/build_instructions.md.
+ - PR submitted for patch to modules/video_coding/decoding_state.h https://webrtc-review.googlesource.com/c/src/+/211762
+ 

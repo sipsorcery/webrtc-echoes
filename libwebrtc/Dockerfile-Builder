@@ -1,0 +1,23 @@
+FROM ubuntu:16.04
+
+# Install packages for libwebrtc build and app dependencies.
+RUN apt update && DEBIAN_FRONTEND="noninteractive" apt install -y curl git \
+  lsb-release python sudo wget
+  
+# Install depot_tools
+WORKDIR /src 
+
+# https://webrtc.googlesource.com/src/+/refs/heads/master/docs/native-code/development/prerequisite-sw/index.md
+RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git --depth 1 depot_tools
+ENV PATH="/src/depot_tools:${PATH}"
+
+# https://webrtc.googlesource.com/src/+/refs/heads/master/docs/native-code/development/index.md#building
+WORKDIR /src/webrtc-checkout
+RUN fetch --nohooks webrtc
+WORKDIR /src/webrtc-checkout/src
+RUN gclient sync
+RUN git pull origin master
+RUN build/install-build-deps.sh
+RUN gn gen out/Default --args="is_component_build=false use_custom_libcxx=false use_custom_libcxx_for_host=false rtc_enable_protobuf=false"
+RUN ninja all -C out/Default
+RUN ar crs out/Default/libwebrtc-full.a $(find out/Default/obj -name *\.o) 
