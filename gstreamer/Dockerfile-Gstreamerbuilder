@@ -1,0 +1,24 @@
+FROM ubuntu:latest
+
+# Install packages and build system for gstreamer build and app dependencies.
+RUN apt update && DEBIAN_FRONTEND="noninteractive" apt install -y \
+  bison build-essential cmake flex git libevent-dev libglib2.0-dev libmbedtls-dev \
+  libnice-dev libsrtp2-dev libssl-dev libvpx-dev ninja-build python-is-python3 \
+  python3-pip
+RUN python -m pip install meson
+
+# Copy libnice plugin patch file.
+WORKDIR /src
+
+# Build gstreamer
+RUN git clone https://gitlab.freedesktop.org/gstreamer/gst-build.git --depth 1 gst-build
+WORKDIR /src/gst-build
+RUN meson -Dgood=enabled -Dgst-plugins-good:vpx=enabled \
+  -Dgst-plugins-good:rtpmanager=enabled \
+  -Dbad=enabled -Dgst-plugins-bad:dtls=enabled \
+  -Dbad=enabled -Dgst-plugins-bad:srtp=enabled \
+  -Dbad=enabled -Dgst-plugins-bad:webrtc=enabled \
+  --default-library=static \
+  builddir
+RUN ninja -C builddir
+RUN meson install -C builddir && ldconfig
