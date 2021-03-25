@@ -21,10 +21,12 @@
 #include <rtc/rtc.hpp>
 
 #include <chrono>
+#include <cstddef>
 #include <future>
 #include <iostream>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace http = httplib;
 using json = nlohmann::json;
@@ -33,7 +35,6 @@ using namespace std::chrono_literals;
 
 int main(int argc, char **argv) try {
 	const std::string url = argc > 1 ? argv[1] : "http://localhost:8080/offer";
-	const std::string message = "Hello world!";
 
 	const size_t separator = url.find_last_of('/');
 	const std::string server = url.substr(0, separator);
@@ -42,37 +43,41 @@ int main(int argc, char **argv) try {
 	rtc::InitLogger(rtc::LogLevel::Warning);
 
 	http::Client cl(server.c_str());
-	rtc::PeerConnection pc{rtc::Configuration{}};
+
+	rtc::Configuration config;
+	config.disableAutoNegotiation = true;
+	rtc::PeerConnection pc{std::move(config)};
 
 	std::promise<void> promise;
 	auto future = promise.get_future();
 
-	pc.onGatheringStateChange([path, &pc, &cl, &promise](rtc::PeerConnection::GatheringState state) {
-		if (state == rtc::PeerConnection::GatheringState::Complete) {
-			try {
-				auto local = pc.localDescription().value();
-				json msg;
-				msg["sdp"] = std::string(local);
-				msg["type"] = local.typeString();
+	pc.onGatheringStateChange(
+	    [path, &pc, &cl, &promise](rtc::PeerConnection::GatheringState state) {
+		    if (state == rtc::PeerConnection::GatheringState::Complete) {
+			    try {
+				    auto local = pc.localDescription().value();
+				    json msg;
+				    msg["sdp"] = std::string(local);
+				    msg["type"] = local.typeString();
 
-				auto res = cl.Post(path.c_str(), msg.dump().c_str(), "application/json");
-				if (!res)
-					throw std::runtime_error("HTTP request failed");
+				    auto res = cl.Post(path.c_str(), msg.dump().c_str(), "application/json");
+				    if (!res)
+					    throw std::runtime_error("HTTP request failed");
 
-				if (res->status != 200)
-					throw std::runtime_error("HTTP request failed with status " +
-					                         std::to_string(res->status));
+				    if (res->status != 200)
+					    throw std::runtime_error("HTTP request failed with status " +
+					                             std::to_string(res->status));
 
-				auto parsed = json::parse(res->body);
-				rtc::Description remote(parsed["sdp"].get<std::string>(),
-				                        parsed["type"].get<std::string>());
-				pc.setRemoteDescription(std::move(remote));
+				    auto parsed = json::parse(res->body);
+				    rtc::Description remote(parsed["sdp"].get<std::string>(),
+				                            parsed["type"].get<std::string>());
+				    pc.setRemoteDescription(std::move(remote));
 
-			} catch (...) {
-				promise.set_exception(std::current_exception());
-			}
-		}
-	});
+			    } catch (...) {
+				    promise.set_exception(std::current_exception());
+			    }
+		    }
+	    });
 
 	pc.onStateChange([&pc, &promise](rtc::PeerConnection::State state) {
 		if (state == rtc::PeerConnection::State::Disconnected) {
@@ -82,29 +87,20 @@ int main(int argc, char **argv) try {
 		}
 	});
 
-	auto dc = pc.createDataChannel("echo");
+	rtc::Description::Audio media("echo", rtc::Description::Direction::SendRecv);
+	media.addOpusCodec(96);
+	auto tr = pc.addTrack(std::move(media));
 
-	dc->onOpen([dc, message]() { dc->send(message); });
+	// TODO: send media
+	tr->onOpen([&promise]() { promise.set_value(); });
 
-	dc->onMessage([message, &promise](auto msg) {
-		if (std::holds_alternative<std::string>(msg)) {
-			auto str = std::get<std::string>(msg);
-			if (str == message)
-				promise.set_value();
-			else
-				promise.set_exception(
-				    std::make_exception_ptr(std::runtime_error("Echo test failed")));
-		}
-	});
+	auto dc = pc.createDataChannel("test");
 
-	if (future.wait_for(10s) != std::future_status::ready) {
-		if (dc->isOpen())
-			throw std::runtime_error("Timeout waiting on echo message");
-		else if (pc.state() == rtc::PeerConnection::State::Connected)
-			throw std::runtime_error("Timeout waiting on Data Channel opening");
-		else
-			throw std::runtime_error("Timeout waiting on Peer Connection");
-	}
+	pc.setLocalDescription(rtc::Description::Type::Offer);
+
+	if (future.wait_for(10s) != std::future_status::ready)
+		throw std::runtime_error("Timeout");
+
 	future.get();
 	return 0;
 
