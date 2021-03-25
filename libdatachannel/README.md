@@ -11,13 +11,14 @@ Additionally, be sure the submodules are updated with `git submodule update --in
 **Build**
 
 `$ cmake -B build` for OpenSSL or `$ cmake -B build -DUSE_GNUTLS=1` for GnuTLS
-`$ (cd build; make -j4)
+
+`$ (cd build; make -j4)`
 
 **Usage**
 
 Server: `$ build/server [PORT]`
+
 Client: `$ build/client [URL]`
 
-The server listens on port 8080 by default.
-The client uses the URL http://127.0.0.1:8080/offer by default.
+The server listens on port 8080 by default and the client uses the URL http://127.0.0.1:8080/offer by default.
 
