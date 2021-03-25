@@ -1,0 +1,6 @@
+[submodule "libdatachannel/deps/cpp-httplib"]
+	path = libdatachannel/deps/cpp-httplib
+	url = https://github.com/yhirose/cpp-httplib.git
+[submodule "libdatachannel/deps/libdatachannel"]
+	path = libdatachannel/deps/libdatachannel
+	url = https://github.com/paullouisageneau/libdatachannel
