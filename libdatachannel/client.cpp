@@ -94,8 +94,6 @@ int main(int argc, char **argv) try {
 	// TODO: send media
 	tr->onOpen([&promise]() { promise.set_value(); });
 
-	auto dc = pc.createDataChannel("test");
-
 	pc.setLocalDescription(rtc::Description::Type::Offer);
 
 	if (future.wait_for(10s) != std::future_status::ready)
