@@ -5,7 +5,7 @@ on:
     branches:
       - master
   pull_request:
-    branches: 
+    branches:
       - master
   repository_dispatch:
     types: [echo-test-command]
@@ -19,9 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        library: ["sipsorcery", "aiortc", "werift", "pion"]
+        library: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel"]
     steps:
       - uses: actions/checkout@v2
+      - name: Update submodules
+        if: matrix.library == 'libdatachannel'
+        run: git submodule update --init --recursive
       - name: Build ${{ matrix.library }} and push to GitHub container registry.
         run: |
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u sipsorcery --password-stdin
@@ -35,8 +38,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        server: ["sipsorcery", "aiortc", "werift", "pion", "gstreamer", "libwebrtc", "kurento", "janus"]
-        client: ["sipsorcery", "aiortc", "werift", "pion"]
+        server: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel", "gstreamer", "libwebrtc", "kurento", "janus"]
+        client: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel"]
     needs: [build-docker-images]
     services:
       echo-test-server:

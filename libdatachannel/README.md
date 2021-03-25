@@ -16,8 +16,8 @@ Additionally, be sure the submodules are updated with `git submodule update --in
 **Usage**
 
 Server: `$ build/server [PORT]`
-Client: `$ build/client [BASE URL]`
+Client: `$ build/client [URL]`
 
 The server listens on port 8080 by default.
-The client requests the server on http://127.0.0.1:8080 by default.
+The client uses the URL http://127.0.0.1:8080/offer by default.
 

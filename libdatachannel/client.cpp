@@ -32,8 +32,12 @@ using json = nlohmann::json;
 using namespace std::chrono_literals;
 
 int main(int argc, char **argv) try {
-	const std::string server = argc > 1 ? argv[1] : "http://localhost:8080";
+	const std::string url = argc > 1 ? argv[1] : "http://localhost:8080/offer";
 	const std::string message = "Hello world!";
+
+	const size_t separator = url.find_last_of('/');
+	const std::string server = url.substr(0, separator);
+	const std::string path = url.substr(separator);
 
 	rtc::InitLogger(rtc::LogLevel::Warning);
 
@@ -43,7 +47,7 @@ int main(int argc, char **argv) try {
 	std::promise<void> promise;
 	auto future = promise.get_future();
 
-	pc.onGatheringStateChange([&pc, &cl, &promise](rtc::PeerConnection::GatheringState state) {
+	pc.onGatheringStateChange([path, &pc, &cl, &promise](rtc::PeerConnection::GatheringState state) {
 		if (state == rtc::PeerConnection::GatheringState::Complete) {
 			try {
 				auto local = pc.localDescription().value();
@@ -51,7 +55,7 @@ int main(int argc, char **argv) try {
 				msg["sdp"] = std::string(local);
 				msg["type"] = local.typeString();
 
-				auto res = cl.Post("/offer", msg.dump().c_str(), "application/json");
+				auto res = cl.Post(path.c_str(), msg.dump().c_str(), "application/json");
 				if (!res)
 					throw std::runtime_error("HTTP request failed");
 
@@ -101,6 +105,7 @@ int main(int argc, char **argv) try {
 		else
 			throw std::runtime_error("Timeout waiting on Peer Connection");
 	}
+	future.get();
 	return 0;
 
 } catch (const std::exception &e) {

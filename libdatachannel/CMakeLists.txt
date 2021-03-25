@@ -18,7 +18,7 @@ set_target_properties(webrtc-libdatachannel-client PROPERTIES
         CXX_STANDARD 17
 	OUTPUT_NAME client)
 
-target_link_libraries(webrtc-libdatachannel-client datachannel httplib nlohmann_json)
+target_link_libraries(webrtc-libdatachannel-client datachannel-static httplib nlohmann_json)
 
 # Server
 
@@ -28,5 +28,5 @@ set_target_properties(webrtc-libdatachannel-server PROPERTIES
         CXX_STANDARD 17
 	OUTPUT_NAME server)
 
-target_link_libraries(webrtc-libdatachannel-server datachannel httplib nlohmann_json)
+target_link_libraries(webrtc-libdatachannel-server datachannel-static httplib nlohmann_json)
 
