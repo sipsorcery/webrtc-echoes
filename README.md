@@ -15,13 +15,13 @@ The libraries that currently have a Client and Server implementation are:
  - [aiortc](https://github.com/aiortc/aiortc): WebRTC and ORTC implementation for Python using asyncio.
  - [libdatachannel](https://github.com/paullouisageneau/libdatachannel): C/C++ WebRTC Data Channels and Media Transport standalone library (bindings for [Rust](https://github.com/lerouxrgd/datachannel-rs), [Node.js](https://github.com/murat-dogan/node-datachannel), and [Unity](https://github.com/hanseuljun/datachannel-unity))
  - [Pion](https://github.com/pion/webrtc): Pure Go implementation of the WebRTC API.
- - [SIPSorcery](https://github.com/sipsorcery-org/sipsorcery) - A WebRTC, SIP and VoIP library for C# and .NET Core. Designed for real-time communications apps.
+ - [SIPSorcery](https://github.com/sipsorcery-org/sipsorcery): A WebRTC, SIP and VoIP library for C# and .NET Core. Designed for real-time communications apps.
  - [werift-webrtc](https://github.com/shinyoshiaki/werift-webrtc): WebRTC Implementation for TypeScript (Node.js)
 
 The libraries that currently have a Server implementation are:
 
   - [gstreamer](https://gstreamer.freedesktop.org/) `master` branch, commit ID `d3c4043db3833ec758093d40fe255518059baf5b`.
-  - [janus](https://janus.conf.meetecho.com/) janus `0.10.7`, commit ID `04229be3eeceb28dbc57a70a57928aab223895a5`.
+  - [janus](https://janus.conf.meetecho.com/) version `0.10.7`, commit ID `04229be3eeceb28dbc57a70a57928aab223895a5`.
   - [kurento](https://www.kurento.org/) version `6.16.1~1.g907a859`.
   - [libwebrtc](https://webrtc.googlesource.com/src/) `m90` branch, commit ID `bb52bdf09516ca548c4aff50526eda561f239bc0`.
 
