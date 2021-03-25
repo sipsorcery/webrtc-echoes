@@ -107,7 +107,12 @@ namespace webrtc_echo
 
         private static RTCPeerConnection CreatePeerConnection()
         {
-            var pc = new RTCPeerConnection();
+            RTCConfiguration config = new RTCConfiguration
+            {
+                //X_ForceUseExtendedMasterSecret = false
+            };
+
+            var pc = new RTCPeerConnection(config);
 
             MediaStreamTrack audioTrack = new MediaStreamTrack(SDPWellKnownMediaFormatsEnum.PCMU);
             pc.addTrack(audioTrack);
