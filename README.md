@@ -44,8 +44,15 @@ If you are interested in adding a library to this project the recommended steps 
  - Test your client by building and running one of the [Echo Test Servers](https://github.com/sipsorcery/webrtc-echoes/blob/master/doc/EchoTestSpecification.md#view-the-code) or you can use one of the [Echo Test Server Docker Images](https://github.com/sipsorcery?tab=packages&q=webrtc):
 
 ````
-docker pull ghcr.io/sipsorcery/sipsorcery-webrtc-echo:latest
-docker run -it --rm -p 8080:8080 ghcr.io/sipsorcery/sipsorcery-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/aiortc-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/gstreamer-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/janus-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/kurento-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/libdatachannel-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/libwebrtc-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/pion-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/sipsorcery-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/werift-webrtc-echo
 ````
 
 - If you encounter any problems open an [Issue](https://github.com/sipsorcery/webrtc-echoes/issues). When done submit a [Pull Request](https://github.com/sipsorcery/webrtc-echoes/pulls) for your application.
