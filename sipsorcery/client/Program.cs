@@ -109,7 +109,7 @@ namespace webrtc_echo
         {
             RTCConfiguration config = new RTCConfiguration
             {
-                //X_ForceUseExtendedMasterSecret = false
+                X_DisableExtendedMasterSecretKey = true
             };
 
             var pc = new RTCPeerConnection(config);
