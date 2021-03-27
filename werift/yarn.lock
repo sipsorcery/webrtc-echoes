@@ -140,10 +140,10 @@
     tslib "^2.1.0"
     webcrypto-core "^1.2.0"
 
-"@peculiar/x509@^1.2.0":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@peculiar/x509/-/x509-1.2.1.tgz#ccb87e66c50b3d7e0f856ededc7210d2a5a31821"
-  integrity sha512-lCTPvAPLUDWuGk0TDRjIZrKwfP4V4DmN0+0z/+bF3E9lYlSKnxzz/nJwc561/BS+Q7frwoOQ2RLgwgiJIwUpXg==
+"@peculiar/x509@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@peculiar/x509/-/x509-1.2.2.tgz#d240701ee9a48110ec99431ab5aaf214a9f1266a"
+  integrity sha512-OxDRTDvWgjsm4lf9DX3DT0Gijgv44JZ9Hxiwuqtg/Aw8XkC6rEoiyjoBd6lg+WGIg1wAkvAy/oeo/p7CCQzGYw==
   dependencies:
     "@peculiar/asn1-cms" "^2.0.27"
     "@peculiar/asn1-csr" "^2.0.27"
@@ -152,7 +152,7 @@
     "@peculiar/asn1-rsa" "^2.0.27"
     "@peculiar/asn1-schema" "^2.0.27"
     "@peculiar/asn1-x509" "^2.0.27"
-    pvtsutils "^1.1.1"
+    pvtsutils "^1.1.2"
     reflect-metadata "^0.1.13"
     tslib "^2.1.0"
     tsyringe "^4.4.0"
@@ -302,9 +302,9 @@ array-flatten@1.1.1:
   integrity sha1-ml9pkFGx5wczKPKgCJaLZOopVdI=
 
 asn1js@^2.0.26:
-  version "2.0.26"
-  resolved "https://registry.yarnpkg.com/asn1js/-/asn1js-2.0.26.tgz#0a6d435000f556a96c6012969d9704d981b71251"
-  integrity sha512-yG89F0j9B4B0MKIcFyWWxnpZPLaNTjCj4tkE3fjbAoo0qmpGw0PYYqSbX/4ebnd9Icn8ZgK4K1fvDyEtW1JYtQ==
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/asn1js/-/asn1js-2.1.1.tgz#bb3896191ebb5fb1caeda73436a6c6e20a2eedff"
+  integrity sha512-t9u0dU0rJN4ML+uxgN6VM2Z4H5jWIYm0w8LsZLzMJaQsgL3IJNbxHgmbWDvJAwspyHpDFuzUaUFh4c05UB4+6g==
   dependencies:
     pvutils latest
 
@@ -339,9 +339,9 @@ binary-extensions@^2.0.0:
   integrity sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==
 
 bn.js@^4.11.9:
-  version "4.11.9"
-  resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.9.tgz#26d556829458f9d1e81fc48952493d0ba3507828"
-  integrity sha512-E6QoYqCKZfgatHTdHzs1RRKP7ip4vvm+EyRUeE2RF0NblwVvb0p6jSVeNTOFxPn26QXN2o6SMfNxKp6kU8zQaw==
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.12.0.tgz#775b3f278efbb9718eec7361f483fb36fbbfea88"
+  integrity sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==
 
 body-parser@1.19.0:
   version "1.19.0"
@@ -482,10 +482,10 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
-date-fns@^2.17.0:
-  version "2.18.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.18.0.tgz#08e50aee300ad0d2c5e054e3f0d10d8f9cdfe09e"
-  integrity sha512-NYyAg4wRmGVU4miKq5ivRACOODdZRY3q5WLmOJSq8djyzftYphU7dTHLcEtLqEvfqMKQ0jVv91P4BAwIjsXIcw==
+date-fns@^2.19.0:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.19.0.tgz#65193348635a28d5d916c43ec7ce6fbd145059e1"
+  integrity sha512-X3bf2iTPgCAQp9wvjOQytnf5vO5rESYRXlPIVcgSbtT5OTScPcsf9eZU+B/YIkKAtYr5WeCii58BgATrNitlWg==
 
 dateformat@~1.0.4-1.2.3:
   version "1.0.12"
@@ -909,9 +909,9 @@ load-json-file@^1.0.0:
     strip-bom "^2.0.0"
 
 lodash@^4.17.20:
-  version "4.17.20"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
-  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 loud-rejection@^1.0.0:
   version "1.6.0"
@@ -1067,10 +1067,10 @@ once@^1.3.0:
   dependencies:
     wrappy "1"
 
-p-cancelable@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/p-cancelable/-/p-cancelable-2.0.0.tgz#4a3740f5bdaf5ed5d7c3e34882c6fb5d6b266a6e"
-  integrity sha512-wvPXDmbMmu2ksjkB4Z3nZWTSkJEb9lqVdMaCKpZUGJG9TMiNp9XcbG3fn9fPKjem04fJMJnXoyFPk2FmgiaiNg==
+p-cancelable@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/p-cancelable/-/p-cancelable-2.1.0.tgz#4d51c3b91f483d02a0d300765321fca393d758dd"
+  integrity sha512-HAZyB3ZodPo+BDpb4/Iu7Jv4P6cSazBz9ZM0ChhEXp70scx834aWCEjQRwgt41UzzejUAPdbqqONfRWTPYrPAQ==
 
 parse-json@^2.2.0:
   version "2.2.0"
@@ -1241,10 +1241,10 @@ rimraf@^2.6.1:
   dependencies:
     glob "^7.1.3"
 
-rx.mini@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/rx.mini/-/rx.mini-1.0.2.tgz#cda85b647d9a1b532665bb4d17cef49efcb84593"
-  integrity sha512-oJTZWKa/wOo1dDj7kSsB6PzKax1s6DzEYpHpEJyCqpimsVMLmb+paTov7LAJcoBdoRoib4gKtWNt9ATGIpOREA==
+rx.mini@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/rx.mini/-/rx.mini-1.1.0.tgz#0f53f02764812dbbb5e2e97938b31cefc3e86147"
+  integrity sha512-SgejtK4cAYpORQeIfwY8DWkanwhi8DAmlJKaUjmcPjNlq6OLBix0qVTYtj2aXxh7tsvO34hd4PQpP263ZrcwYg==
 
 safe-buffer@5.1.2:
   version "5.1.2"
@@ -1456,9 +1456,9 @@ tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0:
   integrity sha512-hcVC3wYEziELGGmEEXue7D75zbwIIVUMWAVbHItGPx0ziyXxrOMQx4rQEVEV45Ut/1IotuEvwqPopzIOkDMf0A==
 
 tsyringe@^4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/tsyringe/-/tsyringe-4.4.0.tgz#cd8a6866316b4cf643ee5e72c41c8a221ccea73d"
-  integrity sha512-SlMApe1lhIq546CDp7bF+IdF4RB6d+9C5T7B0AS0P/Bm+Qpizj/gEmZzvw9J/KlXPEt4qHTbi1TRvX3rCPSdTg==
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/tsyringe/-/tsyringe-4.5.0.tgz#fc88cbab57deac47a2a2033bbca94c96d3c2702a"
+  integrity sha512-XvYgdUxkmGQfpCkKyr/ybJx71OLSnNec1SO0xdohMjaS2UOEyKi76YfKx92XUXgc1TocypHENg6y4wCyYyMKag==
   dependencies:
     tslib "^1.9.3"
 
@@ -1524,19 +1524,19 @@ webcrypto-core@^1.2.0:
     pvtsutils "^1.1.2"
     tslib "^2.1.0"
 
-werift@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/werift/-/werift-0.7.0.tgz#baab5ddb4ad7d999024882bee2c20ac25010b027"
-  integrity sha512-eiHXDcCwJccwlxwREMn7zIcIFbXBr08wkkCu/hAUHLh0MPzurj1+DuQd8heB2HnJK9qcdDQBuxkyPn7lhQ4Zuw==
+werift@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/werift/-/werift-0.7.2.tgz#de8199727c6de04fe772cd191c4a562020396af9"
+  integrity sha512-SEPTaklabXXeaE560FjbVbg3oXGgSMRldDmjDtZ5F6Ez24dHIfJA9odmInkdKrZA2z3lfPhxMbkJuL1lleaDPA==
   dependencies:
     "@fidm/x509" "^1.2.1"
     "@peculiar/webcrypto" "^1.1.6"
-    "@peculiar/x509" "^1.2.0"
+    "@peculiar/x509" "^1.2.2"
     aes-js "^3.1.2"
     big-integer "^1.6.48"
     binary-data "^0.6.0"
     buffer-crc32 "^0.2.13"
-    date-fns "^2.17.0"
+    date-fns "^2.19.0"
     debug "^4.3.1"
     elliptic "^6.5.3"
     int64-buffer "^1.0.0"
@@ -1544,8 +1544,8 @@ werift@^0.7.0:
     jspack "^0.0.4"
     lodash "^4.17.20"
     nano-time "^1.0.0"
-    p-cancelable "^2.0.0"
-    rx.mini "^1.0.1"
+    p-cancelable "^2.1.0"
+    rx.mini "^1.1.0"
     turbo-crc32 "^1.0.1"
     tweetnacl "^1.0.3"
     uuid "^8.3.2"

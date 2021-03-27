@@ -12,7 +12,7 @@
     "axios": "^0.21.1",
     "debug": "^4.3.1",
     "express": "^4.17.1",
-    "werift": "^0.7.0",
+    "werift": "^0.7.2",
     "yargs": "^16.2.0"
   },
   "devDependencies": {
