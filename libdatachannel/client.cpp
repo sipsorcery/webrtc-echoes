@@ -96,8 +96,8 @@ int main(int argc, char **argv) try {
 		}
 	});
 
-	rtc::Description::Audio media("echo", rtc::Description::Direction::SendRecv);
-	media.addOpusCodec(96);
+	rtc::Description::Video media("echo", rtc::Description::Direction::SendRecv);
+	media.addVP8Codec(96);
 	auto tr = pc.addTrack(std::move(media));
 
 	// TODO: send media
