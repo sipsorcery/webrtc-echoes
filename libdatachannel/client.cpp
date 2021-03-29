@@ -51,33 +51,42 @@ int main(int argc, char **argv) try {
 	std::promise<void> promise;
 	auto future = promise.get_future();
 
-	pc.onGatheringStateChange(
-	    [path, &pc, &cl, &promise](rtc::PeerConnection::GatheringState state) {
-		    if (state == rtc::PeerConnection::GatheringState::Complete) {
-			    try {
-				    auto local = pc.localDescription().value();
-				    json msg;
-				    msg["sdp"] = std::string(local);
-				    msg["type"] = local.typeString();
+	pc.onGatheringStateChange([url, path, &pc, &cl,
+	                           &promise](rtc::PeerConnection::GatheringState state) {
+		if (state == rtc::PeerConnection::GatheringState::Complete) {
+			try {
+				auto local = pc.localDescription().value();
+				json msg;
+				msg["sdp"] = std::string(local);
+				msg["type"] = local.typeString();
 
-				    auto res = cl.Post(path.c_str(), msg.dump().c_str(), "application/json");
-				    if (!res)
-					    throw std::runtime_error("HTTP request failed");
+				auto dumped = msg.dump();
+				auto res = cl.Post(path.c_str(), dumped.c_str(), "application/json");
+				if (!res)
+					throw std::runtime_error("HTTP request to " + url +
+					                         " failed; error code: " + std::to_string(res.error()));
 
-				    if (res->status != 200)
-					    throw std::runtime_error("HTTP request failed with status " +
-					                             std::to_string(res->status));
+				if (res->status != 200)
+					throw std::runtime_error("HTTP POST failed with status " +
+					                         std::to_string(res->status) + "; content: " + dumped);
+				json parsed;
+				try {
+					parsed = json::parse(res->body);
 
-				    auto parsed = json::parse(res->body);
-				    rtc::Description remote(parsed["sdp"].get<std::string>(),
-				                            parsed["type"].get<std::string>());
-				    pc.setRemoteDescription(std::move(remote));
+				} catch (const std::exception &e) {
+					throw std::runtime_error("HTTP response parsing failed: " +
+					                         std::string(e.what()) + "; content: " + res->body);
+				}
 
-			    } catch (...) {
-				    promise.set_exception(std::current_exception());
-			    }
-		    }
-	    });
+				rtc::Description remote(parsed["sdp"].get<std::string>(),
+				                        parsed["type"].get<std::string>());
+				pc.setRemoteDescription(std::move(remote));
+
+			} catch (...) {
+				promise.set_exception(std::current_exception());
+			}
+		}
+	});
 
 	pc.onStateChange([&pc, &promise](rtc::PeerConnection::State state) {
 		if (state == rtc::PeerConnection::State::Disconnected) {
@@ -87,8 +96,8 @@ int main(int argc, char **argv) try {
 		}
 	});
 
-	rtc::Description::Audio media("echo", rtc::Description::Direction::SendRecv);
-	media.addOpusCodec(96);
+	rtc::Description::Video media("echo", rtc::Description::Direction::SendRecv);
+	media.addVP8Codec(96);
 	auto tr = pc.addTrack(std::move(media));
 
 	// TODO: send media
