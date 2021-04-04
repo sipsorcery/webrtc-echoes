@@ -84,8 +84,8 @@ namespace webrtc_echo
                     .WithUrlPrefix(url)
                     .WithMode(HttpListenerMode.EmbedIO))
                 .WithCors("*", "*", "*")
-                .WithAction("/offer", HttpVerbs.Post, Offer)
-                .WithStaticFolder("/", "../../html", false);
+                .WithAction("/offer", HttpVerbs.Post, Offer);
+                //.WithStaticFolder("/", "../../html", false);
             server.StateChanged += (s, e) => Console.WriteLine($"WebServer New State - {e.NewState}");
 
             return server;
@@ -181,10 +181,8 @@ namespace webrtc_echo
             var setResult = pc.setRemoteDescription(offer);
             if (setResult == SetDescriptionResultEnum.OK)
             {
-                var offerSdp = pc.createOffer(null);
-                await pc.setLocalDescription(offerSdp);
-
                 var answer = pc.createAnswer(null);
+                await pc.setLocalDescription(answer);
 
                 logger.LogTrace($"SDP answer created.");
                 logger.LogTrace(answer.sdp);
