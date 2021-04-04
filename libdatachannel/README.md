@@ -8,11 +8,23 @@ You need cmake and the development libraries with header files for either OpenSS
 
 Additionally, be sure the submodules are updated with `git submodule update --init --recursive`.
 
+For building on Windows vcpkg can be used to install the required dependencies:
+
+`vcpkg install --triplet=x64-windows openssl zlib`
+
+If cmake fails to find the vcpkg dependencies try passing the vcpkg include file (run `vcpkg integrate install` to print out the path):
+
+`cmake -DCMAKE_TOOLCHAIN_FILE=C:/Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -B build`
+
 **Build**
 
 `$ cmake -B build` for OpenSSL or `$ cmake -B build -DUSE_GNUTLS=1` for GnuTLS
 
 `$ (cd build; make -j4)`
+
+For Windows:
+
+`msbuild build\webrtc-libdatachannel.sln`
 
 **Usage**
 
