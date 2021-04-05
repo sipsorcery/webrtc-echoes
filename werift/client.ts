@@ -20,7 +20,7 @@ new Promise<void>(async (r, f) => {
     iceConfig: { stunServer: ["stun.l.google.com", 19302] },
   });
   const senderTrack = new MediaStreamTrack({ kind: "video" });
-  const transceiver = pc.addTransceiver(senderTrack, "sendrecv");
+  const transceiver = pc.addTransceiver(senderTrack);
   transceiver.onTrack.once((track) => {
     track.onReceiveRtp.subscribe((rtp) => {
       log(rtp.header);
