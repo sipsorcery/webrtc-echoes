@@ -43,13 +43,12 @@ app.post("/offer", async (req, res) => {
   const pc = new RTCPeerConnection({
     iceConfig: { stunServer: ["stun.l.google.com", 19302] },
   });
-  pc.onTransceiver.subscribe(async (transceiver) => {
-    const [track] = await transceiver.onTrack.asPromise();
-    transceiver.sender.replaceTrack(track);
-  });
   pc.onDataChannel.subscribe((dc) => {
     dc.message.subscribe((msg) => dc.send(msg));
   });
+
+  const transceiver = pc.addTransceiver("video", { direction: "sendrecv" });
+  transceiver.onTrack.once((track) => transceiver.sender.replaceTrack(track));
 
   await pc.setRemoteDescription(offer);
   const answer = await pc.setLocalDescription(await pc.createAnswer());
