@@ -2,17 +2,17 @@
 
 This image gets as far as producing `libwebrtc-full.a` so that it can be used for application builds.
 
-`docker build -t libwebrtc-builder:0.1 -f Dockerfile-Builder --progress=plain .`
+`docker build -t libwebrtc-builder:m90 -f Dockerfile-Builder --progress=plain .`
 
 ## Building docker image
 
 The application image. It builds the application on an instance of the builder image and then copies the binary to a new ubuntu image and installs the required shared library packages.
 
-`docker build -t libwebrtc-webrtc-echo:0.1 --progress=plain .`
+`docker build -t libwebrtc-webrtc-echo:0.9 --progress=plain .`
 
 ## Running docker image
 
-`docker run -it --init --rm -p 8080:8080 libwebrtc-webrtc-echo:0.1`
+`docker run -it --init --rm -p 8080:8080 libwebrtc-webrtc-echo:0.9`
 
 ## Building webrtc.lib on Windows
 
@@ -58,6 +58,13 @@ Subsequently:
 ````
 src$ gclient sync
 ````
+
+or if there are problems with `gclient sync`:
+
+````
+src$ gclient sync --force 
+````
+
 And then:
 
 ````
