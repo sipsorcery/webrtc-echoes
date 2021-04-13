@@ -39,9 +39,10 @@ app.use(express.static((args.static as string) || "../html"));
 
 app.post("/offer", async (req, res) => {
   const offer = req.body;
+  console.log("offer", offer);
 
   const pc = new RTCPeerConnection({
-    iceConfig: { stunServer: ["stun.l.google.com", 19302] },
+    iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
   });
   pc.onTransceiver.subscribe(async (transceiver) => {
     const [track] = await transceiver.onTrack.asPromise();
