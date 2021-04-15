@@ -3,10 +3,10 @@ name: WebRTC Data Channel Interopability Test
 on:
   push:
     branches:
-      - master
+      - datachanneltest
   pull_request:
     branches:
-      - master
+      # - master
   repository_dispatch:
     types: [datachannel-test-command]
 
@@ -35,7 +35,7 @@ jobs:
       - name: Data Channel test for server ${{ matrix.server }} and ${{ matrix.client }} client
         id: check_connection
         run: |
-          docker run --entrypoint "/client-datachannel.sh" --network ${{ job.container.network }} ghcr.io/sipsorcery/${{ matrix.client }}-webrtc-echo http://echo-server:8080/offer
+          docker run --entrypoint "/client.sh" --network ${{ job.container.network }} ghcr.io/sipsorcery/${{ matrix.client }}-webrtc-echo http://echo-server:8080/offer -t 1
           result=$?
           echo "Check connection for ${{ matrix.server }} server and ${{ matrix.client }} client result $result."
           echo "::set-output name=TEST_RESULT::$result"
