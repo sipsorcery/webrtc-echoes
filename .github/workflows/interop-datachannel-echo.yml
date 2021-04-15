@@ -1,0 +1,85 @@
+name: WebRTC Data Channel Interopability Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  repository_dispatch:
+    types: [datachannel-test-command]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  # Job Description: Performs the Data Channel Test between each combination of the client and server for each library.
+  interop-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        server: ["sipsorcery"]
+        client: ["sipsorcery"]
+    services:
+      echo-test-server:
+        image: ghcr.io/sipsorcery/${{ matrix.server }}-webrtc-echo
+        credentials:
+          username: ${{ github.actor }}
+          password: ${{ secrets.CR_PAT }}
+        #ports:
+        #  - 8080:8080
+        options: "--name echo-server"
+
+    steps:
+      - name: Data Channel test for server ${{ matrix.server }} and ${{ matrix.client }} client
+        id: check_connection
+        run: |
+          docker run --entrypoint "/client-datachannel.sh" --network ${{ job.container.network }} ghcr.io/sipsorcery/${{ matrix.client }}-webrtc-echo http://echo-server:8080/offer
+          result=$?
+          echo "Check connection for ${{ matrix.server }} server and ${{ matrix.client }} client result $result."
+          echo "::set-output name=TEST_RESULT::$result"
+        continue-on-error: true
+      - name: Record result
+        run: |
+          echo "Result for ${{ matrix.server }} server and ${{ matrix.client }} client, outcome ${{ steps.check_connection.outcome }}, result ${{ steps.check_connection.outputs.TEST_RESULT }}."
+          echo "${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> ${{ matrix.server }}_${{ matrix.client }}_result.csv
+      - name: Upload result
+        uses: actions/upload-artifact@v2
+        with:
+          name: results
+          path: |
+            ${{ matrix.server }}_${{ matrix.client }}_result.csv
+
+  # Job Description: Collates the results of the interop tests into a mark down table.
+  collate:
+    runs-on: ubuntu-latest
+    needs: [interop-tests]
+    steps:
+      - uses: actions/checkout@v2
+        if: github.event_name == 'repository_dispatch'
+        with:
+          ref: refs/pull/${{ github.event.client_payload.pull_request.number }}/head
+      - uses: actions/checkout@v2
+        if: github.event_name != 'repository_dispatch'
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+      - name: Download results
+        uses: actions/download-artifact@v2
+        with:
+          name: results
+      - name: Collate result files
+        run: |
+          python --version
+          pip install weasyprint
+          python test/collate-results.py
+          python test/collate-results.py > test/datachannel_test_results.md
+          cat test/datachannel_test_results.md
+      - name: Commit the results to the git repository
+        if: github.event_name != 'pull_request' && github.event_name != 'repository_dispatch'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit test/datachannel_test_results.md test/datachanneltest_results.png -m "Automated data channel test results."
+          git push
