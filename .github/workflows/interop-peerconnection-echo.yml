@@ -93,13 +93,14 @@ jobs:
         run: |
           python --version
           pip install weasyprint
-          python test/collate-results.py
-          python test/collate-results.py > test/echo_test_results.md
+          python test/collate-results.py echo
+          python test/collate-results.py echo > echo_test_results.md
           cat test/echo_test_results.md
-      - name: Commit the results to the git repository
+      - name: Azure CLI script to upload results to Azure blob storage
         if: github.event_name != 'pull_request' && github.event_name != 'repository_dispatch'
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git commit test/echo_test_results.md test/echo_test_results.png -m "Automated echo test results."
-          git push
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az storage blob upload --account-name webrtctestresults --container-name githubactions --name echo_test_results.md --file echo_test_results.md --account-key ${{ secrets.Azure_Key }}
+            az storage blob upload --account-name webrtctestresults --container-name githubactions --name echo_test_results.png --file echo_test_results.png --account-key ${{ secrets.Azure_Key }}
+          

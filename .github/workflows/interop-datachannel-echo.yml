@@ -76,15 +76,11 @@ jobs:
           python test/collate-results.py datachannel
           python test/collate-results.py > datachannel_test_results.md
           cat datachannel_test_results.md
-      #- name: Azure Login
-      #  uses: azure/login@v1
-      #  with:
-      #    creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Azure CLI script to upload results to Azure blob storage
         if: github.event_name != 'pull_request' && github.event_name != 'repository_dispatch'
         uses: azure/CLI@v1
         with:
           inlineScript: |
-            az storage blob upload --account-name webrtctestresults --container-name datachannel --name datachannel_test_results.md --file datachannel_test_results.md --account-key ${{ secrets.Azure_Key }}
-            az storage blob upload --account-name webrtctestresults --container-name datachannel --name datachannel_test_results.png --file datachannel_test_results.png --account-key ${{ secrets.Azure_Key }}
+            az storage blob upload --account-name webrtctestresults --container-name githubactions --name datachannel_test_results.md --file datachannel_test_results.md --account-key ${{ secrets.Azure_Key }}
+            az storage blob upload --account-name webrtctestresults --container-name githubactions --name datachannel_test_results.png --file datachannel_test_results.png --account-key ${{ secrets.Azure_Key }}
           
