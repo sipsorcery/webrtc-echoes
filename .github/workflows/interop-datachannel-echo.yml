@@ -3,10 +3,10 @@ name: WebRTC Data Channel Interopability Test
 on:
   push:
     branches:
-      - datachanneltest
+      - master
   pull_request:
     branches:
-      # - master
+      - master
   repository_dispatch:
     types: [datachannel-test-command]
 
