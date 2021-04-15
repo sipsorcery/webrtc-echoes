@@ -33,7 +33,9 @@ The initial goal of this project is to find the simplest useful interoperability
 
  - **[Echo Test](doc/EchoTestSpecification.md)**: The first test is an Echo Test Server and/or Client that tests the ability to negotiate a peer connection up to the DTLS handshake. **A description of how the Echo Test works is available [here](doc/EchoTestSpecification.md)**.
 
-![Echo Test Results](test/echo_test_results.png)
+![Echo Test Results](https://webrtctestresults.blob.core.windows.net/githubactions/echo_test_results.png)
+
+![Data Channel Test Results](https://webrtctestresults.blob.core.windows.net/githubactions/datachannel_test_results.png)
 
 ## Get Started
 

@@ -20,6 +20,7 @@
 
 import os
 import glob
+import sys
 #import pandas as pd
 #import dataframe_image as dfi
 import weasyprint as wsp
@@ -28,9 +29,17 @@ import PIL as pil
 from collections import defaultdict
 from datetime import datetime
 
+testname = "echo"
+if len(sys.argv) > 1: 
+    testname = sys.argv[1]
+
+#print("Test name=%s.\n" % testname)
+	
 # The character width of each cell in the results markdown table.
 COL_WIDTH = 12
-RESULTS_FILE_PATH = "test/echo_test_results.png"
+RESULTS_FILE_PATH = testname + "_test_results.png"
+
+#print("results file path=%s.\n" % RESULTS_FILE_PATH)
 
 def trim(source_filepath, target_filepath=None, background=None):
     if not target_filepath:
@@ -66,10 +75,10 @@ sorted(clientKeys)
 html = """<html>
  <body>"""
 
-print('## Echo Test Results')
+print('## %s Test Results' % testname)
 print('Test run at %s\n' % datetime.now())
 
-html += "<h3>Echo Test Results</h3>"
+html += "<h3>" + testname + " Test Results</h3>"
 html += "<p>Test run at %s.</p>" % datetime.now()
 
 # Print Table header row.
