@@ -73,9 +73,9 @@ jobs:
         run: |
           python --version
           pip install weasyprint
-          python test/collate-results.py
-          python test/collate-results.py > test/datachannel_test_results.md
-          cat test/datachannel_test_results.md
+          python test/collate-results.py datachannel
+          python test/collate-results.py > datachannel_test_results.md
+          cat datachannel_test_results.md
       #- name: Azure Login
       #  uses: azure/login@v1
       #  with:
