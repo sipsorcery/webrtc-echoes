@@ -35,7 +35,7 @@ jobs:
       - name: Data Channel test for server ${{ matrix.server }} and ${{ matrix.client }} client
         id: check_connection
         run: |
-          docker run --entrypoint "/client.sh" --network ${{ job.container.network }} ghcr.io/sipsorcery/${{ matrix.client }}-webrtc-echo http://echo-server:8080/offer -t 1
+          docker run --entrypoint "/client.sh" --network ${{ job.container.network }} ghcr.io/sipsorcery/${{ matrix.client }}-webrtc-echo "http://echo-server:8080/offer -t 1"
           result=$?
           echo "Check connection for ${{ matrix.server }} server and ${{ matrix.client }} client result $result."
           echo "::set-output name=TEST_RESULT::$result"
@@ -76,10 +76,10 @@ jobs:
           python test/collate-results.py
           python test/collate-results.py > test/datachannel_test_results.md
           cat test/datachannel_test_results.md
-      - name: Commit the results to the git repository
+      - name: Install Azure CLI
+        run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+      - name: Upload the results to Azure Blob Storage
         if: github.event_name != 'pull_request' && github.event_name != 'repository_dispatch'
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git commit test/datachannel_test_results.md test/datachanneltest_results.png -m "Automated data channel test results."
-          git push
+          az storage blob upload --account-name webrtctestresults --container-name datachannel --name datachannel_test_results.md --file datachannel_test_results.md --account-key ${{ secrets.Azure_Key }}
+          az storage blob upload --account-name webrtctestresults --container-name datachannel --name datachannel_test_results.png --file datachannel_test_results.png --account-key ${{ secrets.Azure_Key }}
