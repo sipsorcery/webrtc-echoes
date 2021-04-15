@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        server: ["sipsorcery"]
+        server: ["libdatachannel", "sipsorcery"]
         client: ["sipsorcery"]
     services:
       echo-test-server:
