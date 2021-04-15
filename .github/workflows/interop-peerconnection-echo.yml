@@ -95,7 +95,7 @@ jobs:
           pip install weasyprint
           python test/collate-results.py echo
           python test/collate-results.py echo > echo_test_results.md
-          cat test/echo_test_results.md
+          cat echo_test_results.md
       - name: Azure CLI script to upload results to Azure blob storage
         if: github.event_name != 'pull_request' && github.event_name != 'repository_dispatch'
         uses: azure/CLI@v1
