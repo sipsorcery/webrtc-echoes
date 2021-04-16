@@ -77,7 +77,6 @@ jobs:
     needs: [interop-tests]
     steps:
       - uses: actions/checkout@v2
-        if: github.event_name == 'repository_dispatch'
         with:
           ref: testresults
       - uses: actions/setup-python@v2
@@ -95,14 +94,14 @@ jobs:
           python test/collate-results.py echo > echo_test_results.md
           cat echo_test_results.md
       - name: Azure CLI script to upload results to Azure blob storage
-        if: github.event_name != 'pull_request' && github.event_name != 'repository_dispatch'
+        if: github.event_name != 'pull_request'
         uses: azure/CLI@v1
         with:
           inlineScript: |
             az storage blob upload --account-name webrtctestresults --container-name githubactions --name echo_test_results.md --file echo_test_results.md --account-key ${{ secrets.Azure_Key }}
             az storage blob upload --account-name webrtctestresults --container-name githubactions --name echo_test_results.png --file echo_test_results.png --account-key ${{ secrets.Azure_Key }}
       - name: Commit the results to the git repository
-        if: github.event_name != 'pull_request' && github.event_name != 'repository_dispatch'
+        if: github.event_name != 'pull_request'
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
