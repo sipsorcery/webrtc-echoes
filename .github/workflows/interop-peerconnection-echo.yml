@@ -103,4 +103,11 @@ jobs:
           inlineScript: |
             az storage blob upload --account-name webrtctestresults --container-name githubactions --name echo_test_results.md --file echo_test_results.md --account-key ${{ secrets.Azure_Key }}
             az storage blob upload --account-name webrtctestresults --container-name githubactions --name echo_test_results.png --file echo_test_results.png --account-key ${{ secrets.Azure_Key }}
-          
+      - name: Commit the results to the git repository
+        if: github.event_name != 'pull_request' && github.event_name != 'repository_dispatch'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git checkout testresults
+          git commit echo_test_results.md echo_test_results.png -m "Automated echo test results."
+          git push   
