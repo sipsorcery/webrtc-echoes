@@ -2,23 +2,24 @@
 
 The purpose of the WebRTC Echo Test is verify that a Peer Connection can be established between two peers: the `Server Peer` and the `Client Peer`.
 
-The "Echo" part of the test is the ability of the `Server Peer` to reflect any audio or video packets it receives back to the `Client Peer`. This is particularly useful when testing when a Browser is in the `Client Peer` role as it can provide a prompt visual indication of the success of the test.
-
 ## View the Code
 
-The descriptions in the following sections outline how the Echo Test Server and Client work. Often it can be easier to read the code and at the time of writing there are already a number of implementations in different languages that can be reviewed.
+The descriptions in the following sections outline how the `Server Peer` and `Client Peer` work together. Often it can be easier to read the code. A number of implementations in different languages that can be reviewed:
 
-  - Python: [aiortc Echo Test Server](../aiortc/server.py)
-  - Go: [Pion Echo Test Server](../pion/main.go)
-  - Go: [Pion Echo Test Client](../pion/client/main.go)
-  - C#: [SIPSorcery Echo Test Server](../sipsorcery/server/Program.cs)
-  - C#: [SIPSorcery Echo Test Client](../sipsorcery/client/Program.cs)
-  - TypeScript: [werift Echo Test Server](../werift/server.ts)
-  - TypeScript: [werift Echo Test Client](../werift/client.ts)
+  - Python: [aiortc Test Server](../aiortc/server.py)
+  - Python: [aiortc Test Client](../aiortc/client.py)
+  - Go: [Pion Test Server](../pion/main.go)
+  - Go: [Pion Test Client](../pion/client/main.go)
+  - C#: [SIPSorcery Test Server](../sipsorcery/server/Program.cs)
+  - C#: [SIPSorcery Test Client](../sipsorcery/client/Program.cs)
+  - C++: [libdatachannel Test Server](../libdatachannel/server.cpp)
+  - C++: [libdatachannel Test Client](../libdatachannel/client.cpp)
+  - TypeScript: [werift Test Server](../werift/server.ts)
+  - TypeScript: [werift Test Client](../werift/client.ts)
 
 ## Signaling
 
-The single signaling operation involved in the test is a HTTP POST request from the `Client Peer` to the `Server Peer`. The Client must send it's SDP offer to the Server and the Server will respond with its SDP answer.
+The single step signaling operation involved in the test is a HTTP POST request from the `Client Peer` to the `Server Peer`. The Client must send its SDP offer to the Server and the Server will respond with its SDP answer.
 
 **Note**: Using this single-shot signaling approach means that at least one of the `Client Peer` or `Server Peer` must operate in non-trickle ICE mode and include their ICE candidates in the SDP. Ideally both peers should be configured to operate in non-trickle mode. This is a deliberate choice in order to reduce the signaling complexity.
 
@@ -45,6 +46,6 @@ The required flow for a `Server Peer` is:
   - Set the remote offer on the `Peer Connection`.
   - Perform the `Peer Connection` initialisation.
   - Optionally send any audio or video to the server and have it echoed back.
-  - Once the client has determined the `Peer Connection` has been successfully connected it shoudl close the connetion adn **Return 0**. If the connection fails or times out the client should **Return 1**.
+  - If the DTLS handshake is successfully completed the client should **Return 0**. If the test fails or times out the client should **Return 1**. It's solely up to the `Client Peer` to decide if the test was successful or not.
 
  In addition to the various implementations listed above a javascript application that functions as an Echo Test `Client Peer` is available [here](../html/index.html). 

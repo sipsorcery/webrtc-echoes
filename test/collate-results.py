@@ -29,7 +29,7 @@ import PIL as pil
 from collections import defaultdict
 from datetime import datetime
 
-testname = "echo"
+testname = "PeerConnection"
 if len(sys.argv) > 1: 
     testname = sys.argv[1]
 

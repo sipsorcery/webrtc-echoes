@@ -1,4 +1,4 @@
-name: WebRTC Peer Connection Echo Interopability Test
+name: WebRTC Peer Connection Echo Interoperability Test
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
       - name: List docker images (diagnostics).
         run: docker image ls
 
-  # Job Description: Performs the WebRTC Echo Test between each combination of the client and server for each library.
+  # Job Description: Performs the Peer Connection Test between each combination of the client and server for each library.
   interop-tests:
     runs-on: ubuntu-latest
     strategy:
@@ -90,22 +90,22 @@ jobs:
         run: |
           python --version
           pip install weasyprint
-          python test/collate-results.py echo
-          python test/collate-results.py echo > echo_test_results.md
-          cat echo_test_results.md
+          python test/collate-results.py PeerConnection
+          python test/collate-results.py PeerConnection > PeerConnection_test_results.md
+          cat PeerConnection_test_results.md
       - name: Azure CLI script to upload results to Azure blob storage
         if: github.event_name != 'pull_request'
         uses: azure/CLI@v1
         with:
           inlineScript: |
-            az storage blob upload --account-name webrtctestresults --container-name githubactions --name echo_test_results.md --file echo_test_results.md --account-key ${{ secrets.Azure_Key }}
-            az storage blob upload --account-name webrtctestresults --container-name githubactions --name echo_test_results.png --file echo_test_results.png --account-key ${{ secrets.Azure_Key }}
+            az storage blob upload --account-name webrtctestresults --container-name githubactions --name PeerConnection_test_results.md --file PeerConnection_test_results.md --account-key ${{ secrets.Azure_Key }}
+            az storage blob upload --account-name webrtctestresults --container-name githubactions --name PeerConnection_test_results.png --file PeerConnection_test_results.png --account-key ${{ secrets.Azure_Key }}
       - name: Commit the results to the git repository
         if: github.event_name != 'pull_request'
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git pull
-          git add echo_test_results.md echo_test_results.png
-          git commit echo_test_results.md echo_test_results.png -m "Automated echo test results."
+          git add PeerConnection_test_results.md PeerConnection_test_results.png
+          git commit PeerConnection_test_results.md PeerConnection_test_results.png -m "Automated peer connection test results."
           git push   

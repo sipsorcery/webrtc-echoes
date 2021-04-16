@@ -1,8 +1,8 @@
 ## Overview
 
-Once an Echo Test Server or Client has succeeded in one or more manual tests with another implementation it is worth creating a Docker image so that it can be included in the automated tests.
+Once an `Server Peer` or `Client Peer` has succeeded in one or more manual tests with another implementation a Docker image should be created so that it can be included in the automated tests.
 
-This document outlines the requirements for an automated Echo Test Docker image.
+This document outlines the requirements for creating a Docker image.
 
 ## Example
 
@@ -31,9 +31,9 @@ ENTRYPOINT ["dotnet", "webrtc-echo.dll"]
 
 ## Requirements
 
-The Docker image built from the `Dockerfile` must be capable of being used as an Echo Test Server, Echo Test Client or both.
+The Docker image built from the `Dockerfile` must be capable of being used as a `Server Peer`, `Client Peer` or both.
 
-The default mode of operation is an Echo Test Server and the `ENTRYPOINT` in the `Dockerfile` should result in an [Echo Test Server](EchoTestSpecification.md) running when a new container is created. An example of how the [GitHub Action Script](../.github/workflows/interop-peerconnection-echo.yml) will create the container is:
+The default mode of operation is as a `Server Peer` and the `ENTRYPOINT` in the `Dockerfile` should result in an [Server Peer](PeerConnectionTestSpecification.md) running when a new container is created. An example of how the [GitHub Action Script](../.github/workflows/peerconnection-test.yml) will create the container is:
 
 `docker run ghcr.io/sipsorcery/sipsorcery-webrtc-echo`
 
