@@ -483,9 +483,9 @@ currently-unhandled@^0.4.1:
     array-find-index "^1.0.1"
 
 date-fns@^2.19.0:
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.19.0.tgz#65193348635a28d5d916c43ec7ce6fbd145059e1"
-  integrity sha512-X3bf2iTPgCAQp9wvjOQytnf5vO5rESYRXlPIVcgSbtT5OTScPcsf9eZU+B/YIkKAtYr5WeCii58BgATrNitlWg==
+  version "2.21.1"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.21.1.tgz#679a4ccaa584c0706ea70b3fa92262ac3009d2b0"
+  integrity sha512-m1WR0xGiC6j6jNFAyW4Nvh4WxAi4JF4w9jRJwSI8nBmNcyZXPcP9VUQG+6gHQXAmqaGEKDKhOqAtENDC941UkA==
 
 dateformat@~1.0.4-1.2.3:
   version "1.0.12"
@@ -1450,7 +1450,12 @@ tslib@^1.9.3:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0:
+tslib@^2.0.0, tslib@^2.0.3:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.2.0.tgz#fb2c475977e35e241311ede2693cee1ec6698f5c"
+  integrity sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==
+
+tslib@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.1.0.tgz#da60860f1c2ecaa5703ab7d39bc05b6bf988b97a"
   integrity sha512-hcVC3wYEziELGGmEEXue7D75zbwIIVUMWAVbHItGPx0ziyXxrOMQx4rQEVEV45Ut/1IotuEvwqPopzIOkDMf0A==
@@ -1525,9 +1530,9 @@ webcrypto-core@^1.2.0:
     tslib "^2.1.0"
 
 werift@^0.8.3:
-  version "0.8.3"
-  resolved "https://registry.yarnpkg.com/werift/-/werift-0.8.3.tgz#5216f9ac5666a9cd27413978292f274d2c23ceda"
-  integrity sha512-pkniapEaP6Rhss3XuiV/2WgPvH0rxj5vhKrk2V6khTzPLjn6Csp0WBrFrnpbx/J7Roj5IWOl6xap7dX7cG7WmQ==
+  version "0.8.4"
+  resolved "https://registry.yarnpkg.com/werift/-/werift-0.8.4.tgz#63cdca5abccbd5a4f67a0401cfccb2c1bc4c9654"
+  integrity sha512-JKz7eC0HXsYrAXRCz51U040nA+hIHgQem/0J7gJaZnF4rR5ocwL8rNhOBD+/lANKhmeq/GfaIve7Sbyy2JogAQ==
   dependencies:
     "@fidm/x509" "^1.2.1"
     "@peculiar/webcrypto" "^1.1.6"
