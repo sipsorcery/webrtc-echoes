@@ -1,6 +1,6 @@
 ## Overview
 
-The purpose of the WebRTC Echo Test is verify that a Peer Connection can be established between two peers: the `Server Peer` and the `Client Peer`.
+The purpose of the `Peer Connection Test` is verify that the WebRTC steps up to and including a DTLS handshake can be successfully completed between two peers: the `Server Peer` and the `Client Peer`.
 
 ## View the Code
 
@@ -25,7 +25,7 @@ The single step signaling operation involved in the test is a HTTP POST request 
 
 ## Server Peer Operation
 
-The required flow for a `Server Peer` is:
+The required operation for a `Server Peer` is:
 
  - Listen on TCP port `8080` for HTTP POST requests. The URL that the HTTP server must listen on for POST requests is:
    - http://*:8080/offer (if a wildcard IP address cannot be used any address that the client can reach is suitable).
@@ -33,11 +33,10 @@ The required flow for a `Server Peer` is:
  - When an SDP offer is received create a new `Peer Connection` and set the remote offer.
  - Generate an SDP answer and return it as a JSON encoded [RTCSessionDescriptionInit](https://www.w3.org/TR/webrtc/#dom-rtcsessiondescriptioninit) object in the HTTP POST response.
  - Perform the `Peer Connection` initialisation.
- - For any RTP media received on the `Peer Connection` send it back to the remote peer.
 
  ## Client Peer Operation
 
- The required flow for a `Client Peer` is:
+ The required operation for a `Client Peer` is:
 
   - Create a new `Peer Connection` and generate an SDP offer.
   - Send the SDP offer as a JSON encoded [RTCSessionDescriptionInit](https://www.w3.org/TR/webrtc/#dom-rtcsessiondescriptioninit) object to the `Server Peer` with an HTTP POST request to:
@@ -45,7 +44,6 @@ The required flow for a `Server Peer` is:
   - The HTTP POST response will be an SDP answer as a JSON encoded [RTCSessionDescriptionInit](https://www.w3.org/TR/webrtc/#dom-rtcsessiondescriptioninit) object.
   - Set the remote offer on the `Peer Connection`.
   - Perform the `Peer Connection` initialisation.
-  - Optionally send any audio or video to the server and have it echoed back.
   - If the DTLS handshake is successfully completed the client should **Return 0**. If the test fails or times out the client should **Return 1**. It's solely up to the `Client Peer` to decide if the test was successful or not.
 
  In addition to the various implementations listed above a javascript application that functions as an Echo Test `Client Peer` is available [here](../html/index.html). 

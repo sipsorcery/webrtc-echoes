@@ -18,7 +18,7 @@ The libraries that currently have a Client and Server implementation are:
  - [SIPSorcery](https://github.com/sipsorcery-org/sipsorcery): A WebRTC, SIP and VoIP library for C# and .NET Core. Designed for real-time communications apps.
  - [werift-webrtc](https://github.com/shinyoshiaki/werift-webrtc): WebRTC Implementation for TypeScript (Node.js)
 
-The libraries that currently have a Server implementation are:
+Additional libraries/applications that currently have a Server implementation are:
 
   - [gstreamer](https://gstreamer.freedesktop.org/) `master` branch, commit ID `d3c4043db3833ec758093d40fe255518059baf5b`.
   - [janus](https://janus.conf.meetecho.com/) version `0.10.7`, commit ID `04229be3eeceb28dbc57a70a57928aab223895a5`.
@@ -27,11 +27,11 @@ The libraries that currently have a Server implementation are:
 
 ## Interoperability Tests
 
-WebRTC covers a plethora of different standards and protocols. On top of that signaling is left up to each individual application.
+The current interoperability tests are:
 
-The initial goal of this project is to find the simplest useful interoperability test so as to encourage an initial implementation for as many projects as possible.
+ - **[Peer Connection Test](doc/PeerConnectionTestSpecification.md)**: The initial, and simplest, test is a WebRTC `Server Peer` and/or `Client Peer` that tests the ability to negotiate a peer connection up to a successful DTLS handshake. **A description of how the Peer Connection Test works is available [here](doc/PeerConnectionTestSpecification.md)**.
 
- - **[Peer Connection Test](doc/PeerConnectionTestSpecification.md)**: The first test is a WebRTC Server Peer and/or Client Peer that tests the ability to negotiate a peer connection up to a successful DTLS handshake. **A description of how the Peer Connection Test works is available [here](doc/PeerConnectionTestSpecification.md)**.
+ - **[Data Channel Echo Test](doc/DataChannelEchoTestSpecification)**: This test builds on the [Peer Connection Test](doc/PeerConnectionTestSpecification.md) and adds a `data channel` test. It tests the ability of the peers to create a data channel and then checks that the `Server Peer` can echo a string message sent by the `Client Peer`.
 
 ![Peer Connection Test Results](https://github.com/sipsorcery/webrtc-echoes/blob/testresults/PeerConnection_test_results.png)
 

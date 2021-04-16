@@ -31,13 +31,12 @@ ENTRYPOINT ["dotnet", "webrtc-echo.dll"]
 
 ## Requirements
 
-The Docker image built from the `Dockerfile` must be capable of being used as a `Server Peer`, `Client Peer` or both.
+The Docker image built from the `Dockerfile` must be capable of being used as either a `Server Peer`, `Client Peer` or, ideally, both.
 
 The default mode of operation is as a `Server Peer` and the `ENTRYPOINT` in the `Dockerfile` should result in an [Server Peer](PeerConnectionTestSpecification.md) running when a new container is created. An example of how the [GitHub Action Script](../.github/workflows/peerconnection-test.yml) will create the container is:
 
 `docker run ghcr.io/sipsorcery/sipsorcery-webrtc-echo`
 
-
-If the image can also support operating as an Echo Test Client then a file called `client.sh` should exist in the root of the image file system. When a container is being used as an Echo Test Client the default `ENTRYPOINT` will be overruled by calling the `/client.sh` script. The script must take a single parameter of the URL of the Echo Test Server. An example of how the [GitHub Action Script](../.github/workflows/interop-peerconnection-echo.yml) will create a container to operate an an Echo Test client is:
+If the image can also support operating as an `Client Peer` then a file called `client.sh` should exist in the root of the image file system. When a container is being used as in a client role the default `ENTRYPOINT` will be overruled by calling the `/client.sh` script. The script must take a single parameter of the URL of the `Server Peer`. An example of how the [GitHub Action Script](../.github/workflows/interop-peerconnection-echo.yml) will create a container to operate an an Echo Test client is:
 
 `docker run --entrypoint "/client.sh" ghcr.io/sipsorcery/sipsorcery-webrtc-echo http://echo-server:8080/offer`
