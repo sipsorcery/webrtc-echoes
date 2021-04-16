@@ -85,6 +85,7 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
+          git pull
           git add datachannel_test_results.md datachannel_test_results.png
           git commit datachannel_test_results.md datachannel_test_results.png -m "Automated echo test results."
           git push
