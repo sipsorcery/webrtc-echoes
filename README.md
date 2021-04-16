@@ -31,7 +31,7 @@ The current interoperability tests are:
 
  - **[Peer Connection Test](doc/PeerConnectionTestSpecification.md)**: The initial, and simplest, test is a WebRTC `Server Peer` and/or `Client Peer` that tests the ability to negotiate a peer connection up to a successful DTLS handshake. **A description of how the Peer Connection Test works is available [here](doc/PeerConnectionTestSpecification.md)**.
 
- - **[Data Channel Echo Test](doc/DataChannelEchoTestSpecification)**: This test builds on the [Peer Connection Test](doc/PeerConnectionTestSpecification.md) and adds a `data channel` test. It tests the ability of the peers to create a data channel and then checks that the `Server Peer` can echo a string message sent by the `Client Peer`.
+ - **[Data Channel Echo Test](doc/DataChannelEchoTestSpecification.md)**: This test builds on the [Peer Connection Test](doc/PeerConnectionTestSpecification.md) and adds a `data channel` test. It tests the ability of the peers to create a data channel and then checks that the `Server Peer` can echo a string message sent by the `Client Peer`.
 
 ![Peer Connection Test Results](https://github.com/sipsorcery/webrtc-echoes/blob/testresults/PeerConnection_test_results.png)
 
