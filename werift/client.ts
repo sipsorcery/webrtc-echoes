@@ -1,5 +1,5 @@
 import { MediaStreamTrack, RTCPeerConnection, RtpPacket } from "werift";
-import axios from "axios";
+import got from "got";
 import * as yargs from "yargs";
 import { createSocket } from "dgram";
 import { exec } from "child_process";
@@ -61,10 +61,10 @@ new Promise<void>(async (done, failed) => {
   }
 
   await pc.setLocalDescription(await pc.createOffer());
-  const { data } = await axios.post(url, pc.localDescription).catch((e) => {
-    failed(e);
-    throw e;
-  });
+  const data = await got
+    .post(url, { json: pc.localDescription, retry: 5 })
+    .json<any>()
+    .catch(failed);
   console.log("server answer sdp", data?.sdp);
   pc.setRemoteDescription(data);
 
