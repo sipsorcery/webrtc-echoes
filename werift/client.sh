@@ -1,2 +1,2 @@
 #!/bin/bash
-npm run client $1
+DEBUG=werift* node -r ts-node/register client.ts $1
