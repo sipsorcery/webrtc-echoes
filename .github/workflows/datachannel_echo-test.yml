@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        server: ["libdatachannel", "sipsorcery"]
+        server: ["libdatachannel", "sipsorcery", "werift"]
         client: ["sipsorcery"]
     services:
       echo-test-server:
@@ -89,4 +89,3 @@ jobs:
           git add DataChannel_Echo_test_results.md DataChannel_Echo_test_results.png
           git commit DataChannel_Echo_test_results.md DataChannel_Echo_test_results.png -m "Automated data channel echo test results."
           git push
-          

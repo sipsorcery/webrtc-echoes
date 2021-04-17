@@ -49,7 +49,10 @@ app.post("/offer", async (req, res) => {
     pc.addTrack(track);
   });
   pc.onDataChannel.subscribe((dc) => {
-    dc.message.subscribe((msg) => dc.send(msg));
+    dc.message.subscribe((msg) => {
+      console.log("datachannel incoming message", msg);
+      dc.send(msg);
+    });
   });
 
   await pc.setRemoteDescription(offer);

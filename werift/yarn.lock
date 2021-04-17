@@ -482,10 +482,10 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
-date-fns@^2.19.0:
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.19.0.tgz#65193348635a28d5d916c43ec7ce6fbd145059e1"
-  integrity sha512-X3bf2iTPgCAQp9wvjOQytnf5vO5rESYRXlPIVcgSbtT5OTScPcsf9eZU+B/YIkKAtYr5WeCii58BgATrNitlWg==
+date-fns@^2.21.1:
+  version "2.21.1"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.21.1.tgz#679a4ccaa584c0706ea70b3fa92262ac3009d2b0"
+  integrity sha512-m1WR0xGiC6j6jNFAyW4Nvh4WxAi4JF4w9jRJwSI8nBmNcyZXPcP9VUQG+6gHQXAmqaGEKDKhOqAtENDC941UkA==
 
 dateformat@~1.0.4-1.2.3:
   version "1.0.12"
@@ -1524,10 +1524,10 @@ webcrypto-core@^1.2.0:
     pvtsutils "^1.1.2"
     tslib "^2.1.0"
 
-werift@^0.8.3:
-  version "0.8.3"
-  resolved "https://registry.yarnpkg.com/werift/-/werift-0.8.3.tgz#5216f9ac5666a9cd27413978292f274d2c23ceda"
-  integrity sha512-pkniapEaP6Rhss3XuiV/2WgPvH0rxj5vhKrk2V6khTzPLjn6Csp0WBrFrnpbx/J7Roj5IWOl6xap7dX7cG7WmQ==
+werift@^0.8.5:
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/werift/-/werift-0.8.5.tgz#15bd5ba9afc178321e2f28d7e20b1cd80a51d4b9"
+  integrity sha512-kgbKUhSt6CJBHFWxO2QhdXBdPzVWyhmosCZm/+fZNW88fX0ACvl8WH5hRHJUciaVWjsN0OoaMGqmPAUF5WiYMg==
   dependencies:
     "@fidm/x509" "^1.2.1"
     "@peculiar/webcrypto" "^1.1.6"
@@ -1536,7 +1536,7 @@ werift@^0.8.3:
     big-integer "^1.6.48"
     binary-data "^0.6.0"
     buffer-crc32 "^0.2.13"
-    date-fns "^2.19.0"
+    date-fns "^2.21.1"
     debug "^4.3.1"
     elliptic "^6.5.3"
     int64-buffer "^1.0.0"
