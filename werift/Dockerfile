@@ -9,4 +9,4 @@ RUN apt-get -y update && \
 RUN chmod +x /client.sh
 RUN npm install
 EXPOSE 8080
-ENTRYPOINT npm run server
+ENTRYPOINT node -r ts-node/register server.ts
