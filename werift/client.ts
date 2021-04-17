@@ -62,7 +62,10 @@ new Promise<void>(async (done, failed) => {
 
   await pc.setLocalDescription(await pc.createOffer());
   const data = await got
-    .post(url, { json: pc.localDescription, retry: 5 })
+    .post(url, {
+      json: pc.localDescription,
+      retry: { limit: 5, methods: ["POST"] },
+    })
     .json<any>()
     .catch(failed);
   console.log("server answer sdp", data?.sdp);
