@@ -30,6 +30,23 @@
       "env": { "DEBUG": "werift*" },
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "name": "werift:client-datachannel",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/werift/node_modules/ts-node-dev/lib/bin.js",
+      "protocol": "inspector",
+      "args": [
+        "--project",
+        "${workspaceRoot}/werift/tsconfig.json",
+        "${workspaceRoot}/werift/client.ts",
+        "-t",
+        "1"
+      ],
+      "env": { "DEBUG": "werift*" },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     }
   ]
 }
