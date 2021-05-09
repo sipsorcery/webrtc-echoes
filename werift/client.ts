@@ -22,7 +22,7 @@ const testType = args["t"];
 console.log(args, { url, testType });
 
 const udp = createSocket("udp4");
-udp.bind(5000);
+udp.bind(5055);
 
 new Promise<void>(async (done, failed) => {
   setTimeout(() => {
@@ -91,7 +91,7 @@ new Promise<void>(async (done, failed) => {
     });
 
     exec(
-      "gst-launch-1.0 videotestsrc ! video/x-raw,width=640,height=480,format=I420 ! vp8enc error-resilient=partitions keyframe-max-dist=10 auto-alt-ref=true cpu-used=5 deadline=1 ! rtpvp8pay ! udpsink host=127.0.0.1 port=5000"
+      "gst-launch-1.0 videotestsrc ! video/x-raw,width=640,height=480,format=I420 ! vp8enc error-resilient=partitions keyframe-max-dist=10 auto-alt-ref=true cpu-used=5 deadline=1 ! rtpvp8pay ! udpsink host=127.0.0.1 port=5055"
     );
   }
 })
