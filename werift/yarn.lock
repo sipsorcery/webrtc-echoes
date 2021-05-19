@@ -1713,10 +1713,10 @@ webcrypto-core@^1.2.0:
     pvtsutils "^1.1.2"
     tslib "^2.1.0"
 
-werift@^0.9.8:
-  version "0.9.8"
-  resolved "https://registry.yarnpkg.com/werift/-/werift-0.9.8.tgz#fe36da8648266fe9548d0714964583c005c9bfd1"
-  integrity sha512-9eDR665z3ymWhsg3NzZ4qExJW7C0Dyecs0m8B4MjMnz6F+cG6XSGgaa9opdLmwdKKkJYLehMe3mmZpqmCsQs2Q==
+werift@^0.10.2:
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/werift/-/werift-0.10.2.tgz#30fa17983db366b48efad6e4f543ed510e28c12d"
+  integrity sha512-2tkyJ8pKqT1SNOf1cdOvlL/JbF1THB+sW7te65ClKrpP0sbHm97o/YDIDv746mJ621mjG2fhWb5ztFV+jQq7ww==
   dependencies:
     "@fidm/x509" "^1.2.1"
     "@peculiar/webcrypto" "^1.1.6"
