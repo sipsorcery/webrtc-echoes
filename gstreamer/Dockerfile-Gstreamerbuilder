@@ -18,6 +18,7 @@ RUN meson -Dgood=enabled -Dgst-plugins-good:vpx=enabled \
   -Dbad=enabled -Dgst-plugins-bad:dtls=enabled \
   -Dbad=enabled -Dgst-plugins-bad:srtp=enabled \
   -Dbad=enabled -Dgst-plugins-bad:webrtc=enabled \
+  -Dintrospection=disabled \
   --default-library=static \
   builddir
 RUN ninja -C builddir
