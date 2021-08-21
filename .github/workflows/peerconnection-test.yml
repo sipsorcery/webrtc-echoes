@@ -89,7 +89,7 @@ jobs:
       - name: Collate result files
         run: |
           python --version
-          pip install weasyprint
+          pip install 'weasyprint==52.4'
           python test/collate-results.py PeerConnection
           python test/collate-results.py PeerConnection > PeerConnection_test_results.md
           cat PeerConnection_test_results.md

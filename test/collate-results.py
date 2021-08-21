@@ -13,6 +13,8 @@
 #
 # History:
 # 19 Feb 2021	Aaron Clauson	Created, Dublin, Ireland.
+# 21 Aug 2021	Aaron Clauson	Investigating breaking change to weasyprint that removed the write to png function, see
+#                               https://www.courtbouillon.org/blog/00004-weasyprint-without-cairo-what-s-different.
 #
 # License: 
 # BSD 3-Clause "New" or "Revised" License, see included LICENSE.md file.
