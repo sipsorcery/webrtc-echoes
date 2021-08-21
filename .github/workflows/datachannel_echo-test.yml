@@ -69,7 +69,7 @@ jobs:
       - name: Collate result files
         run: |
           python --version
-          pip install weasyprint
+          pip install 'weasyprint==52.4'
           python test/collate-results.py DataChannel_Echo
           python test/collate-results.py > DataChannel_Echo_test_results.md
           cat DataChannel_Echo_test_results.md
