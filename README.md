@@ -20,7 +20,7 @@ The libraries that currently have a Client and Server implementation are:
 
 Additional libraries/applications that currently have a Server implementation are:
 
-  - [gstreamer](https://gstreamer.freedesktop.org/) `master` branch, commit ID `d3c4043db3833ec758093d40fe255518059baf5b`.
+  - [gstreamer](https://gstreamer.freedesktop.org/) `master` branch, commit ID `637b0d8dc25b660d3b05370e60a95249a5228a39` 20 Aug 2021 (gst-build commit ID `ebcca1e5ead27cab1eafc028332b1984c84b10b2` 26 Mar 2021).
   - [janus](https://janus.conf.meetecho.com/) version `0.10.7`, commit ID `04229be3eeceb28dbc57a70a57928aab223895a5`.
   - [kurento](https://www.kurento.org/) version `6.16.1~1.g907a859`.
   - [libwebrtc](https://webrtc.googlesource.com/src/) `m90` branch, commit ID `a4da76a880d31f012038ac721ac4abc7ea3ffa2d`, commit date `Fri Apr 9 21:03:39 2021 -0700`.
