@@ -157,6 +157,13 @@
     tslib "^2.1.0"
     tsyringe "^4.4.0"
 
+"@shinyoshiaki/ebml-builder@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@shinyoshiaki/ebml-builder/-/ebml-builder-0.0.1.tgz#4dfe912b12911975a5ab77676f538c24c7caedf5"
+  integrity sha512-rz1LklnlZ0yvVIt924yRGu+R87Fhfa06BdRIZR6GF6SXVSBTD9wCQmN6opXQLuSkoKXleWJwF3PW1ls8DGZjtw==
+  dependencies:
+    lodash.memoize "^4.1.2"
+
 "@sindresorhus/is@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-4.0.0.tgz#2ff674e9611b45b528896d820d3d7a812de2f0e4"
@@ -1042,6 +1049,11 @@ load-json-file@^1.0.0:
     pinkie-promise "^2.0.0"
     strip-bom "^2.0.0"
 
+lodash.memoize@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
+  integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
+
 lodash@^4.17.20:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
@@ -1713,14 +1725,15 @@ webcrypto-core@^1.2.0:
     pvtsutils "^1.1.2"
     tslib "^2.1.0"
 
-werift@^0.12.8:
-  version "0.12.8"
-  resolved "https://registry.yarnpkg.com/werift/-/werift-0.12.8.tgz#7b550cfaa10b7480afa1514793b8beff72330983"
-  integrity sha512-fM/c38V6jc1jQJFu4zBV998c+FHae5R7Jim+wsacW1rRgQt8lfG32syBEqjRix6EKlycFu1FgqNzHFfnCSjA6A==
+werift@^0.13.2:
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/werift/-/werift-0.13.2.tgz#e33d8ae4a05da40b836e9b66e46da82599902bc6"
+  integrity sha512-1z41h86E8G6Kj6fm53wFDshizARXTwMrk2OYiy5WPYeQaeVCpFirVaL6gRoOwGuxwUzCPoKctQp812OMJ1lUpA==
   dependencies:
     "@fidm/x509" "^1.2.1"
     "@peculiar/webcrypto" "^1.1.6"
     "@peculiar/x509" "^1.2.2"
+    "@shinyoshiaki/ebml-builder" "^0.0.1"
     aes-js "^3.1.2"
     big-integer "^1.6.48"
     binary-data "^0.6.0"
