@@ -25,6 +25,7 @@
 #include <future>
 #include <iostream>
 #include <memory>
+#include <random>
 #include <string>
 #include <vector>
 
@@ -33,23 +34,73 @@ using json = nlohmann::json;
 
 using namespace std::chrono_literals;
 
+std::string randomString(std::size_t length) {
+	static const std::string chars = "0123456789abcdefghijklmnopqrstuvwxyz";
+	std::default_random_engine rng(std::random_device{}());
+	std::uniform_int_distribution<int> dist(0, int(chars.size() - 1));
+	std::string result(length, '\0');
+	std::generate(result.begin(), result.end(), [&]() { return chars[dist(rng)]; });
+	return result;
+}
+
 int main(int argc, char **argv) try {
-	const std::string url = argc > 1 ? argv[1] : "http://localhost:8080/offer";
+	// Default arguments
+	int test = 0;
+	std::string url = "http://localhost:8080/offer";
+
+	// Parse arguments
+	for (int i = 1; i < argc; ++i) {
+		std::string arg = argv[i];
+		if (!arg.empty() && arg[0] == '-') {
+			std::string option = arg.substr(1);
+			if (option == "h") {
+				std::cout
+				    << "Usage: " << argv[0] << "[URL|<options>]\n"
+				    << "Options:\n"
+				    << "\t-h,\t\tShow this help message\n"
+				    << "\t-t NUMBER\tSpecify the test number (default 0)\n"
+				    << "\t-s URL\t\tSpecify the server URL (default http://localhost:8080/offer)\n"
+				    << std::endl;
+				return 0;
+			} else if (option == "t") {
+				if (i + 1 == argc)
+					throw std::invalid_argument("Missing argument for option \"t\"");
+				test = std::atoi(argv[++i]);
+			} else if (option == "s") {
+				if (i + 1 == argc)
+					throw std::invalid_argument("Missing argument for option \"s\"");
+				url = argv[++i];
+			} else {
+				throw std::invalid_argument("Unknown option \"" + option + "\"");
+			}
+		} else {
+			if (i > 1)
+				throw std::invalid_argument("Unexpected positional argument \"" + arg + "\"");
+			url = std::move(arg);
+		}
+	}
+
+	if (test != 0 && test != 1)
+		throw std::invalid_argument("Invalid test number");
 
 	const size_t separator = url.find_last_of('/');
+	if (separator == std::string::npos)
+		throw std::invalid_argument("Invalid URL");
+
 	const std::string server = url.substr(0, separator);
 	const std::string path = url.substr(separator);
 
-	rtc::InitLogger(rtc::LogLevel::Warning);
+	std::promise<void> promise;
+	auto future = promise.get_future();
 
 	http::Client cl(server.c_str());
 
+	rtc::InitLogger(rtc::LogLevel::Warning);
+
+	// Set up Peer Connection
 	rtc::Configuration config;
 	config.disableAutoNegotiation = true;
 	rtc::PeerConnection pc{std::move(config)};
-
-	std::promise<void> promise;
-	auto future = promise.get_future();
 
 	pc.onGatheringStateChange([url, path, &pc, &cl,
 	                           &promise](rtc::PeerConnection::GatheringState state) {
@@ -96,12 +147,38 @@ int main(int argc, char **argv) try {
 		}
 	});
 
-	rtc::Description::Video media("echo", rtc::Description::Direction::SendRecv);
-	media.addVP8Codec(96);
-	auto tr = pc.addTrack(std::move(media));
+	std::shared_ptr<rtc::Track> tr;
+	std::shared_ptr<rtc::DataChannel> dc;
+	if (test == 0) { // Peer Connection test
+		rtc::Description::Video media("echo", rtc::Description::Direction::SendRecv);
+		media.addVP8Codec(96);
+		tr = pc.addTrack(std::move(media));
 
-	// TODO: send media
-	tr->onOpen([&promise]() { promise.set_value(); });
+		// TODO: send media
+		tr->onOpen([&promise]() { promise.set_value(); });
+
+	} else { // test == 1 Data Channel test
+		auto test = randomString(5);
+		dc = pc.createDataChannel("echo");
+
+		dc->onOpen([test, &dc]() { dc->send(test); });
+
+		dc->onMessage([test, &promise](auto message) {
+			try {
+				if (!std::holds_alternative<std::string>(message))
+					throw std::runtime_error("Received unexpected binary message");
+
+				auto str = std::get<std::string>(message);
+				if (str != test)
+					throw std::runtime_error("Received unexpected message \"" + str + "\"");
+
+				promise.set_value();
+
+			} catch (const std::exception &e) {
+				promise.set_exception(std::make_exception_ptr(e));
+			}
+		});
+	}
 
 	pc.setLocalDescription(rtc::Description::Type::Offer);
 
