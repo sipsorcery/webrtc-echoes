@@ -6,7 +6,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-webrtc="0.0.15"
+webrtc="0.0.16"
 interceptor = "0.1.2"
 tokio = { version = "1.12.0", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
