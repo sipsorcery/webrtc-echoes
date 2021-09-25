@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         server: ["libdatachannel", "sipsorcery", "werift"]
-        client: ["sipsorcery", "werift"]
+        client: ["libdatachannel", "sipsorcery", "werift"]
     services:
       echo-test-server:
         image: ghcr.io/sipsorcery/${{ matrix.server }}-webrtc-echo
