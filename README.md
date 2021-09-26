@@ -17,6 +17,7 @@ The libraries that currently have a Client and Server implementation are:
  - [Pion](https://github.com/pion/webrtc): Pure Go implementation of the WebRTC API.
  - [SIPSorcery](https://github.com/sipsorcery-org/sipsorcery): A WebRTC, SIP and VoIP library for C# and .NET Core. Designed for real-time communications apps.
  - [werift-webrtc](https://github.com/shinyoshiaki/werift-webrtc): WebRTC Implementation for TypeScript (Node.js)
+ - [webrtc-rs](https://github.com/webrtc-rs/webrtc): A pure Rust implementation of WebRTC stack. Rewrite [Pion](https://github.com/pion/webrtc) WebRTC stack in Rust.
 
 Additional libraries/applications that currently have a Server implementation are:
 
