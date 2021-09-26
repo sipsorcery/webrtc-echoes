@@ -16,6 +16,8 @@ The descriptions in the following sections outline how the `Server Peer` and `Cl
   - C++: [libdatachannel Test Client](../libdatachannel/client.cpp)
   - TypeScript: [werift Test Server](../werift/server.ts)
   - TypeScript: [werift Test Client](../werift/client.ts)
+  - Rust: [webrtc-rs Test Server](../webrtc-rs/server/src/main.rs)
+  - Rust: [webrtc-rs Test Client](../webrtc-rs/client/src/main.rs)
 
 ## Signaling
 
