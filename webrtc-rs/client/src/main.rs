@@ -44,10 +44,8 @@ async fn main() -> Result<()> {
                 .help("Prints debug log information"),
         )
         .arg(
-            Arg::with_name("server")
-                .takes_value(true)
-                .default_value("localhost:8080")
-                .long("server")
+            Arg::with_name("server_url")
+                .default_value("http://localhost:8080/offer")
                 .help("Echo HTTP server is hosted on."),
         );
 
@@ -76,7 +74,7 @@ async fn main() -> Result<()> {
             .init();
     }
 
-    let echo_test_server = matches.value_of("server").unwrap().to_owned();
+    let echo_test_server_url = matches.value_of("server_url").unwrap().to_owned();
 
     // Everything below is the WebRTC.rs API! Thanks for using it ❤️.
 
@@ -211,7 +209,7 @@ async fn main() -> Result<()> {
     // in a production application you should exchange ICE Candidates via OnICECandidate
     let _ = gather_complete.recv().await;
 
-    println!("Attempting to POST offer to {}.", echo_test_server);
+    println!("Attempting to POST offer to {}.", echo_test_server_url);
 
     // POST the offer to the echo server.
     let offer_with_ice = peer_connection.local_description().await.unwrap();
@@ -219,7 +217,7 @@ async fn main() -> Result<()> {
 
     let req = Request::builder()
         .method(Method::POST)
-        .uri(format!("http://{}/offer", echo_test_server))
+        .uri(echo_test_server_url.to_owned())
         .header("content-type", "application/json")
         .body(Body::from(offer_buf))?;
 
