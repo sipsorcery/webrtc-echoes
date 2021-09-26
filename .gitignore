@@ -4,3 +4,8 @@ node_modules
 .vscode
 **/.vs
 .ionide
+.idea/
+webrtc-rs/client/target/
+webrtc-rs/server/target/
+webrtc-rs/client/Cargo.lock
+webrtc-rs/server/Cargo.lock
