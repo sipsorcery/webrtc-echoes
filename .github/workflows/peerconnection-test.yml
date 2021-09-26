@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        library: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel"]
+        library: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel", "webrtc-rs"]
     steps:
       - uses: actions/checkout@v2
       - name: Update submodules
@@ -38,8 +38,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        server: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel", "gstreamer", "libwebrtc", "kurento", "janus"]
-        client: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel"]
+        server: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel", "gstreamer", "libwebrtc", "kurento", "janus", "webrtc-rs"]
+        client: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel", "webrtc-rs"]
     needs: [build-docker-images]
     services:
       echo-test-server:
