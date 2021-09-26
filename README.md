@@ -15,10 +15,9 @@ The libraries that currently have a Client and Server implementation are:
  - [aiortc](https://github.com/aiortc/aiortc): WebRTC and ORTC implementation for Python using asyncio.
  - [libdatachannel](https://github.com/paullouisageneau/libdatachannel): C/C++ WebRTC Data Channels and Media Transport standalone library (bindings for [Rust](https://github.com/lerouxrgd/datachannel-rs), [Node.js](https://github.com/murat-dogan/node-datachannel), and [Unity](https://github.com/hanseuljun/datachannel-unity))
  - [Pion](https://github.com/pion/webrtc): Pure Go implementation of the WebRTC API.
- - [SIPSorcery](https://github.com/sipsorcery-org/sipsorcery): A WebRTC, SIP and VoIP library for C# and .NET Core. Designed for real-time communications apps.
- - [webrtc-rs](https://github.com/webrtc-rs/webrtc): A pure Rust implementation of WebRTC
- - [werift-webrtc](https://github.com/shinyoshiaki/werift-webrtc): WebRTC Implementation for TypeScript (Node.js)
  - [webrtc-rs](https://github.com/webrtc-rs/webrtc): A pure Rust implementation of WebRTC stack. Rewrite [Pion](https://github.com/pion/webrtc) WebRTC stack in Rust.
+ - [SIPSorcery](https://github.com/sipsorcery-org/sipsorcery): A WebRTC, SIP and VoIP library for C# and .NET Core. Designed for real-time communications apps.
+ - [werift-webrtc](https://github.com/shinyoshiaki/werift-webrtc): WebRTC Implementation for TypeScript (Node.js)
 
 Additional libraries/applications that currently have a Server implementation are:
 
