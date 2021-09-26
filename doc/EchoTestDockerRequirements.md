@@ -29,6 +29,11 @@ COPY --from=build /app/publish/client .
 ENTRYPOINT ["dotnet", "webrtc-echo.dll"]
 ````
 
+To build use:
+
+`webrtc-echoes> docker build -t sipsorcery-webrtc-echo:0.4 --progress=plain -f sipsorcery\Dockerfile .`
+
+
 ## Requirements
 
 The Docker image built from the `Dockerfile` must be capable of being used as either a `Server Peer`, `Client Peer` or, ideally, both.
