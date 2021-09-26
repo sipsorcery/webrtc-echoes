@@ -16,6 +16,7 @@ The libraries that currently have a Client and Server implementation are:
  - [libdatachannel](https://github.com/paullouisageneau/libdatachannel): C/C++ WebRTC Data Channels and Media Transport standalone library (bindings for [Rust](https://github.com/lerouxrgd/datachannel-rs), [Node.js](https://github.com/murat-dogan/node-datachannel), and [Unity](https://github.com/hanseuljun/datachannel-unity))
  - [Pion](https://github.com/pion/webrtc): Pure Go implementation of the WebRTC API.
  - [SIPSorcery](https://github.com/sipsorcery-org/sipsorcery): A WebRTC, SIP and VoIP library for C# and .NET Core. Designed for real-time communications apps.
+ - [webrtc-rs](https://github.com/webrtc-rs/webrtc): A pure Rust implementation of WebRTC
  - [werift-webrtc](https://github.com/shinyoshiaki/werift-webrtc): WebRTC Implementation for TypeScript (Node.js)
 
 Additional libraries/applications that currently have a Server implementation are:
@@ -54,6 +55,7 @@ docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/libdatachannel-webrtc
 docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/libwebrtc-webrtc-echo
 docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/pion-webrtc-echo
 docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/sipsorcery-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/webrtc-rs-webrtc-echo
 docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/werift-webrtc-echo
 ````
 
