@@ -368,10 +368,15 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
   integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
 
-big-integer@^1.6.16, big-integer@^1.6.48:
+big-integer@^1.6.16:
   version "1.6.48"
   resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.48.tgz#8fd88bd1632cba4a1c8c3e3d7159f08bb95b4b9e"
   integrity sha512-j51egjPa7/i+RdiRuJbPdJ2FIUYYPhvYLjzoYbcMMm62ooO6F94fETG4MTs46zPAF9Brs04OajboA/qTGuz78w==
+
+big-integer@^1.6.49:
+  version "1.6.49"
+  resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.49.tgz#f6817d3ea5d4f3fb19e24df9f4b1b4471a8328ce"
+  integrity sha512-KJ7VhqH+f/BOt9a3yMwJNmcZjG53ijWMTjSAGMveQWyLwqIiwkjNP5PFgDob3Snnx86SjDj6I89fIbv0dkQeNw==
 
 binary-data@^0.6.0:
   version "0.6.0"
@@ -555,10 +560,10 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
-date-fns@^2.23.0:
-  version "2.23.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.23.0.tgz#4e886c941659af0cf7b30fafdd1eaa37e88788a9"
-  integrity sha512-5ycpauovVyAk0kXNZz6ZoB9AYMZB4DObse7P3BPWmyEjXNORTI8EJ6X0uaSAq4sCHzM1uajzrkr6HnsLQpxGXA==
+date-fns@^2.24.0:
+  version "2.24.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.24.0.tgz#7d86dc0d93c87b76b63d213b4413337cfd1c105d"
+  integrity sha512-6ujwvwgPID6zbI0o7UbURi2vlLDR9uP26+tW6Lg+Ji3w7dd0i3DOcjcClLjLPranT60SSEFBwdSyYwn/ZkPIuw==
 
 dateformat@~1.0.4-1.2.3:
   version "1.0.12"
@@ -1725,20 +1730,20 @@ webcrypto-core@^1.2.0:
     pvtsutils "^1.1.2"
     tslib "^2.1.0"
 
-werift@^0.13.3:
-  version "0.13.3"
-  resolved "https://registry.yarnpkg.com/werift/-/werift-0.13.3.tgz#ab6f851e7902fe10ee42e6562f12c8bc2ab79091"
-  integrity sha512-DOZbwWZh7fPyRjxx1acq3BH60+V7m3gwRGCxaLwT2I/eMyqr6v2UvZtzpwh6WJ/3R56VIJc4rM92sfk/6ciyHQ==
+werift@^0.13.4:
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/werift/-/werift-0.13.4.tgz#a11ac00e8d078ba36928aebcf315347e7e9ce784"
+  integrity sha512-AIZp5dVfvJvTCLM0kxgv5FBUmCyrAyXuXVpUjCdzwch8Xo3uePTk2F1omwZ+BQjWI0lWyrD8N3gzM2UUmJYFqg==
   dependencies:
     "@fidm/x509" "^1.2.1"
     "@peculiar/webcrypto" "^1.1.6"
     "@peculiar/x509" "^1.2.2"
     "@shinyoshiaki/ebml-builder" "^0.0.1"
     aes-js "^3.1.2"
-    big-integer "^1.6.48"
+    big-integer "^1.6.49"
     binary-data "^0.6.0"
     buffer-crc32 "^0.2.13"
-    date-fns "^2.23.0"
+    date-fns "^2.24.0"
     debug "^4.3.1"
     elliptic "^6.5.3"
     int64-buffer "^1.0.1"
