@@ -1,4 +1,5 @@
 FROM python:latest
+RUN apt update && apt install -y libopus-dev libsrtp2-dev libavformat-dev libvpx-dev libavdevice-dev libavfilter-dev
 WORKDIR /app
 COPY ["aiortc", ""]
 COPY ["html", "../html/"]
