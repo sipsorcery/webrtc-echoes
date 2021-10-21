@@ -418,14 +418,14 @@ impl EchoTrack {
 
 #[async_trait]
 impl TrackLocal for EchoTrack {
-    async fn bind(&self, c: &TrackLocalContext) -> Result<RTCRtpCodecParameters> {
+    async fn bind(&self, c: &TrackLocalContext) -> std::result::Result<RTCRtpCodecParameters, webrtc::Error> {
         let mut ctx = self.ctx.lock().await;
         ctx.push(c.clone());
 
         Ok(c.codec_parameters()[0].clone())
     }
 
-    async fn unbind(&self, _: &TrackLocalContext) -> Result<()> {
+    async fn unbind(&self, _: &TrackLocalContext) -> std::result::Result<(), webrtc::Error> {
         Ok(())
     }
 
