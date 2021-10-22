@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.9
 RUN apt update && apt install -y libopus-dev libsrtp2-dev libavformat-dev libvpx-dev libavdevice-dev libavfilter-dev
 WORKDIR /app
 COPY ["aiortc", ""]
