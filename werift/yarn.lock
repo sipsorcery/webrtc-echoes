@@ -15,6 +15,11 @@
     "@fidm/asn1" "^1.0.4"
     tweetnacl "^1.0.1"
 
+"@minhducsun2002/leb128@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@minhducsun2002/leb128/-/leb128-0.2.0.tgz#8301db597736f865154b783680845d35b25ba361"
+  integrity sha512-XckPQO6CDP0LAg3ZHIBZcjIWXgdM5vGhwhixZU78UEwaXwc33LXPl1KfvV8jCyrdU2YzplCvaNK3Mm0MDh6t1Q==
+
 "@peculiar/asn1-cms@^2.0.27", "@peculiar/asn1-cms@^2.0.29":
   version "2.0.29"
   resolved "https://registry.yarnpkg.com/@peculiar/asn1-cms/-/asn1-cms-2.0.29.tgz#049a5f88da229ef72818a84b9dc5720e72003eee"
@@ -1449,12 +1454,13 @@ webcrypto-core@^1.2.0:
     pvtsutils "^1.1.2"
     tslib "^2.1.0"
 
-werift@^0.13.6:
-  version "0.13.6"
-  resolved "https://registry.yarnpkg.com/werift/-/werift-0.13.6.tgz#94cf115852f644fd133635968774eecd009c69c7"
-  integrity sha512-RCojgs2kIlqC8ZWcFguweEFgcY11utGgJXwkFXzWo8HNVQ+22l1Phsz3AXDaAn7uumsPKkehtlo7VlEg2MX5SQ==
+werift@^0.13.7:
+  version "0.13.7"
+  resolved "https://registry.yarnpkg.com/werift/-/werift-0.13.7.tgz#bc883cef82308a9612c00ad278f725b334d3dde0"
+  integrity sha512-szZLDb7hzF4b37QjO62M4grAsJslB8t9MvNlVjvJ9ubupJ+JkJ61T7sBBWOdhzBM4TlLu3ceEo3FpNzHgIz65g==
   dependencies:
     "@fidm/x509" "^1.2.1"
+    "@minhducsun2002/leb128" "^0.2.0"
     "@peculiar/webcrypto" "^1.1.6"
     "@peculiar/x509" "^1.2.2"
     "@shinyoshiaki/ebml-builder" "^0.0.1"
