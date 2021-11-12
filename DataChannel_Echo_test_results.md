@@ -1,9 +1,9 @@
 ## echo Test Results
-Test run at 2021-10-22 21:03:27.301059
+Test run at 2021-11-12 10:52:16.479420
 
 | Server      | Client      |             |             |
 |-------------|-------------|-------------|-------------|
-|             | werift      | libdatachannel| sipsorcery  |
-| sipsorcery  | &#9745;     | &#9745;     | &#9745;     |
+|             | libdatachannel| sipsorcery  | werift      |
 | werift      | &#9745;     | &#9745;     | &#9745;     |
 | libdatachannel| &#9745;     | &#9745;     | &#9745;     |
+| sipsorcery  | &#9745;     | &#9745;     | &#9745;     |
