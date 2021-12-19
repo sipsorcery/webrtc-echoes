@@ -373,11 +373,6 @@ big-integer@^1.6.16:
   resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.48.tgz#8fd88bd1632cba4a1c8c3e3d7159f08bb95b4b9e"
   integrity sha512-j51egjPa7/i+RdiRuJbPdJ2FIUYYPhvYLjzoYbcMMm62ooO6F94fETG4MTs46zPAF9Brs04OajboA/qTGuz78w==
 
-big-integer@^1.6.49:
-  version "1.6.49"
-  resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.49.tgz#f6817d3ea5d4f3fb19e24df9f4b1b4471a8328ce"
-  integrity sha512-KJ7VhqH+f/BOt9a3yMwJNmcZjG53ijWMTjSAGMveQWyLwqIiwkjNP5PFgDob3Snnx86SjDj6I89fIbv0dkQeNw==
-
 binary-data@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/binary-data/-/binary-data-0.6.0.tgz#72d635ee9e84199858d472396de0e218f9dfa0f2"
@@ -540,10 +535,10 @@ create-require@^1.1.0:
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
   integrity sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
 
-date-fns@^2.24.0:
-  version "2.24.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.24.0.tgz#7d86dc0d93c87b76b63d213b4413337cfd1c105d"
-  integrity sha512-6ujwvwgPID6zbI0o7UbURi2vlLDR9uP26+tW6Lg+Ji3w7dd0i3DOcjcClLjLPranT60SSEFBwdSyYwn/ZkPIuw==
+date-fns@^2.27.0:
+  version "2.27.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.27.0.tgz#e1ff3c3ddbbab8a2eaadbb6106be2929a5a2d92b"
+  integrity sha512-sj+J0Mo2p2X1e306MHq282WS4/A8Pz/95GIFcsPNMPMZVI3EUrAdSv90al1k+p74WGLCruMXk23bfEDZa71X9Q==
 
 debug@2.6.9:
   version "2.6.9"
@@ -556,6 +551,13 @@ debug@^4.3.1:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.2.tgz#f0a49c18ac8779e31d4a0c6029dfb76873c7428b"
   integrity sha512-mOp8wKcvj7XxC78zLgw/ZA+6TSgkoE2C/ienthhRD298T7UNwAg9diBpLRxC0mOezLl4B0xV7M0cCO6P/O0Xhw==
+  dependencies:
+    ms "2.1.2"
+
+debug@^4.3.3:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.3.tgz#04266e0b70a98d4462e6e288e38259213332b664"
+  integrity sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==
   dependencies:
     ms "2.1.2"
 
@@ -1454,10 +1456,10 @@ webcrypto-core@^1.2.0:
     pvtsutils "^1.1.2"
     tslib "^2.1.0"
 
-werift@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/werift/-/werift-0.14.0.tgz#4da9eb5cb42fc5c09cf6cf7720e7ec683adcf843"
-  integrity sha512-CoHbXUNDkZDWY6z5P5pwX0smOU3pA5Q6WoW6YDDDcO03LUGeeBIJ/aAfhZNWpKvw7GM7waRUWWUG+3nOcz/BYg==
+werift@^0.14.3:
+  version "0.14.3"
+  resolved "https://registry.yarnpkg.com/werift/-/werift-0.14.3.tgz#cf3865358bfae577a4d756b0da355cd7ba91a9f4"
+  integrity sha512-RDzINVEFb4m2D+Kcj2yHJD9oMI/irYGMZocZpts7+qCaRDiMm7wq1iwkrPizt5zTNwz2jw3kA/udGQXs1bG2rQ==
   dependencies:
     "@fidm/x509" "^1.2.1"
     "@minhducsun2002/leb128" "^0.2.0"
@@ -1465,11 +1467,10 @@ werift@^0.14.0:
     "@peculiar/x509" "^1.2.2"
     "@shinyoshiaki/ebml-builder" "^0.0.1"
     aes-js "^3.1.2"
-    big-integer "^1.6.49"
     binary-data "^0.6.0"
     buffer-crc32 "^0.2.13"
-    date-fns "^2.24.0"
-    debug "^4.3.1"
+    date-fns "^2.27.0"
+    debug "^4.3.3"
     elliptic "^6.5.3"
     int64-buffer "^1.0.1"
     ip "^1.1.5"
