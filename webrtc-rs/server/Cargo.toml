@@ -19,4 +19,4 @@ hyper = { version = "0.14.13", features = ["full"] }
 anyhow = "1.0.44"
 lazy_static = "1.4"
 async-trait = "0.1.42"
-tokio-util = "0.6.8"
+tokio-util = { version = "0.6.8", features = ["codec"] }
