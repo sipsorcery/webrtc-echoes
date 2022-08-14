@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: "sipsorceryaksb2s-595b"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "sipsorceryaksb2s-595b"
+  template:
+    metadata:
+      labels:
+        app: "sipsorceryaksb2s-595b"
+    spec:
+      containers:
+        - name: "sipsorceryaksb2s-595b"
+          image: "sipsorceryk8sacr.azurecr.io/sipsorceryaksb2s"
+          ports:
+          - containerPort: 8080
