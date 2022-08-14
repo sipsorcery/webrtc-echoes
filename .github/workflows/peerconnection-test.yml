@@ -98,8 +98,8 @@ jobs:
         uses: azure/CLI@v1
         with:
           inlineScript: |
-            az storage blob upload --account-name webrtctestresults --container-name githubactions --name PeerConnection_test_results.md --file PeerConnection_test_results.md --account-key ${{ secrets.Azure_Key }}
-            az storage blob upload --account-name webrtctestresults --container-name githubactions --name PeerConnection_test_results.png --file PeerConnection_test_results.png --account-key ${{ secrets.Azure_Key }}
+            az storage blob upload --account-name webrtctestresults --container-name githubactions --name PeerConnection_test_results.md --file PeerConnection_test_results.md --account-key ${{ secrets.Azure_Key }} --overwrite
+            az storage blob upload --account-name webrtctestresults --container-name githubactions --name PeerConnection_test_results.png --file PeerConnection_test_results.png --account-key ${{ secrets.Azure_Key }} --overwrite
       - name: Commit the results to the git repository
         if: github.event_name != 'pull_request'
         run: |
