@@ -1,23 +1,25 @@
 use anyhow::Result;
 use clap::{App, AppSettings, Arg};
 use hyper::{Body, Client, Method, Request};
-use interceptor::registry::Registry;
 use std::io::Write;
 use std::sync::Arc;
 use tokio::time::Duration;
 use webrtc::api::interceptor_registry::register_default_interceptors;
 use webrtc::api::media_engine::{MediaEngine, MIME_TYPE_VP8};
 use webrtc::api::APIBuilder;
-use webrtc::media::rtp::rtp_codec::{RTCRtpCodecCapability, RTCRtpCodecParameters, RTPCodecType};
-use webrtc::media::track::track_local::track_local_static_rtp::TrackLocalStaticRTP;
-use webrtc::media::track::track_local::TrackLocal;
-use webrtc::peer::configuration::RTCConfiguration;
-use webrtc::peer::ice::ice_candidate::RTCIceCandidate;
-use webrtc::peer::ice::ice_connection_state::RTCIceConnectionState;
-use webrtc::peer::ice::ice_server::RTCIceServer;
-use webrtc::peer::peer_connection_state::RTCPeerConnectionState;
-use webrtc::peer::sdp::session_description::RTCSessionDescription;
-use webrtc::peer::signaling_state::RTCSignalingState;
+use webrtc::ice_transport::ice_candidate::RTCIceCandidate;
+use webrtc::ice_transport::ice_connection_state::RTCIceConnectionState;
+use webrtc::ice_transport::ice_server::RTCIceServer;
+use webrtc::interceptor::registry::Registry;
+use webrtc::peer_connection::configuration::RTCConfiguration;
+use webrtc::peer_connection::peer_connection_state::RTCPeerConnectionState;
+use webrtc::peer_connection::sdp::session_description::RTCSessionDescription;
+use webrtc::peer_connection::signaling_state::RTCSignalingState;
+use webrtc::rtp_transceiver::rtp_codec::{
+    RTCRtpCodecCapability, RTCRtpCodecParameters, RTPCodecType,
+};
+use webrtc::track::track_local::track_local_static_rtp::TrackLocalStaticRTP;
+use webrtc::track::track_local::TrackLocal;
 
 //const ECHO_TEST_SERVER_URL: &str = "http://localhost:8080/offer";
 const CONNECTION_ATTEMPT_TIMEOUT_SECONDS: u64 = 10;
@@ -150,14 +152,12 @@ async fn main() -> Result<()> {
     });
 
     // Add ICE candidates to the local offer (simulates non-trickle).
-    peer_connection
-        .on_ice_candidate(Box::new(move |c: Option<RTCIceCandidate>| {
-            if c.is_none() {
-                //println!(peer_connection.LocalDescription())
-            }
-            Box::pin(async {})
-        }))
-        .await;
+    peer_connection.on_ice_candidate(Box::new(move |c: Option<RTCIceCandidate>| {
+        if c.is_none() {
+            //println!(peer_connection.LocalDescription())
+        }
+        Box::pin(async {})
+    }));
 
     // Create an offer to send to the other process
     let offer = peer_connection.create_offer(None).await?;
@@ -167,17 +167,17 @@ async fn main() -> Result<()> {
 
     // Set the handler for ICE connection state
     // This will notify you when the peer has connected/disconnected
-    peer_connection
-        .on_ice_connection_state_change(Box::new(|connection_state: RTCIceConnectionState| {
+    peer_connection.on_ice_connection_state_change(Box::new(
+        |connection_state: RTCIceConnectionState| {
             println!("ICE connection state has changed {}.", connection_state);
             Box::pin(async {})
-        }))
-        .await;
+        },
+    ));
 
     let (done_tx, mut done_rx) = tokio::sync::mpsc::channel::<()>(1);
     let done_tx = Arc::new(done_tx);
-    peer_connection
-        .on_peer_connection_state_change(Box::new(move |state: RTCPeerConnectionState| {
+    peer_connection.on_peer_connection_state_change(Box::new(
+        move |state: RTCPeerConnectionState| {
             println!("Peer connection state has changed to {}.", state);
 
             let done_tx2 = Arc::clone(&done_tx);
@@ -191,15 +191,13 @@ async fn main() -> Result<()> {
                     std::process::exit(SUCCESS_RETURN_VALUE);
                 }
             })
-        }))
-        .await;
+        },
+    ));
 
-    peer_connection
-        .on_signaling_state_change(Box::new(|state: RTCSignalingState| {
-            println!("Signaling state has changed to {}.", state);
-            Box::pin(async {})
-        }))
-        .await;
+    peer_connection.on_signaling_state_change(Box::new(|state: RTCSignalingState| {
+        println!("Signaling state has changed to {}.", state);
+        Box::pin(async {})
+    }));
 
     // Create channel that is blocked until ICE Gathering is complete
     let mut gather_complete = peer_connection.gathering_complete_promise().await;
