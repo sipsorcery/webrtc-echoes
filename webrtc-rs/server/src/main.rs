@@ -3,7 +3,6 @@ use async_trait::async_trait;
 use clap::{App, AppSettings, Arg};
 use hyper::service::{make_service_fn, service_fn};
 use hyper::{Body, Method, Request, Response, Server, StatusCode};
-use interceptor::registry::Registry;
 use std::any::Any;
 use std::io::Write;
 use std::net::SocketAddr;
@@ -14,17 +13,19 @@ use tokio_util::codec::{BytesCodec, FramedRead};
 use webrtc::api::interceptor_registry::register_default_interceptors;
 use webrtc::api::media_engine::MediaEngine;
 use webrtc::api::APIBuilder;
-use webrtc::media::rtp::rtp_codec::{RTCRtpCodecParameters, RTPCodecType};
-use webrtc::media::rtp::rtp_receiver::RTCRtpReceiver;
-use webrtc::media::track::track_local::{TrackLocal, TrackLocalContext};
-use webrtc::media::track::track_remote::TrackRemote;
-use webrtc::peer::configuration::RTCConfiguration;
-use webrtc::peer::ice::ice_connection_state::RTCIceConnectionState;
-use webrtc::peer::ice::ice_server::RTCIceServer;
-use webrtc::peer::peer_connection::RTCPeerConnection;
-use webrtc::peer::peer_connection_state::RTCPeerConnectionState;
-use webrtc::peer::sdp::session_description::RTCSessionDescription;
-use webrtc::peer::signaling_state::RTCSignalingState;
+use webrtc::ice_transport::ice_connection_state::RTCIceConnectionState;
+use webrtc::ice_transport::ice_server::RTCIceServer;
+use webrtc::interceptor::registry::Registry;
+use webrtc::peer_connection::configuration::RTCConfiguration;
+use webrtc::peer_connection::peer_connection_state::RTCPeerConnectionState;
+use webrtc::peer_connection::sdp::session_description::RTCSessionDescription;
+use webrtc::peer_connection::signaling_state::RTCSignalingState;
+use webrtc::peer_connection::RTCPeerConnection;
+use webrtc::rtp_transceiver::rtp_codec::{RTCRtpCodecParameters, RTPCodecType};
+use webrtc::rtp_transceiver::rtp_receiver::RTCRtpReceiver;
+use webrtc::rtp_transceiver::RTCRtpTransceiver;
+use webrtc::track::track_local::{TrackLocal, TrackLocalContext};
+use webrtc::track::track_remote::TrackRemote;
 
 #[macro_use]
 extern crate lazy_static;
@@ -173,8 +174,7 @@ async fn process_offer(req: Request<Body>) -> Result<Response<Body>, hyper::Erro
             });
         }
         Box::pin(async {})
-    }))
-    .await;
+    }));
 
     let audio_track = Arc::new(EchoTrack::new(
         "audio".to_owned(),
@@ -203,52 +203,51 @@ async fn process_offer(req: Request<Body>) -> Result<Response<Body>, hyper::Erro
     };
 
     pc.on_track(Box::new(
-        move |track: Option<Arc<TrackRemote>>, _receiver: Option<Arc<RTCRtpReceiver>>| {
+        move |track: Arc<TrackRemote>,
+              _receiver: Arc<RTCRtpReceiver>,
+              _transceiver: Arc<RTCRtpTransceiver>| {
             let audio_track2 = Arc::clone(&audio_track);
             let video_track2 = Arc::clone(&video_track);
             Box::pin(async move {
-                if let Some(track) = track {
-                    let mime_type = track.codec().await.capability.mime_type;
-                    let out_track = if mime_type.starts_with("audio") {
-                        audio_track2
-                    } else {
-                        video_track2
+                let mime_type = track.codec().capability.mime_type;
+                let out_track = if mime_type.starts_with("audio") {
+                    audio_track2
+                } else {
+                    video_track2
+                };
+
+                println!(
+                    "Track has started, of type {}: {}",
+                    track.payload_type(),
+                    mime_type
+                );
+                tokio::spawn(async move {
+                    let (ssrc, write_stream) = {
+                        let ctx = out_track.ctx.lock().await;
+                        (ctx[0].ssrc(), ctx[0].write_stream())
                     };
+                    while let Ok((mut rtp, _)) = track.read_rtp().await {
+                        rtp.header.ssrc = ssrc;
+                        if let Some(ws) = &write_stream {
+                            if let Err(err) = ws.write_rtp(&rtp).await {
+                                println!("write_stream.write_rtp err: {}", err);
+                                break;
+                            }
+                        } else {
+                            println!("write_stream is none");
+                            break;
+                        }
+                    }
 
                     println!(
-                        "Track has started, of type {}: {}",
+                        "Track has ended, of type {}: {}",
                         track.payload_type(),
                         mime_type
                     );
-                    tokio::spawn(async move {
-                        let (ssrc, write_stream) = {
-                            let ctx = out_track.ctx.lock().await;
-                            (ctx[0].ssrc(), ctx[0].write_stream())
-                        };
-                        while let Ok((mut rtp, _)) = track.read_rtp().await {
-                            rtp.header.ssrc = ssrc;
-                            if let Some(ws) = &write_stream {
-                                if let Err(err) = ws.write_rtp(&rtp).await {
-                                    println!("write_stream.write_rtp err: {}", err);
-                                    break;
-                                }
-                            } else {
-                                println!("write_stream is none");
-                                break;
-                            }
-                        }
-
-                        println!(
-                            "Track has ended, of type {}: {}",
-                            track.payload_type(),
-                            mime_type
-                        );
-                    });
-                }
+                });
             })
         },
-    ))
-    .await;
+    ));
 
     let stats_id = pc.get_stats_id().to_owned();
     pc.on_peer_connection_state_change(Box::new(move |state: RTCPeerConnectionState| {
@@ -257,15 +256,13 @@ async fn process_offer(req: Request<Body>) -> Result<Response<Body>, hyper::Erro
             stats_id, state
         );
         Box::pin(async {})
-    }))
-    .await;
+    }));
 
     let stats_id = pc.get_stats_id().to_owned();
     pc.on_signaling_state_change(Box::new(move |state: RTCSignalingState| {
         println!("Signaling state {} has changed to {}.", stats_id, state);
         Box::pin(async {})
-    }))
-    .await;
+    }));
 
     if let Err(err) = pc.set_remote_description(offer).await {
         panic!("{}", err);
@@ -418,7 +415,10 @@ impl EchoTrack {
 
 #[async_trait]
 impl TrackLocal for EchoTrack {
-    async fn bind(&self, c: &TrackLocalContext) -> std::result::Result<RTCRtpCodecParameters, webrtc::Error> {
+    async fn bind(
+        &self,
+        c: &TrackLocalContext,
+    ) -> std::result::Result<RTCRtpCodecParameters, webrtc::Error> {
         let mut ctx = self.ctx.lock().await;
         ctx.push(c.clone());
 
