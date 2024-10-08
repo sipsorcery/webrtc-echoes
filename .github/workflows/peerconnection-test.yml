@@ -50,7 +50,6 @@ jobs:
         #ports:
         #  - 8080:8080
         options: "--name echo-server"
-        options: "--name echo-server"
 
     steps:
       - name: Peer connection test for server ${{ matrix.server }} and ${{ matrix.client }} client
