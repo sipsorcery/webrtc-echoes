@@ -48,6 +48,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: results
+          overwrite: true
           path: |
             ${{ matrix.server }}_${{ matrix.client }}_result.csv
 
