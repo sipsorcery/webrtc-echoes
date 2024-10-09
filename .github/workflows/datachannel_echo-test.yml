@@ -34,6 +34,7 @@ jobs:
     steps:
       - name: Set up result array
         run: echo "RESULTS=[]" >> $GITHUB_ENV
+        
       - name: Data Channel test for server ${{ matrix.server }} and ${{ matrix.client }} client
         id: check_connection
         run: |
@@ -42,14 +43,11 @@ jobs:
           echo "Check connection for ${{ matrix.server }} server and ${{ matrix.client }} client result $result."
           echo "::set-output name=TEST_RESULT::$result"
         continue-on-error: true
+        
       - name: Record result
         run: |
           echo "Result for ${{ matrix.server }} server and ${{ matrix.client }} client, outcome ${{ steps.check_connection.outcome }}, result ${{ steps.check_connection.outputs.TEST_RESULT }}."
-          # echo "${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> ${{ matrix.server }}_${{ matrix.client }}_result.csv
-          # Append the result to the environment variable
           echo "RESULTS+=['${{ matrix.server }}','${{ matrix.client }}','${{ steps.check_connection.outputs.TEST_RESULT }}']" >> $GITHUB_ENV
-          echo "GITHUB_ENV=${GITHUB_ENV}"
-          echo "env.RESULTS=${{ env.RESULTS }}"
 
   # Job Description: Collates the results of the interop tests into a mark down table.
   collate:
@@ -61,10 +59,14 @@ jobs:
           ref: testresults
       - name: Create results file from environment variable
         run: |
-          echo "Collating results..."
+          echo "Collating results from ${{ env.RESULTS }}."
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
-          for result in ${{ env.RESULTS }}; do
+          
+          # Read from the RESULTS environment variable
+          echo "Collecting results..."
+          IFS=',' read -r -a results_array <<< "${{ env.RESULTS }}"
+          for result in "${results_array[@]}"; do
             echo "| ${result[0]} | ${result[1]} | ${result[2]} |" >> DataChannel_Echo_test_results.md
           done
           cat DataChannel_Echo_test_results.md
