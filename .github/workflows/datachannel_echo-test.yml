@@ -50,9 +50,9 @@ jobs:
         id: set_output
         run: |
           # Combine the results directly into a single output variable
-          echo "RESULTS+=('${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}')" >> $GITHUB_ENV
+          echo "${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> "$GITHUB_OUTPUT"
           # Set the combined output for this job
-          echo "results=$(echo "${RESULTS[@]}" | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          #echo "results=$(echo "${RESULTS[@]}" | tr '\n' ' ')" >> $GITHUB_OUTPUT
          
   # Job Description: Collates the results of the interop tests into a mark down table.
   collate:
