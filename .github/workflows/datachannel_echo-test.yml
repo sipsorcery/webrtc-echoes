@@ -69,7 +69,7 @@ jobs:
       - name: Create results file from results.txt
         run: |
           echo "Collating results from:"
-          cat results.txt
+          echo "${{ needs.interop-tests.outputs.results }}"
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
           
