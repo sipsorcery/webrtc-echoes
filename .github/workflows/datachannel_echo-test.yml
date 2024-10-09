@@ -49,10 +49,14 @@ jobs:
       - name: Set output results
         id: set_output
         run: |
-          # Combine the results directly into a single output variable
-          echo "result[@]=${{ matrix.server }},${{ matrix.client }}=${{ steps.check_connection.outputs.TEST_RESULT }}${{ steps.set_output.outputs.result }}" >> "$GITHUB_OUTPUT"
-          # Set the combined output for this job
-          #echo "results=$(echo "${RESULTS[@]}" | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          # Create a string for the result entry
+          result_entry="${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}"
+          
+          # Append the result entry to the output variable
+          echo "RESULTS+=($result_entry)" >> $GITHUB_ENV  # Use environment variable for results
+          
+          # Also set the results for output
+          echo "results=${{ env.RESULTS }}" >> $GITHUB_OUTPUT
          
   # Job Description: Collates the results of the interop tests into a mark down table.
   collate:
