@@ -49,7 +49,6 @@ jobs:
           # Append the result to the environment variable
           echo "RESULTS+=['${{ matrix.server }}','${{ matrix.client }}','${{ steps.check_connection.outputs.TEST_RESULT }}']" >> $GITHUB_ENV
           echo "GITHUB_ENV=${GITHUB_ENV}"
-          echo "RESULTS=${{ RESULTS }}"
           echo "env.RESULTS=${{ env.RESULTS }}"
 
   # Job Description: Collates the results of the interop tests into a mark down table.
