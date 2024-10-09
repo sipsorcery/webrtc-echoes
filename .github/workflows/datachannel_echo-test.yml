@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     # See https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#using-job-outputs-in-a-matrix-job
     outputs:
-      results: ${{ steps.set_output.outputs.results }}  # Capture all results in one output
+      results: ${{ steps.record_results.outputs.results }}  # Capture all results in one output
   
     strategy:
       matrix:
@@ -50,14 +50,8 @@ jobs:
         id: record_results
         run: |
           echo "Result for ${{ matrix.server }} server and ${{ matrix.client }} client, outcome ${{ steps.check_connection.outcome }}, result ${{ steps.check_connection.outputs.TEST_RESULT }}."
-          echo "${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> results.txt
-
-      - name: Set output results
-        id: set_output
-        run: |
-          echo "results=$(cat results.txt | tr '\n' ' ')" >> $GITHUB_ENV  # Format results for output
-          echo "results=${{ env.results }}" >> $GITHUB_OUTPUT  # Set output to be used in the next job
-          
+          echo "${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> $GITHUB_OUTPUT
+         
   # Job Description: Collates the results of the interop tests into a mark down table.
   collate:
     runs-on: ubuntu-latest
@@ -67,7 +61,7 @@ jobs:
       - name: Create results file from interop test outputs
         run: |
           echo "Collating results from:"
-          echo "results=${{ toJSON(needs.interop-tests.outputs.results) }}"
+          echo "results=${{ toJSON(needs.interop-tests.outputs) }}"
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
           
