@@ -70,7 +70,7 @@ jobs:
       - name: Create results file from interop test outputs
         run: |
           echo "Collating results from:"
-          echo "results=${{ needs.interop-tests.outputs }}"
+          echo "results=${{ toJSON(needs.interop-tests.outputs) }}"
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
           
