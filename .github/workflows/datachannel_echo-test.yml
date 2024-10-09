@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     # See https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#using-job-outputs-in-a-matrix-job
     outputs:
-      results: ${{ steps.record_results.outputs.results }}  # Capture all results in one output
+      results: ${{ steps.set_output.outputs.results }}  # Capture all results in one output
   
     strategy:
       matrix:
@@ -46,11 +46,13 @@ jobs:
           echo "::set-output name=TEST_RESULT::$result"
         continue-on-error: true
         
-      - name: Record result
-        id: record_results
+      - name: Set output results
+        id: set_output
         run: |
-          echo "Result for ${{ matrix.server }} server and ${{ matrix.client }} client, outcome ${{ steps.check_connection.outcome }}, result ${{ steps.check_connection.outputs.TEST_RESULT }}."
-          echo "${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> "$GITHUB_OUTPUT"
+          # Combine the results directly into a single output variable
+          echo "RESULTS+=('${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}')" >> $GITHUB_ENV
+          # Set the combined output for this job
+          echo "results=$(echo "${RESULTS[@]}" | tr '\n' ' ')" >> $GITHUB_OUTPUT
          
   # Job Description: Collates the results of the interop tests into a mark down table.
   collate:
