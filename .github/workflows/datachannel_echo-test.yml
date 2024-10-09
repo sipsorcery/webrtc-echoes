@@ -55,7 +55,7 @@ jobs:
       - name: Set output results
         id: collect_results
         run: |
-          echo "results=${{ env.RESULTS }}
+          echo "results=${{ env.RESULTS }}"
           echo "results=${{ env.RESULTS }}" >> $GITHUB_ENV
 
   # Job Description: Collates the results of the interop tests into a mark down table.
