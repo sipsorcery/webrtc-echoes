@@ -64,8 +64,6 @@ jobs:
     needs: [interop-tests]
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: testresults
       - name: Create results file from interop test outputs
         run: |
           echo "Collating results from:"
@@ -73,7 +71,7 @@ jobs:
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
           
-         # Read results from the job output
+          # Read results from the job output
           IFS=' ' read -r -a results_array <<< "${{ needs.interop-tests.outputs.results }}"
           for result in "${results_array[@]}"; do
             IFS=',' read -r server client test_result <<< "$result"
