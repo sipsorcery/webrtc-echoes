@@ -48,12 +48,9 @@ jobs:
           # echo "${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> ${{ matrix.server }}_${{ matrix.client }}_result.csv
           # Append the result to the environment variable
           echo "RESULTS+=['${{ matrix.server }}','${{ matrix.client }}','${{ steps.check_connection.outputs.TEST_RESULT }}']" >> $GITHUB_ENV
-      - name: Upload result
-        uses: actions/upload-artifact@v4
-        with:
-          name: results-${{ matrix.server }}-${{ matrix.client }}-${{ github.run_id }}
-          path: |
-            ${{ matrix.server }}_${{ matrix.client }}_result.csv
+          echo "GITHUB_ENV=$GITHUB_ENV"
+          echo "RESULTS=$RESULTS"
+          echo "env.RESULTS=${{ env.RESULTS }}"
 
   # Job Description: Collates the results of the interop tests into a mark down table.
   collate:
@@ -71,13 +68,15 @@ jobs:
           for result in ${{ env.RESULTS }}; do
             echo "| ${result[0]} | ${result[1]} | ${result[2]} |" >> results.md
           done
-          cat results.md
+          cat DataChannel_Echo_test_results.md
       - name: Commit the results to the git repository
         if: github.event_name != 'pull_request'
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git pull
-          git add DataChannel_Echo_test_results.md DataChannel_Echo_test_results.png
-          git commit DataChannel_Echo_test_results.md DataChannel_Echo_test_results.png -m "Automated data channel echo test results."
+          #git add DataChannel_Echo_test_results.md DataChannel_Echo_test_results.png
+          #git commit DataChannel_Echo_test_results.md DataChannel_Echo_test_results.png -m "Automated data channel echo test results."
+          git add DataChannel_Echo_test_results.md
+          git add DataChannel_Echo_test_results.md -m "Automated data channel echo test results."
           git push
