@@ -32,6 +32,8 @@ jobs:
         options: "--name echo-server"
 
     steps:
+      - name: Set up result array
+        run: echo "RESULTS=[]" >> $GITHUB_ENV
       - name: Data Channel test for server ${{ matrix.server }} and ${{ matrix.client }} client
         id: check_connection
         run: |
@@ -43,7 +45,9 @@ jobs:
       - name: Record result
         run: |
           echo "Result for ${{ matrix.server }} server and ${{ matrix.client }} client, outcome ${{ steps.check_connection.outcome }}, result ${{ steps.check_connection.outputs.TEST_RESULT }}."
-          echo "${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> ${{ matrix.server }}_${{ matrix.client }}_result.csv
+          # echo "${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> ${{ matrix.server }}_${{ matrix.client }}_result.csv
+          # Append the result to the environment variable
+          echo "RESULTS+=['${{ matrix.server }}','${{ matrix.client }}','${{ steps.check_connection.outputs.TEST_RESULT }}']" >> $GITHUB_ENV
       - name: Upload result
         uses: actions/upload-artifact@v4
         with:
@@ -59,28 +63,15 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: testresults
-      - uses: actions/setup-python@v2
-        with:
-          python-version: "3.x"
-      - name: Download results
-        uses: actions/download-artifact@v4
-        with:
-          overwrite: true
-          name: results
-      - name: Collate result files
+      - name: Create results file from environment variable
         run: |
-          python --version
-          pip install 'weasyprint==52.4'
-          python test/collate-results.py DataChannel_Echo
-          python test/collate-results.py > DataChannel_Echo_test_results.md
-          cat DataChannel_Echo_test_results.md
-      - name: Azure CLI script to upload results to Azure blob storage
-        if: github.event_name != 'pull_request'
-        uses: azure/CLI@v1
-        with:
-          inlineScript: |
-            az storage blob upload --account-name webrtctestresults --container-name githubactions --name DataChannel_Echo_test_results.md --file DataChannel_Echo_test_results.md --account-key ${{ secrets.Azure_Key }} --overwrite
-            az storage blob upload --account-name webrtctestresults --container-name githubactions --name DataChannel_Echo_test_results.png --file DataChannel_Echo_test_results.png --account-key ${{ secrets.Azure_Key }} --overwrite
+          echo "Collating results..."
+          echo "| Server | Client | Test Result |" > results.md
+          echo "|--------|--------|-------------|" >> results.md
+          for result in ${{ env.RESULTS }}; do
+            echo "| ${result[0]} | ${result[1]} | ${result[2]} |" >> results.md
+          done
+          cat results.md
       - name: Commit the results to the git repository
         if: github.event_name != 'pull_request'
         run: |
