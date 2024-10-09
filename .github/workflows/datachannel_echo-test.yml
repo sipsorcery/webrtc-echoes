@@ -50,7 +50,7 @@ jobs:
         id: record_results
         run: |
           echo "Result for ${{ matrix.server }} server and ${{ matrix.client }} client, outcome ${{ steps.check_connection.outcome }}, result ${{ steps.check_connection.outputs.TEST_RESULT }}."
-          echo "${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> $GITHUB_OUTPUT
+          echo "${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> "$GITHUB_OUTPUT"
          
   # Job Description: Collates the results of the interop tests into a mark down table.
   collate:
