@@ -50,7 +50,7 @@ jobs:
         id: set_output
         run: |
           # Combine the results directly into a single output variable
-          echo "${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> "$GITHUB_OUTPUT"
+          echo "result=${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> "$GITHUB_OUTPUT"
           # Set the combined output for this job
           #echo "results=$(echo "${RESULTS[@]}" | tr '\n' ' ')" >> $GITHUB_OUTPUT
          
