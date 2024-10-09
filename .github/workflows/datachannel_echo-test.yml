@@ -31,6 +31,9 @@ jobs:
         #  - 8080:8080
         options: "--name echo-server"
 
+    outputs:
+      results: ${{ steps.collect_results.outputs.results }}
+
     steps:
       - name: Set up result file
         run: echo "" > results.txt  # Create or empty the results file
@@ -47,8 +50,13 @@ jobs:
       - name: Record result
         run: |
           echo "Result for ${{ matrix.server }} server and ${{ matrix.client }} client, outcome ${{ steps.check_connection.outcome }}, result ${{ steps.check_connection.outputs.TEST_RESULT }}."
-          echo "${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}" >> results.txt # Append result to the file
-          cat results.txt
+          echo "RESULTS+=['${{ matrix.server }}','${{ matrix.client }}','${{ steps.check_connection.outputs.TEST_RESULT }}']" >> $GITHUB_ENV
+          
+      - name: Set output results
+        id: collect_results
+        run: |
+          echo "results=${{ env.RESULTS }}
+          echo "results=${{ env.RESULTS }}" >> $GITHUB_ENV
 
   # Job Description: Collates the results of the interop tests into a mark down table.
   collate:
@@ -60,16 +68,19 @@ jobs:
           ref: testresults
       - name: Create results file from results.txt
         run: |
-          echo "Collating results from ${{ env.RESULTS }}."
+          echo "Collating results from:"
+          cat results.txt
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
           
-          # Read results from the results.txt file
-          while IFS=',' read -r server client result; do
-            echo "| $server | $client | $result |" >> DataChannel_Echo_test_results.md
-          done < results.txt
+          # Read results from the job output
+          IFS=' ' read -r -a results_array <<< "${{ needs.interop-tests.outputs.results }}"
+          for result in "${results_array[@]}"; do
+            echo "| ${result[0]} | ${result[1]} | ${result[2]} |" >> DataChannel_Echo_test_results.md
+          done
           
           cat DataChannel_Echo_test_results.md
+          
       - name: Commit the results to the git repository
         if: github.event_name != 'pull_request'
         run: |
