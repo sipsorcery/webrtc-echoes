@@ -17,15 +17,18 @@ jobs:
   # Job Description: Performs the Data Channel Test between each combination of the client and server for each library.
   interop-tests:
     runs-on: ubuntu-latest
-    # See https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#using-job-outputs-in-a-matrix-job
-    outputs:
-      results: ${{ steps.set_output.outputs.result }}  # Capture all results in one output
-  
-    strategy:
-      matrix:
-        server: ["libdatachannel", "sipsorcery", "werift"]
-        client: ["libdatachannel", "sipsorcery", "werift"]
+
     services:
+      redis:
+        image: redis:alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          
       echo-test-server:
         image: ghcr.io/sipsorcery/${{ matrix.server }}-webrtc-echo
         credentials:
@@ -35,7 +38,18 @@ jobs:
         #  - 8080:8080
         options: "--name echo-server"
 
+    strategy:
+      matrix:
+        server: ["libdatachannel", "sipsorcery", "werift"]
+        client: ["libdatachannel", "sipsorcery", "werift"]
+
     steps:
+        
+      - name: Wait for Redis to be ready
+        run: |
+          for i in {1..30}; do
+            redis-cli -h 127.0.0.1 ping && break || sleep 1;
+          done   
         
       - name: Data Channel test for server ${{ matrix.server }} and ${{ matrix.client }} client
         id: check_connection
@@ -49,14 +63,8 @@ jobs:
       - name: Set output results
         id: set_output
         run: |
-          # Create a string for the result entry
-          result_entry="${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}"
-          
-          # Append the result entry to the output variable
-          echo "RESULTS+=($result_entry)" >> $GITHUB_ENV  # Use environment variable for results
-          
-          # Also set the results for output
-          echo "results=${{ env.RESULTS }}" >> $GITHUB_OUTPUT
+          # Store this in Redis!
+          #result_entry="${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}"
          
   # Job Description: Collates the results of the interop tests into a mark down table.
   collate:
