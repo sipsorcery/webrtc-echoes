@@ -35,8 +35,6 @@ jobs:
       results: ${{ steps.collect_results.outputs.results }}
 
     steps:
-      - name: Set up result file
-        run: echo "" > results.txt  # Create or empty the results file
         
       - name: Data Channel test for server ${{ matrix.server }} and ${{ matrix.client }} client
         id: check_connection
@@ -50,13 +48,12 @@ jobs:
       - name: Record result
         run: |
           echo "Result for ${{ matrix.server }} server and ${{ matrix.client }} client, outcome ${{ steps.check_connection.outcome }}, result ${{ steps.check_connection.outputs.TEST_RESULT }}."
-          echo "RESULTS+=['${{ matrix.server }}','${{ matrix.client }}','${{ steps.check_connection.outputs.TEST_RESULT }}']" >> $GITHUB_ENV
+          echo "RESULTS+=['${{ matrix.server }}','${{ matrix.client }}','${{ steps.check_connection.outputs.TEST_RESULT }}']" >> $GITHUB_OUTPUT
           
-      - name: Set output results
+      - name: Show step output results
         id: collect_results
         run: |
-          echo "results=${{ env.RESULTS }}"
-          echo "results=${{ env.RESULTS }}" >> $GITHUB_ENV
+          echo "results=${{ steps.collect_results.outputs.results }}"
 
   # Job Description: Collates the results of the interop tests into a mark down table.
   collate:
@@ -69,12 +66,12 @@ jobs:
       - name: Create results file from results.txt
         run: |
           echo "Collating results from:"
-          echo "${{ needs.interop-tests.outputs.results }}"
+          echo "results=${{ steps.collect_results.outputs.results }}"
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
           
           # Read results from the job output
-          IFS=' ' read -r -a results_array <<< "${{ needs.interop-tests.outputs.results }}"
+          IFS=' ' read -r -a results_array <<< "${{ steps.collect_results.outputs.results }}"
           for result in "${results_array[@]}"; do
             echo "| ${result[0]} | ${result[1]} | ${result[2]} |" >> DataChannel_Echo_test_results.md
           done
