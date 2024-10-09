@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     # See https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#using-job-outputs-in-a-matrix-job
     outputs:
-      results: ${{ steps.record_results.outputs.results }}  # Capture all results in one output
+      results: ${{ steps.set_output.outputs.results }}  # Capture all results in one output
   
     strategy:
       matrix:
