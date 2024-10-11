@@ -19,15 +19,6 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      redis:
-        image: redis:alpine
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
           
       echo-test-server:
         image: ghcr.io/sipsorcery/${{ matrix.server }}-webrtc-echo
@@ -38,19 +29,24 @@ jobs:
         #  - 8080:8080
         options: "--name echo-server"
 
+    outputs:
+      result_libdatachannel_libdatachannel: ${{ steps.set-output.outputs.result_libdatachannel_libdatachannel }}
+      result_libdatachannel_sipsorcery: ${{ steps.set-output.outputs.result_libdatachannel_sipsorcery }}
+      result_libdatachannel_werift: ${{ steps.set-output.outputs.result_libdatachannel_werift }}
+      result_sipsorcery_libdatachannel: ${{ steps.set-output.outputs.result_sipsorcery_libdatachannel }}
+      result_sipsorcery_sipsorcery: ${{ steps.set-output.outputs.result_sipsorcery_sipsorcery }}
+      result_sipsorcery_werift: ${{ steps.set-output.outputs.result_sipsorcery_werift }}
+      result_werift_libdatachannel: ${{ steps.set-output.outputs.result_werift_libdatachannel }}
+      result_werift_sipsorcery: ${{ steps.set-output.outputs.result_werift_sipsorcery }}
+      result_werift_werift: ${{ steps.set-output.outputs.result_werift_werift }}
+
     strategy:
       matrix:
         server: ["libdatachannel", "sipsorcery", "werift"]
         client: ["libdatachannel", "sipsorcery", "werift"]
 
     steps:
-        
-      - name: Wait for Redis to be ready
-        run: |
-          for i in {1..30}; do
-            redis-cli -h 127.0.0.1 ping && break || sleep 1;
-          done   
-        
+               
       - name: Data Channel test for server ${{ matrix.server }} and ${{ matrix.client }} client
         id: check_connection
         run: |
@@ -65,6 +61,7 @@ jobs:
         run: |
           # Store this in Redis!
           #result_entry="${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}"
+          echo "result_${{ matrix.server }}_${{ matrix.client }}=${{ steps.check_connection.outputs.TEST_RESULT }}" >> $GITHUB_OUTPUT
          
   # Job Description: Collates the results of the interop tests into a mark down table.
   collate:
@@ -79,11 +76,18 @@ jobs:
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
           
-          # Read results from the job output
-          IFS=' ' read -r -a results_array <<< "${{ needs.interop-tests.outputs.results }}"
-          for result in "${results_array[@]}"; do
-            IFS=',' read -r server client test_result <<< "$result"
-            echo "| $server | $client | $test_result |" >> DataChannel_Echo_test_results.md
+        
+          # Define the server and client combinations
+          servers=("libdatachannel" "sipsorcery" "werift")
+          clients=("libdatachannel" "sipsorcery" "werift")
+
+          # Loop through server and client combinations to get results
+          for server in "${servers[@]}"; do
+            for client in "${clients[@]}"; do
+              result_key="result_${server}_${client}"
+              result_value="${{ needs.interop-tests.outputs[result_key] }}"
+              echo "| ${server} | ${client} | ${result_value} |" >> DataChannel_Echo_test_results.md
+            done
           done
           
           cat DataChannel_Echo_test_results.md
