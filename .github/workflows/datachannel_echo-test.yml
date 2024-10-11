@@ -70,13 +70,16 @@ jobs:
       - name: Create results file from interop test outputs
         run: |
           echo "Collating...."
-          echo "results=${{ toJSON(needs.interoptests.outputs) }}"
+          
+          results="${{ toJSON(needs.interop-tests.outputs) }}"
+          echo "results=${results}"
+          
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
           
-          # Define the server and client combinations
-          servers=("libdatachannel" "sipsorcery" "werift")
-          clients=("libdatachannel" "sipsorcery" "werift")
+          echo "$results" | jq -r 'to_entries | .[] | 
+            capture("result_(?<server>.+)_(?<client>.+)") | 
+            "\(.server) | \(.client) | \(.value) |"' >> DataChannel_Echo_test_results.md
 
           cat DataChannel_Echo_test_results.md
           
@@ -88,6 +91,6 @@ jobs:
           git pull
           #git add DataChannel_Echo_test_results.md DataChannel_Echo_test_results.png
           #git commit DataChannel_Echo_test_results.md DataChannel_Echo_test_results.png -m "Automated data channel echo test results."
-          #git add DataChannel_Echo_test_results.md
+          git add DataChannel_Echo_test_results.md
           git commit DataChannel_Echo_test_results.md -m "Automated data channel echo test results."
           git push
