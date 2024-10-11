@@ -79,8 +79,8 @@ jobs:
           
           echo "Listing all key-value pairs with server/client capture..."
           echo "$results" | jq -r 'to_entries | .[] | 
-            capture("result_(?<server>.+)_(?<client>.+)") | 
-            "\(.server): \(.client) - Value: \(.value)"'
+            capture("result_(?<server>.+)_(?<client>.+)") as $c | 
+            "\($c.server): \($c.client) - Value: \(.value)"'
           
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
