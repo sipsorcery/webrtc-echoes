@@ -76,7 +76,6 @@ jobs:
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
           
-        
           # Define the server and client combinations
           servers=("libdatachannel" "sipsorcery" "werift")
           clients=("libdatachannel" "sipsorcery" "werift")
