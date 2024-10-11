@@ -75,20 +75,41 @@ jobs:
           results="${{ toJSON(needs.interoptests.outputs) }}"
           echo "results=${results}"
           
+          # Define an associative array (dictionary) to store the results
+          declare -A results_dict
+        
+          # Loop through known output keys and populate the dictionary
+          output_keys=(
+            "result_libdatachannel_libdatachannel"
+            "result_libdatachannel_sipsorcery"
+            "result_libdatachannel_werift"
+            "result_sipsorcery_libdatachannel"
+            "result_sipsorcery_sipsorcery"
+            "result_sipsorcery_werift"
+            "result_werift_libdatachannel"
+            "result_werift_sipsorcery"
+            "result_werift_werift"
+          )
+
+          for key in "${output_keys[@]}"; do
+            value="${{ needs.interoptests.outputs[key] }}"
+            # Store in dictionary
+            results_dict["$key"]="$value"
+          done
+
+          # Write the header of the Markdown file
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
-          
-          # Define the server and client combinations
-          servers=("libdatachannel" "sipsorcery" "werift")
-          clients=("libdatachannel" "sipsorcery" "werift")
 
-          # Loop through each combination to populate the results
-          for server in "${servers[@]}"; do
-            for client in "${clients[@]}"; do
-              key="result_${server}_${client}"
-              value="${{ needs.interoptests.outputs[key] }}"
-              echo "| ${server} | ${client} | ${value} |" >> DataChannel_Echo_test_results.md
-            done
+          # Loop through the dictionary to create the Markdown table
+          for key in "${!results_dict[@]}"; do
+            # Split the key into server and client
+            server_client="${key#result_}"
+            server="${server_client%%_*}"
+            client="${server_client##*_}"
+            value="${results_dict[$key]}"
+
+            echo "| ${server} | ${client} | ${value} |" >> DataChannel_Echo_test_results.md
           done
 
           cat DataChannel_Echo_test_results.md
