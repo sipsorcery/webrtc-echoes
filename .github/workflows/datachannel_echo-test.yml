@@ -77,7 +77,7 @@ jobs:
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
           
-          echo "$results" | jq -r 'to_entries | .[] | 
+          echo "${results}" | jq -r 'to_entries | .[] | 
             capture("result_(?<server>.+)_(?<client>.+)") | 
             "\(.server) | \(.client) | \(.value) |"' >> DataChannel_Echo_test_results.md
 
