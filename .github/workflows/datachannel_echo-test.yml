@@ -81,14 +81,14 @@ jobs:
           clients=("libdatachannel" "sipsorcery" "werift")
 
           # Loop through server and client combinations to get results
-          for server in "${servers[@]}"; do
-            for client in "${clients[@]}"; do
-              result_key="result_${server}_${client}"
+          #for server in "${servers[@]}"; do
+          #  for client in "${clients[@]}"; do
+          #    result_key="result_${server}_${client}"
               # Access the output using the correct syntax
-              result_value="${{ needs.interop-tests.outputs[result_key] }}"
-              echo "| ${server} | ${client} | ${result_value} |" >> DataChannel_Echo_test_results.md
-            done
-          done
+          #    result_value="${{ needs.interop-tests.outputs[result_key] }}"
+          #    echo "| ${server} | ${client} | ${result_value} |" >> DataChannel_Echo_test_results.md
+          #  done
+          #done
           
           cat DataChannel_Echo_test_results.md
           
