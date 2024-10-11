@@ -71,6 +71,7 @@ jobs:
         run: |
           echo "Collating...."
           
+          echo "raw=${{ toJSON(needs.interoptests.outputs) }}"
           results="${{ toJSON(needs.interoptests.outputs) }}"
           echo "results=${results}"
           
