@@ -15,7 +15,7 @@ on:
 
 jobs:
   # Job Description: Performs the Data Channel Test between each combination of the client and server for each library.
-  interop-tests:
+  interoptests:
     runs-on: ubuntu-latest
 
     services:
@@ -57,22 +57,20 @@ jobs:
         continue-on-error: true
         
       - name: Set output results
-        id: set_output
+        id: set-output
         run: |
-          # Store this in Redis!
-          #result_entry="${{ matrix.server }},${{ matrix.client }},${{ steps.check_connection.outputs.TEST_RESULT }}"
-          echo "result_${{ matrix.server }}_${{ matrix.client }}=${{ steps.check_connection.outputs.TEST_RESULT }}" >> $GITHUB_OUTPUT
+          echo "result_${{ matrix.server }}_${{ matrix.client }}=${{ steps.check_connection.outputs.TEST_RESULT }}" >> "$GITHUB_OUTPUT"
          
   # Job Description: Collates the results of the interop tests into a mark down table.
   collate:
     runs-on: ubuntu-latest
-    needs: [interop-tests]
+    needs: [interoptests]
     steps:
       - uses: actions/checkout@v2
       - name: Create results file from interop test outputs
         run: |
-          echo "Collating results from:"
-          echo "results=${{ toJSON(needs.interop-tests.outputs) }}"
+          echo "Collating...."
+          echo "results=${{ toJSON(needs.interoptests.outputs) }}"
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
           
