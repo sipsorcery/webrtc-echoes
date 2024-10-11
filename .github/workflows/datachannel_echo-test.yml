@@ -78,9 +78,18 @@ jobs:
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
           
-          echo "${{ needs.interoptests.outputs }}" | jq -r 'to_entries | .[] | 
-            capture("result_(?<server>.+)_(?<client>.+)") | 
-            "\(.server) | \(.client) | \(.value) |"' >> DataChannel_Echo_test_results.md
+          # Define the server and client combinations
+          servers=("libdatachannel" "sipsorcery" "werift")
+          clients=("libdatachannel" "sipsorcery" "werift")
+
+          # Loop through each combination to populate the results
+          for server in "${servers[@]}"; do
+            for client in "${clients[@]}"; do
+              key="result_${server}_${client}"
+              value="${{ needs.interoptests.outputs[key] }}"
+              echo "| ${server} | ${client} | ${value} |" >> DataChannel_Echo_test_results.md
+            done
+          done
 
           cat DataChannel_Echo_test_results.md
           
