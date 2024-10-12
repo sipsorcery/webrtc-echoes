@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        library: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel"] # "webrtc-rs"
+        library: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel", "webrtc-rs"]
     steps:
       - uses: actions/checkout@v2
       - name: Update submodules
@@ -43,51 +43,60 @@ jobs:
       result_sipsorcery_werift: ${{ steps.set-output.outputs.result_sipsorcery_werift }}
       result_sipsorcery_pion: ${{ steps.set-output.outputs.result_sipsorcery_pion }}
       result_sipsorcery_libdatachannel: ${{ steps.set-output.outputs.result_sipsorcery_libdatachannel }}
+      result_sipsorcery_webrtc_rs: ${{ steps.set-output.outputs.result_sipsorcery_webrtc_rs }}
       result_aiortc_sipsorcery: ${{ steps.set-output.outputs.result_aiortc_sipsorcery }}
       result_aiortc_aiortc: ${{ steps.set-output.outputs.result_aiortc_aiortc }}
       result_aiortc_werift: ${{ steps.set-output.outputs.result_aiortc_werift }}
       result_aiortc_pion: ${{ steps.set-output.outputs.result_aiortc_pion }}
       result_aiortc_libdatachannel: ${{ steps.set-output.outputs.result_aiortc_libdatachannel }}
+      result_aiortc_webrtc_rs: ${{ steps.set-output.outputs.result_aiortc_webrtc_rs }}
       result_werift_sipsorcery: ${{ steps.set-output.outputs.result_werift_sipsorcery }}
       result_werift_aiortc: ${{ steps.set-output.outputs.result_werift_aiortc }}
       result_werift_werift: ${{ steps.set-output.outputs.result_werift_werift }}
       result_werift_pion: ${{ steps.set-output.outputs.result_werift_pion }}
       result_werift_libdatachannel: ${{ steps.set-output.outputs.result_werift_libdatachannel }}
+      result_werift_webrtc_rs: ${{ steps.set-output.outputs.result_werift_webrtc_rs }}
       result_pion_sipsorcery: ${{ steps.set-output.outputs.result_pion_sipsorcery }}
       result_pion_aiortc: ${{ steps.set-output.outputs.result_pion_aiortc }}
       result_pion_werift: ${{ steps.set-output.outputs.result_pion_werift }}
       result_pion_pion: ${{ steps.set-output.outputs.result_pion_pion }}
       result_pion_libdatachannel: ${{ steps.set-output.outputs.result_pion_libdatachannel }}
+      result_pion_webrtc_rs: ${{ steps.set-output.outputs.result_pion_webrtc_rs }}
       result_libdatachannel_sipsorcery: ${{ steps.set-output.outputs.result_libdatachannel_sipsorcery }}
       result_libdatachannel_aiortc: ${{ steps.set-output.outputs.result_libdatachannel_aiortc }}
       result_libdatachannel_werift: ${{ steps.set-output.outputs.result_libdatachannel_werift }}
       result_libdatachannel_pion: ${{ steps.set-output.outputs.result_libdatachannel_pion }}
       result_libdatachannel_libdatachannel: ${{ steps.set-output.outputs.result_libdatachannel_libdatachannel }}
+      result_libdatachannel_webrtc_rs: ${{ steps.set-output.outputs.result_libdatachannel_webrtc_rs }}
       result_gstreamer_sipsorcery: ${{ steps.set-output.outputs.result_gstreamer_sipsorcery }}
       result_gstreamer_aiortc: ${{ steps.set-output.outputs.result_gstreamer_aiortc }}
       result_gstreamer_werift: ${{ steps.set-output.outputs.result_gstreamer_werift }}
       result_gstreamer_pion: ${{ steps.set-output.outputs.result_gstreamer_pion }}
       result_gstreamer_libdatachannel: ${{ steps.set-output.outputs.result_gstreamer_libdatachannel }}
+      result_gstreamer_webrtc_rs: ${{ steps.set-output.outputs.result_gstreamer_webrtc_rs }}
       result_libwebrtc_sipsorcery: ${{ steps.set-output.outputs.result_libwebrtc_sipsorcery }}
       result_libwebrtc_aiortc: ${{ steps.set-output.outputs.result_libwebrtc_aiortc }}
       result_libwebrtc_werift: ${{ steps.set-output.outputs.result_libwebrtc_werift }}
       result_libwebrtc_pion: ${{ steps.set-output.outputs.result_libwebrtc_pion }}
       result_libwebrtc_libdatachannel: ${{ steps.set-output.outputs.result_libwebrtc_libdatachannel }}
+      result_libwebrtc_webrtc_rs: ${{ steps.set-output.outputs.result_libwebrtc_webrtc_rs }}
       result_kurento_sipsorcery: ${{ steps.set-output.outputs.result_kurento_sipsorcery }}
       result_kurento_aiortc: ${{ steps.set-output.outputs.result_kurento_aiortc }}
       result_kurento_werift: ${{ steps.set-output.outputs.result_kurento_werift }}
       result_kurento_pion: ${{ steps.set-output.outputs.result_kurento_pion }}
       result_kurento_libdatachannel: ${{ steps.set-output.outputs.result_kurento_libdatachannel }}
+      result_kurento_webrtc_rs: ${{ steps.set-output.outputs.result_kurento_webrtc_rs }}
       result_janus_sipsorcery: ${{ steps.set-output.outputs.result_janus_sipsorcery }}
       result_janus_aiortc: ${{ steps.set-output.outputs.result_janus_aiortc }}
       result_janus_werift: ${{ steps.set-output.outputs.result_janus_werift }}
       result_janus_pion: ${{ steps.set-output.outputs.result_janus_pion }}
       result_janus_libdatachannel: ${{ steps.set-output.outputs.result_janus_libdatachannel }}
-    
+      result_janus_webrtc_rs: ${{ steps.set-output.outputs.result_janus_webrtc_rs }}
+
     strategy:
       matrix:
-        server: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel", "gstreamer", "libwebrtc", "kurento", "janus"] # "webrtc-rs"
-        client: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel"] # "webrtc-rs"
+        server: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel", "gstreamer", "libwebrtc", "kurento", "janus", "webrtc-rs"]
+        client: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel", "webrtc-rs"]
     needs: [build-docker-images]
     services:
       echo-test-server:
@@ -163,6 +172,6 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git commit PeerConnection_test_results.md README.md -m "Automated peer connection test results."
+          git commit PeerConnection_test_results.md -m "Automated peer connection test results."
           git pull --rebase
           git push   
