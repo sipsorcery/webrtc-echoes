@@ -71,18 +71,41 @@ jobs:
         run: |
           echo "Collating...."
           
-          echo "raw=${{ toJSON(needs.interoptests.outputs) }}"
+          # Capture the outputs as a JSON string
           results='${{ toJSON(needs.interoptests.outputs) }}'
-          echo "results=${results}"
-          
-          echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
-          echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
-          
-          echo "${results}" | jq -r 'to_entries | .[] |
-            "\(.key): \(.value)" |
-            capture("result_(?<server>.+)_(?<client>.+): (?<value>.+)") |
-            "| \(.server) | \(.client) | \(.value) |"' >> DataChannel_Echo_test_results.md
+        
+          # Print the raw JSON for debugging
+          echo "The output from interop-test is: $results"
 
+          # Define the list of clients
+          clients=("libdatachannel", "sipsorcery", "werift") # Adjust based on actual client list
+
+          # Write the header of the Markdown file
+          echo "| Server | ${clients[@]} |" > DataChannel_Echo_test_results.md
+          echo "|--------|${clients[*]// /|}|" >> DataChannel_Echo_test_results.md
+        
+          # Loop through servers to fill in the matrix
+          for server in $(echo "$results" | jq -r 'keys[] | capture("result_(?<server>.+)_(?<client>.+)") | .server' | sort -u); do
+            # Start the row with the server name
+            row="$server"
+
+            # Loop through each client to get the results
+            for client in "${clients[@]}"; do
+              # Get the result for this server-client combination
+              value=$(echo "$results" | jq -r --arg server "$server" --arg client "$client" '.["result_\($server)_\($client)"] // "N/A"') # Default to N/A if no value
+            
+              # Append the value to the row
+              row+=" | $value"
+            done
+
+            # Write the row to the Markdown file
+            echo "| $row |" >> DataChannel_Echo_test_results.md
+          done
+
+          echo "" >> DataChannel_Echo_test_results.md
+          echo "Timestamp: $(date)" >> DataChannel_Echo_test_results.md
+
+          # Display the results file
           cat DataChannel_Echo_test_results.md
           
       - name: Commit the results to the git repository
