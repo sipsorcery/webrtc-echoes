@@ -119,7 +119,7 @@ jobs:
     needs: [interoptests]
     steps:
       - uses: actions/checkout@v2
-            - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2
         with:
           python-version: "3.x"
       - name: Create results file from interop test outputs
