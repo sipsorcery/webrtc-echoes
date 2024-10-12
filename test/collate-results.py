@@ -15,6 +15,7 @@
 # 19 Feb 2021	Aaron Clauson	Created, Dublin, Ireland.
 # 21 Aug 2021	Aaron Clauson	Investigating breaking change to weasyprint that removed the write to png function, see
 #                               https://www.courtbouillon.org/blog/00004-weasyprint-without-cairo-what-s-different.
+# 12 Oct 2023   Aaron Clauson   Swtiched from csv file processing to stdin. Removed weasyprint html to png stage.
 #
 # License: 
 # BSD 3-Clause "New" or "Revised" License, see included LICENSE.md file.
@@ -24,9 +25,6 @@ import os
 import glob
 import json
 import sys
-#import pandas as pd
-#import dataframe_image as dfi
-import weasyprint as wsp
 import PIL as pil
 
 from collections import defaultdict
@@ -96,13 +94,3 @@ for serverKey in serverKeys:
 
 html += """ </body>
 </html>"""
-
-#df = pd.DataFrame(results, columns=clientKeys)
-#print(df)
-#dfi.export(df, "results.png")
-
-#html = wsp.HTML(string=df.to_html())
-#print(html)
-html = wsp.HTML(string=html)
-html.write_png(RESULTS_FILE_PATH)
-#trim(RESULTS_FILE_PATH)
