@@ -1,7 +1,8 @@
-| Server | libdatachannel, sipsorcery, werift |
-|--------|libdatachannel, sipsorcery, werift|
-| libdatachannel | N/A | N/A | 0 |
-| sipsorcery | N/A | N/A | 0 |
-| werift | N/A | N/A | 0 |
+## Test Results
+Test run at 2024-10-12 20:09:27.125852
 
-Timestamp: Sat Oct 12 19:16:19 UTC 2024
+| Server       | libdatachannel | sipsorcery | werift |
+|--------|--------|--------|--------|
+| libdatachannel | ✔      | ✔      | ✔      |
+| sipsorcery   | ✔      | ✔      | ✔      |
+| werift       | ✔      | ✔      | ✔      |
