@@ -77,7 +77,7 @@ jobs:
           
           python --version
                   
-          echo "${{ toJSON(needs.interoptests.outputs) }}" | python3 test/collate-results.py > DataChannel_Echo_test_results.md
+          echo '${{ toJSON(needs.interoptests.outputs) }}' | python3 test/collate-results.py > DataChannel_Echo_test_results.md
 
           # Display the results file
           cat DataChannel_Echo_test_results.md
