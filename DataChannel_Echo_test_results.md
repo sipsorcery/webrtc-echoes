@@ -1,4 +1,4 @@
-Test run at 2024-10-12 21:02:04.046939
+Test run at 2024-10-12 21:07:27.701971
 
 | Server       | libdatachannel | sipsorcery | werift |
 |--------|--------|--------|--------|
