@@ -50,7 +50,7 @@ Test run at 2024-10-12 21:10:32.093918
 | werift       | ✔      | ✔      | ✔      | ✔      | ✔      |
 
 ## Data Channel Echo Test Results
-Test run at 2024-10-12 21:33:30.643040
+Test run at 2024-10-12 21:40:49.527128
 
 | Server       | libdatachannel | sipsorcery | werift |
 |--------|--------|--------|--------|
