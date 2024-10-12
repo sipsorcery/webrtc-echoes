@@ -172,6 +172,6 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git commit PeerConnection_test_results.md -m "Automated peer connection test results."
+          git commit PeerConnection_test_results.md README.md -m "Automated peer connection test results."
           git pull --rebase
           git push   
