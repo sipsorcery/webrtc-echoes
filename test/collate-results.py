@@ -59,15 +59,9 @@ for key, value in results.items():
 serverKeys.sort()
 clientKeys.sort()
 
-# HTML for Markdown output
-html = """<html>
- <body>"""
-
 # Print Markdown table header
-print('## Test Results')
-print('Test run at %s\n' % datetime.now())
 
-html += "<p>Test run at %s.</p>" % datetime.now()
+print('Test run at %s\n' % datetime.now())
 
 # Print Table header row.
 print(f'| {"Server": <12} | {" | ".join(clientKeys)} |')
@@ -76,18 +70,10 @@ print('|--------|' + '|'.join(['--------'] * len(clientKeys)) + '|')
 # Print Server rows.
 for serverKey in serverKeys:
     print(f'| {serverKey: <12} ', end='')
-    html += f"<tr><td>{serverKey}</td>"
     for clientKey in clientKeys:
         if clientKey in results_dict[serverKey]:
             resultChar = '✔' if results_dict[serverKey][clientKey] == '0' else '✘'
             print(f'| {resultChar: <7}', end='')
-            html += f"<td>{resultChar}</td>"
         else:
             print(f'| {" ":<7}', end='')
-            html += "<td></td>"
     print('|')
-    html += "</tr>"
-    html += "<br/>"
-
-html += """ </body>
-</html>"""

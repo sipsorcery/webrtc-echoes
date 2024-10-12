@@ -104,6 +104,8 @@ jobs:
           !in_section { print }
           ' README.md > README.tmp && mv -f README.tmp README.md
           
+          cat README.md
+          
       - name: Commit the results to the git repository
         if: github.event_name != 'pull_request'
         run: |
