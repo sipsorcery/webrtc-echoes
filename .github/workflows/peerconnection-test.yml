@@ -95,8 +95,6 @@ jobs:
         credentials:
           username: ${{ github.actor }}
           password: ${{ secrets.CR_PAT }}
-        #ports:
-        #  - 8080:8080
         options: "--name echo-server"
 
     steps:
@@ -121,30 +119,50 @@ jobs:
     needs: [interoptests]
     steps:
       - uses: actions/checkout@v2
+            - uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
       - name: Create results file from interop test outputs
         run: |
           echo "Collating...."
+          echo "raw results=${{ toJSON(needs.interoptests.outputs) }}"
           
-          echo "raw=${{ toJSON(needs.interoptests.outputs) }}"
-          results='${{ toJSON(needs.interoptests.outputs) }}'
-          echo "results=${results}"
-          
-          echo "| Server | Client | Test Result |" > PeerConnection_test_results.md
-          echo "|--------|--------|-------------|" >> PeerConnection_test_results.md
-          
-          echo "${results}" | jq -r 'to_entries | .[] |
-            "\(.key): \(.value)" |
-            capture("result_(?<server>.+)_(?<client>.+): (?<value>.+)") |
-            "| \(.server) | \(.client) | \(.value) |"' >> PeerConnection_test_results.md
+          python --version
+                  
+          echo '${{ toJSON(needs.interoptests.outputs) }}' | python3 test/collate-results.py > PeerConnection_test_results.md
 
-          cat PeerConnection_test_results.md
+          # Display the results file
+          cat DataChannel_Echo_test_results.md
           
+      - name: Replace Peer Connection Test Results in README
+        run: |
+          # Read the new content from DPeerConnection_test_results.md
+          new_content="$(<PeerConnection_test_results.md)"
+          
+          # Use awk to replace content between the markers
+          awk -v new_content="$new_content" '
+          BEGIN { in_section = 0 }
+          /## Peer Connection Test Results/ { 
+              in_section = 1; 
+              print; 
+              print new_content; 
+              next 
+          } 
+          /## Data Connection Echo Test Results/ { 
+              in_section = 0; 
+              print; 
+              next 
+          } 
+          !in_section { print }
+          ' README.md > README.tmp && mv -f README.tmp README.md
+          
+          cat README.md
+                    
       - name: Commit the results to the git repository
         if: github.event_name != 'pull_request'
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git pull
-          git add PeerConnection_test_results.md
-          git commit PeerConnection_test_results.md -m "Automated peer connection test results."
+          git commit PeerConnection_test_results.md README.md -m "Automated peer connection test results."
           git push   
