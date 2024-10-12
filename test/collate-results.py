@@ -67,7 +67,6 @@ html = """<html>
 print('## Test Results')
 print('Test run at %s\n' % datetime.now())
 
-html += "<h3>Test Results</h3>"
 html += "<p>Test run at %s.</p>" % datetime.now()
 
 # Print Table header row.
@@ -88,6 +87,7 @@ for serverKey in serverKeys:
             html += "<td></td>"
     print('|')
     html += "</tr>"
+    html += "<br/>"
 
 html += """ </body>
 </html>"""

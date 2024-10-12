@@ -82,12 +82,33 @@ jobs:
           # Display the results file
           cat DataChannel_Echo_test_results.md
           
+      - name: Replace Data Channel Echo Test Results in README
+        run: |
+          # Read the new content from DataChannel_Echo_test_results.md
+          new_content="$(<DataChannel_Echo_test_results.md)"
+          
+          # Use awk to replace content between the markers
+          awk -v new_content="$new_content" '
+          BEGIN { in_section = 0 }
+          /## Data Channel Echo Test Results/ { 
+              in_section = 1; 
+              print; 
+              print new_content; 
+              next 
+          } 
+          /## Get Started/ { 
+              in_section = 0; 
+              print; 
+              next 
+          } 
+          !in_section { print }
+          ' README.md > README.tmp && mv -f README.tmp README.md
+          
       - name: Commit the results to the git repository
         if: github.event_name != 'pull_request'
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git pull
-          git add DataChannel_Echo_test_results.md
-          git commit DataChannel_Echo_test_results.md -m "Automated data channel echo test results."
+          git commit DataChannel_Echo_test_results.md README.md -m "Automated data channel echo test results."
           git push
