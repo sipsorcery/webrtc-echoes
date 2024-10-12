@@ -1,44 +1,13 @@
-| Server | Client | Test Result |
-|--------|--------|-------------|
-| aiortc | aiortc | 0 |
-| aiortc | libdatachannel | 0 |
-| aiortc | pion | 0 |
-| aiortc | werift | 0 |
-| gstreamer | aiortc | 0 |
-| gstreamer | pion | 0 |
-| gstreamer | sipsorcery | 0 |
-| gstreamer | werift | 0 |
-| janus | aiortc | 0 |
-| janus | libdatachannel | 0 |
-| janus | pion | 0 |
-| janus | sipsorcery | 0 |
-| janus | werift | 0 |
-| kurento | aiortc | 0 |
-| kurento | libdatachannel | 0 |
-| kurento | sipsorcery | 0 |
-| kurento | werift | 0 |
-| libdatachannel | aiortc | 0 |
-| libdatachannel | libdatachannel | 0 |
-| libdatachannel | pion | 0 |
-| libdatachannel | sipsorcery | 0 |
-| libdatachannel | werift | 0 |
-| libwebrtc | aiortc | 0 |
-| libwebrtc | libdatachannel | 0 |
-| libwebrtc | pion | 0 |
-| libwebrtc | sipsorcery | 0 |
-| libwebrtc | werift | 0 |
-| pion | aiortc | 0 |
-| pion | libdatachannel | 0 |
-| pion | pion | 0 |
-| pion | sipsorcery | 0 |
-| pion | werift | 0 |
-| sipsorcery | aiortc | 0 |
-| sipsorcery | libdatachannel | 0 |
-| sipsorcery | pion | 0 |
-| sipsorcery | sipsorcery | 0 |
-| sipsorcery | werift | 0 |
-| werift | aiortc | 0 |
-| werift | libdatachannel | 0 |
-| werift | pion | 0 |
-| werift | sipsorcery | 0 |
-| werift | werift | 0 |
+Test run at 2024-10-12 21:10:32.093918
+
+| Server       | aiortc | libdatachannel | pion | sipsorcery | werift |
+|--------|--------|--------|--------|--------|--------|
+| aiortc       | ✔      |        | ✔      |        | ✔      |
+| gstreamer    | ✔      |        | ✔      | ✔      | ✔      |
+| janus        | ✔      | ✔      | ✔      | ✔      | ✔      |
+| kurento      | ✔      | ✔      |        | ✔      | ✔      |
+| libdatachannel | ✔      | ✔      | ✔      | ✔      | ✔      |
+| libwebrtc    | ✔      | ✔      | ✔      | ✔      | ✔      |
+| pion         | ✔      | ✔      | ✔      | ✔      | ✔      |
+| sipsorcery   | ✔      | ✔      | ✔      | ✔      | ✔      |
+| werift       | ✔      | ✔      | ✔      | ✔      | ✔      |
