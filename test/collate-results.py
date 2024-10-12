@@ -21,11 +21,8 @@
 # BSD 3-Clause "New" or "Revised" License, see included LICENSE.md file.
 #-----------------------------------------------------------------------------
 
-import os
-import glob
 import json
 import sys
-import PIL as pil
 
 from collections import defaultdict
 from datetime import datetime
