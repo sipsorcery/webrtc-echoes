@@ -34,7 +34,20 @@ The current interoperability tests are:
 
  - **[Data Channel Echo Test](doc/DataChannelEchoTestSpecification.md)**: This test builds on the [Peer Connection Test](doc/PeerConnectionTestSpecification.md) and adds a `data channel` test. It tests the ability of the peers to create a data channel and then checks that the `Server Peer` can echo a string message sent by the `Client Peer`.
 
-![Peer Connection Test Results](https://github.com/sipsorcery/webrtc-echoes/blob/testresults/PeerConnection_test_results.png)
+## Peer Connection Test Results
+Test run at 2024-10-12 21:10:32.093918
+
+| Server       | aiortc | libdatachannel | pion | sipsorcery | werift |
+|--------|--------|--------|--------|--------|--------|
+| aiortc       | ✔      |        | ✔      |        | ✔      |
+| gstreamer    | ✔      |        | ✔      | ✔      | ✔      |
+| janus        | ✔      | ✔      | ✔      | ✔      | ✔      |
+| kurento      | ✔      | ✔      |        | ✔      | ✔      |
+| libdatachannel | ✔      | ✔      | ✔      | ✔      | ✔      |
+| libwebrtc    | ✔      | ✔      | ✔      | ✔      | ✔      |
+| pion         | ✔      | ✔      | ✔      | ✔      | ✔      |
+| sipsorcery   | ✔      | ✔      | ✔      | ✔      | ✔      |
+| werift       | ✔      | ✔      | ✔      | ✔      | ✔      |
 
 ## Data Channel Echo Test Results
 Test run at 2024-10-12 21:07:27.701971

@@ -132,7 +132,7 @@ jobs:
           echo '${{ toJSON(needs.interoptests.outputs) }}' | python3 test/collate-results.py > PeerConnection_test_results.md
 
           # Display the results file
-          cat DataChannel_Echo_test_results.md
+          cat PeerConnection_test_results.md
           
       - name: Replace Peer Connection Test Results in README
         run: |

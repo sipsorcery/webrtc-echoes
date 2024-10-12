@@ -72,7 +72,7 @@ for serverKey in serverKeys:
     print(f'| {serverKey: <12} ', end='')
     for clientKey in clientKeys:
         if clientKey in results_dict[serverKey]:
-            resultChar = '✔' if results_dict[serverKey][clientKey] == '0' else '✘'
+            resultChar = '✔' if results_dict[serverKey][clientKey] == '0' else 'X'
             print(f'| {resultChar: <7}', end='')
         else:
             print(f'| {" ":<7}', end='')
