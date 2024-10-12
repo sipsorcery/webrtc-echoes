@@ -103,6 +103,6 @@ html += """ </body>
 
 #html = wsp.HTML(string=df.to_html())
 #print(html)
-#html = wsp.HTML(string=html)
-#html.write_png(RESULTS_FILE_PATH)
+html = wsp.HTML(string=html)
+html.write_png(RESULTS_FILE_PATH)
 #trim(RESULTS_FILE_PATH)

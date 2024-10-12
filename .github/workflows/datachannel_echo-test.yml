@@ -80,6 +80,8 @@ jobs:
           # Update package list and install weasyprint
           sudo apt update
           sudo apt install -y weasyprint
+          
+          pip install weasyprint
                   
           echo "${{ toJSON(needs.interoptests.outputs) }}" | python3 test/collate-results.py > DataChannel_Echo_test_results.md
 
