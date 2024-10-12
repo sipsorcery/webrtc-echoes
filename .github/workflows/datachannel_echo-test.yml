@@ -75,16 +75,8 @@ jobs:
           results='${{ toJSON(needs.interoptests.outputs) }}'
           echo "results=${results}"
           
-          #echo "${results}" | jq -r 'to_entries | .[] | "\(.key): \(.value)"'
-          
-          #echo "Listing all key-value pairs with server/client capture..."
-          
-          #echo "${results}" | jq -r 'to_entries'
-          
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
-          
-          echo "Here."
           
           echo "${results}" | jq -r 'to_entries | .[] |
             "\(.key): \(.value)" |
@@ -99,8 +91,6 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git pull
-          #git add DataChannel_Echo_test_results.md DataChannel_Echo_test_results.png
-          #git commit DataChannel_Echo_test_results.md DataChannel_Echo_test_results.png -m "Automated data channel echo test results."
           git add DataChannel_Echo_test_results.md
           git commit DataChannel_Echo_test_results.md -m "Automated data channel echo test results."
           git push
