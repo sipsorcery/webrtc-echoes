@@ -75,20 +75,20 @@ jobs:
           results='${{ toJSON(needs.interoptests.outputs) }}'
           echo "results=${results}"
           
-          echo "${results}" | jq -r 'to_entries | .[] | "\(.key): \(.value)"'
+          #echo "${results}" | jq -r 'to_entries | .[] | "\(.key): \(.value)"'
           
-          echo "Listing all key-value pairs with server/client capture..."
-          echo "$results" | jq -r 'to_entries | .[] | 
-            capture("result_(?<server>.+)_(?<client>.+)") as $c | 
-            "\($c.server): \($c.client) - Value: \(.value)"'
+          #echo "Listing all key-value pairs with server/client capture..."
+          
+          #echo "${results}" | jq -r 'to_entries'
           
           echo "| Server | Client | Test Result |" > DataChannel_Echo_test_results.md
           echo "|--------|--------|-------------|" >> DataChannel_Echo_test_results.md
           
           echo "Here."
           
-          echo "${results}" | jq -r 'to_entries | .[] | 
-            capture("result_(?<server>.+)_(?<client>.+)") | 
+          echo "${results}" | jq -r 'to_entries | .[] |
+            "\(.key): \(.value)" |
+            capture("result_(?<server>.+)_(?<client>.+): (?<value>.+)") |
             "| \(.server) | \(.client) | \(.value) |"' >> DataChannel_Echo_test_results.md
 
           cat DataChannel_Echo_test_results.md
