@@ -111,6 +111,6 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git pull
           git commit DataChannel_Echo_test_results.md README.md -m "Automated data channel echo test results."
+          git pull --rebase
           git push
