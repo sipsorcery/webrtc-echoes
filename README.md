@@ -37,7 +37,7 @@ The current interoperability tests are:
 ![Peer Connection Test Results](https://github.com/sipsorcery/webrtc-echoes/blob/testresults/PeerConnection_test_results.png)
 
 ## Data Channel Echo Test Results
-Test run at 2024-10-12 20:57:13.563455
+Test run at 2024-10-12 21:02:04.046939
 
 | Server       | libdatachannel | sipsorcery | werift |
 |--------|--------|--------|--------|
