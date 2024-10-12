@@ -22,6 +22,7 @@
 
 import os
 import glob
+import json
 import sys
 #import pandas as pd
 #import dataframe_image as dfi
@@ -32,103 +33,69 @@ from collections import defaultdict
 from datetime import datetime
 
 testname = "PeerConnection"
-if len(sys.argv) > 1: 
-    testname = sys.argv[1]
 
-#print("Test name=%s.\n" % testname)
-	
-# The character width of each cell in the results markdown table.
-COL_WIDTH = 12
-RESULTS_FILE_PATH = testname + "_test_results.png"
+# Read JSON input from stdin (for GitHub Actions)
+input_data = sys.stdin.read()
 
-#print("results file path=%s.\n" % RESULTS_FILE_PATH)
+# Parse the input JSON
+try:
+    results = json.loads(input_data)
+except json.JSONDecodeError as e:
+    print(f"Failed to parse JSON: {e}")
+    sys.exit(1)
 
-def trim(source_filepath, target_filepath=None, background=None):
-    if not target_filepath:
-        target_filepath = source_filepath
-    img = pil.Image.open(source_filepath)
-    if background is None:
-        background = img.getpixel((0, 0))
-    border = pil.Image.new(img.mode, img.size, background)
-    diff = pil.ImageChops.difference(img, border)
-    bbox = diff.getbbox()
-    img = img.crop(bbox) if bbox else img
-    img.save(target_filepath)
-
-resultFiles = glob.glob("./*.csv")
-
-results = defaultdict(dict)
+# Initialize data structures
 serverKeys = []
 clientKeys = []
 
-for resFile in resultFiles:
-    with open(resFile) as f:
-        for line in f:
-            cols = line.strip().split(',')
-            if not cols[0] in serverKeys:
-                serverKeys.append(cols[0])
-            if not cols[1] in clientKeys:
-                clientKeys.append(cols[1])
-            results[cols[0]][cols[1]] = cols[2]
+# Prepare the results structure
+results_dict = defaultdict(dict)
 
-sorted(serverKeys)
-sorted(clientKeys)
+# Populate the results_dict with data from the parsed JSON
+for key, value in results.items():
+    server, client = key.split("_")[1:]  # Assuming keys are formatted as "result_<server>_<client>"
+    results_dict[server][client] = value
+    if server not in serverKeys:
+        serverKeys.append(server)
+    if client not in clientKeys:
+        clientKeys.append(client)
 
+# Sort the server and client keys
+serverKeys.sort()
+clientKeys.sort()
+
+# HTML for Markdown output
 html = """<html>
  <body>"""
 
-print('## %s Test Results' % testname)
+# Print Markdown table header
+print('## Test Results')
 print('Test run at %s\n' % datetime.now())
 
-html += "<h3>" + testname + " Test Results</h3>"
+html += "<h3>Test Results</h3>"
 html += "<p>Test run at %s.</p>" % datetime.now()
 
 # Print Table header row.
-print(f'| {"Server": <{COL_WIDTH}}| {"Client": <{COL_WIDTH}}', end='')
-html += """<table>
- <tr>
-   <th>Server</th>
-   <th colspan='%d'>Client</th>
- </tr>  
-""" % COL_WIDTH
-
-for i in range(0, (len(clientKeys) - 1)):
-    print(f'| {" ":<{COL_WIDTH}}', end='')
-print('|')
-
-# Print end of header line.
-sep = '-' * (COL_WIDTH + 1)
-for i in range(len(clientKeys) + 1):
-    print(f'|{sep}', end='')
-print('|')
-
-# Print Client column headings.
-print(f'| {" ":<{COL_WIDTH}}', end='')
-html += """<tr>
- <td/>"""
-for clientKey in clientKeys:
-    print(f'| {clientKey: <{COL_WIDTH}}', end='')
-    html += "<td>%s</td>" % clientKey
-print('|')
-html += "</tr>"
+print(f'| {"Server": <12} | {" | ".join(clientKeys)} |')
+print('|--------|' + '|'.join(['--------'] * len(clientKeys)) + '|')
 
 # Print Server rows.
 for serverKey in serverKeys:
-    print(f'| {serverKey: <{COL_WIDTH}}', end='')
-    html += "<tr><td>%s</td>" % serverKey
+    print(f'| {serverKey: <12} ', end='')
+    html += f"<tr><td>{serverKey}</td>"
     for clientKey in clientKeys:
-        if serverKey in results.keys() and clientKey in results[serverKey].keys():
-            resultChar = '&#9745;' if results[serverKey][clientKey] == '0' else '&#x2612;'
-            print(f'| {resultChar:<{COL_WIDTH}}', end='')
-            html += "<td>%s</td>" % resultChar
+        if clientKey in results_dict[serverKey]:
+            resultChar = '✔' if results_dict[serverKey][clientKey] == '0' else '✘'
+            print(f'| {resultChar: <7}', end='')
+            html += f"<td>{resultChar}</td>"
         else:
-            print(f'| {" ":<{COL_WIDTH}}', end='')
-            html += "<td/>"
+            print(f'| {" ":<7}', end='')
+            html += "<td></td>"
     print('|')
     html += "</tr>"
 
-html += """ </body
-</html"""
+html += """ </body>
+</html>"""
 
 #df = pd.DataFrame(results, columns=clientKeys)
 #print(df)
@@ -136,6 +103,6 @@ html += """ </body
 
 #html = wsp.HTML(string=df.to_html())
 #print(html)
-html = wsp.HTML(string=html)
-html.write_png(RESULTS_FILE_PATH)
-trim(RESULTS_FILE_PATH)
+#html = wsp.HTML(string=html)
+#html.write_png(RESULTS_FILE_PATH)
+#trim(RESULTS_FILE_PATH)
