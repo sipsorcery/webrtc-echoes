@@ -157,7 +157,7 @@ jobs:
               print new_content; 
               next 
           } 
-          /## Data Connection Echo Test Results/ { 
+          /## Data Channel Echo Test Results/ { 
               in_section = 0; 
               print; 
               next 

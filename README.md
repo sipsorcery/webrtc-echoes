@@ -35,11 +35,11 @@ The current interoperability tests are:
  - **[Data Channel Echo Test](doc/DataChannelEchoTestSpecification.md)**: This test builds on the [Peer Connection Test](doc/PeerConnectionTestSpecification.md) and adds a `data channel` test. It tests the ability of the peers to create a data channel and then checks that the `Server Peer` can echo a string message sent by the `Client Peer`.
 
 ## Peer Connection Test Results
-Test run at 2024-10-12 22:03:44.834213
+Test run at 2024-10-12 21:10:32.093918
 
 | Server       | aiortc | libdatachannel | pion | sipsorcery | werift |
 |--------|--------|--------|--------|--------|--------|
-| aiortc       | ✔      | ✔      | ✔      |        | ✔      |
+| aiortc       | ✔      |        | ✔      |        | ✔      |
 | gstreamer    | ✔      |        | ✔      | ✔      | ✔      |
 | janus        | ✔      | ✔      | ✔      | ✔      | ✔      |
 | kurento      | ✔      | ✔      |        | ✔      | ✔      |
@@ -48,3 +48,38 @@ Test run at 2024-10-12 22:03:44.834213
 | pion         | ✔      | ✔      | ✔      | ✔      | ✔      |
 | sipsorcery   | ✔      | ✔      | ✔      | ✔      | ✔      |
 | werift       | ✔      | ✔      | ✔      | ✔      | ✔      |
+
+## Data Channel Echo Test Results
+Test run at 2024-10-12 21:50:30.476743
+
+| Server       | libdatachannel | sipsorcery | werift |
+|--------|--------|--------|--------|
+| libdatachannel | ✔      | ✔      | ✔      |
+| sipsorcery   | ✔      | ✔      | ✔      |
+| werift       | ✔      | ✔      | ✔      |
+## Get Started
+
+If you are interested in adding a library to this project the recommended steps are listed below. The steps don't necessarily have to be completed in any specific order.
+
+ - Write a Peer Connection Test Client application according to the [specification](doc/EchoTestSpecification.md#client-peer-operation) or base it off an [existing application](doc/EchoTestSpecification.md#view-the-code).
+
+ - Test your client by building and running one of the [Peer Connection Test Servers](https://github.com/sipsorcery/webrtc-echoes/blob/master/doc/EchoTestSpecification.md#view-the-code) or you can use one of the [Peer Connection Test Server Docker Images](https://github.com/sipsorcery?tab=packages&q=webrtc):
+
+````
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/aiortc-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/gstreamer-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/janus-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/kurento-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/libdatachannel-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/libwebrtc-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/pion-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/sipsorcery-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/webrtc-rs-webrtc-echo
+docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/werift-webrtc-echo
+````
+
+- If you encounter any problems open an [Issue](https://github.com/sipsorcery/webrtc-echoes/issues). When done submit a [Pull Request](https://github.com/sipsorcery/webrtc-echoes/pulls) for your application.
+
+- Repeat the process for a [Peer Connection Test Server](doc/PeerConnectionTestSpecification.md#server-peer-operation).
+
+- Create a [Dockerfile](doc/EchoTestDockerRequirements.md) and add a Pull Request for it so your Peer Connection Test application(s) can be included in the automated testing.
