@@ -39,7 +39,7 @@ namespace webrtc_echo
     public class Options
     {
         public const string DEFAULT_WEBSERVER_LISTEN_URL = "http://*:8080/";
-        public const LogEventLevel DEFAULT_VERBOSITY = LogEventLevel.Debug;
+        public const LogEventLevel DEFAULT_VERBOSITY = LogEventLevel.Verbose;
         public const int TEST_TIMEOUT_SECONDS = 10;
 
         [Option('l', "listen", Required = false, Default = DEFAULT_WEBSERVER_LISTEN_URL,
@@ -118,8 +118,8 @@ namespace webrtc_echo
                     .WithUrlPrefix(url)
                     .WithMode(HttpListenerMode.EmbedIO))
                 .WithCors("*", "*", "*")
-                .WithAction("/offer", HttpVerbs.Post, (ctx) => Offer(ctx, pcTimeout))
-                .WithStaticFolder("/", "../../html", false);
+                .WithAction("/offer", HttpVerbs.Post, (ctx) => Offer(ctx, pcTimeout));
+                //.WithStaticFolder("/", "../../html", false);
             server.StateChanged += (s, e) => Console.WriteLine($"WebServer New State - {e.NewState}");
 
             return server;
