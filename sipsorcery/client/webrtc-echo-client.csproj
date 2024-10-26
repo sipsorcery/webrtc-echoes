@@ -8,10 +8,9 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
-    <PackageReference Include="SIPSorcery" Version="8.0.0" />
+    <PackageReference Include="SIPSorcery" Version="8.0.1-pre" />
   </ItemGroup>
 
 </Project>
