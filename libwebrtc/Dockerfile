@@ -1,4 +1,4 @@
-FROM libwebrtc-builder:m90 as builder
+FROM libwebrtc-builder:m130 as builder
 FROM ubuntu:latest as appbuilder
 
 # Install packages with the required runtime libraries.
