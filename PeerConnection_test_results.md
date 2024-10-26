@@ -1,8 +1,8 @@
-Test run at 2024-10-17 07:43:56.906814
+Test run at 2024-10-26 21:07:42.806026
 
 | Server       | aiortc | libdatachannel | pion | sipsorcery | werift |
 |--------|--------|--------|--------|--------|--------|
-| aiortc       | ✔      | ✔      | ✔      |        | ✔      |
+| aiortc       | ✔      | ✔      | ✔      | ✔      | ✔      |
 | gstreamer    | ✔      |        | ✔      | ✔      | ✔      |
 | janus        | ✔      | ✔      | ✔      | ✔      | ✔      |
 | kurento      | ✔      | ✔      |        | ✔      | ✔      |
