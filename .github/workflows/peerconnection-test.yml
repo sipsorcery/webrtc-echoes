@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        library: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel", "webrtc-rs"]
+        library: ["sipsorcery", "aiortc", "werift", "pion", "libdatachannel", "webrtcrs"]
     steps:
       - uses: actions/checkout@v2
       - name: Update submodules
