@@ -1,4 +1,4 @@
-Test run at 2024-11-15 16:10:54.869508
+Test run at 2024-11-15 21:40:38.879065
 
 | Server       | aiortc | libdatachannel | pion | sipsorcery | webrtc-rs | werift |
 |--------|--------|--------|--------|--------|--------|--------|
@@ -11,4 +11,4 @@ Test run at 2024-11-15 16:10:54.869508
 | pion         | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
 | sipsorcery   | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
 | webrtc-rs    | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
-| werift       | ✔      |        | ✔      | ✔      | ✔      | ✔      |
+| werift       | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
