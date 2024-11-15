@@ -50,7 +50,7 @@ Test run at 2024-11-15 16:10:54.869508
 | webrtc-rs    | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
 | werift       | ✔      |        | ✔      | ✔      | ✔      | ✔      |
 ## Data Channel Echo Test Results
-Test run at 2024-11-15 16:06:17.771506
+Test run at 2024-11-15 21:36:24.048341
 
 | Server       | libdatachannel | sipsorcery | werift |
 |--------|--------|--------|--------|
