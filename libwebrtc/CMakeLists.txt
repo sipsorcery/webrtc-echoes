@@ -10,7 +10,7 @@ target_sources(libwebrtc-webrtc-echo PRIVATE
 
 add_definitions(-D_LIBCPP_ABI_UNSTABLE -D_LIBCPP_HAS_NO_VENDOR_AVAILABILITY_ANNOTATIONS -D_LIBCPP_DEBUG=0 -DWEBRTC_LINUX -DWEBRTC_POSIX)
 
-SET(CMAKE_CXX_FLAGS "-fstack-protector -funwind-tables -fPIC -O0 -g2 -std=c++14")
+SET(CMAKE_CXX_FLAGS "-fstack-protector -funwind-tables -fPIC -O0 -g2 -std=c++17")
 
 target_include_directories(libwebrtc-webrtc-echo PRIVATE
     /src/webrtc-checkout/src
@@ -24,7 +24,7 @@ link_directories(
 target_link_libraries(libwebrtc-webrtc-echo
     -L/src/webrtc-checkout/src/out/Default
     event       # Important that "event" precedes "webrtc-full" as the webrtc library contains duplicate, but older, symbols.
-    webrtc-full
+    webrtc-full # This will link to libwebrtc-full.a
     dl
     pthread
     X11

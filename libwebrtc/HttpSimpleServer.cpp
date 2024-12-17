@@ -111,7 +111,7 @@ void HttpSimpleServer::OnHttpRequest(struct evhttp_request* req, void* arg)
 
   printf("Received HTTP request for %s.\n", uri);
 
-  if (req->type == EVHTTP_REQ_OPTIONS) {
+  if ((req->type & EVHTTP_REQ_OPTIONS) > 0) {
     evhttp_add_header(req->output_headers, "Access-Control-Allow-Origin", "*");
     evhttp_add_header(req->output_headers, "Access-Control-Allow-Methods", "POST");
     evhttp_add_header(req->output_headers, "Access-Control-Allow-Headers", "content-type");
@@ -131,6 +131,13 @@ void HttpSimpleServer::OnHttpRequest(struct evhttp_request* req, void* arg)
 
     if (http_req_body_len > 0) {
       http_req_buffer = static_cast<char*>(calloc(http_req_body_len, sizeof(char)));
+
+      if(http_req_buffer == nullptr || http_req_buffer ==  0)
+      {
+        evbuffer_add_printf(resp_buffer, "Failed to allocate memory for HTTP request body.");
+        evhttp_send_reply(req, 500, "Internal Server Error", resp_buffer);
+        return;
+      }
 
       evbuffer_copyout(http_req_body, http_req_buffer, http_req_body_len);
 

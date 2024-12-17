@@ -24,8 +24,10 @@
 #include "api/audio_codecs/g711/audio_decoder_g711.h"
 #include "api/audio_codecs/g711/audio_encoder_g711.h"
 #include <api/create_peerconnection_factory.h>
+#include <api/jsep.h>
 #include <api/peer_connection_interface.h>
 #include <api/rtc_event_log/rtc_event_log_factory.h>
+#include <api/set_remote_description_observer_interface.h>
 #include <api/task_queue/default_task_queue_factory.h>
 #include <api/video_codecs/builtin_video_decoder_factory.h>
 #include <api/video_codecs/builtin_video_encoder_factory.h>
@@ -39,14 +41,14 @@
 PcFactory::PcFactory() :
   _peerConnections()
 {  
-  //webrtc::PeerConnectionFactoryDependencies _pcf_deps;
-  //_pcf_deps.task_queue_factory = webrtc::CreateDefaultTaskQueueFactory();
-  //_pcf_deps.signaling_thread = rtc::Thread::Create().release();
-  //_pcf_deps.network_thread = rtc::Thread::CreateWithSocketServer().release();
-  //_pcf_deps.worker_thread = rtc::Thread::Create().release();
+  webrtc::PeerConnectionFactoryDependencies _pcf_deps;
+  _pcf_deps.task_queue_factory = webrtc::CreateDefaultTaskQueueFactory();
+  _pcf_deps.signaling_thread = rtc::Thread::Create().release();
+  _pcf_deps.network_thread = rtc::Thread::CreateWithSocketServer().release();
+  _pcf_deps.worker_thread = rtc::Thread::Create().release();
   //_pcf_deps.call_factory = webrtc::CreateCallFactory();
-  //_pcf_deps.event_log_factory = std::make_unique<webrtc::RtcEventLogFactory>(
-  //_pcf_deps.task_queue_factory.get());
+  _pcf_deps.event_log_factory = std::make_unique<webrtc::RtcEventLogFactory>(
+  _pcf_deps.task_queue_factory.get());
 
   //cricket::MediaEngineDependencies media_deps;
   //media_deps.task_queue_factory = _pcf_deps.task_queue_factory.get();
@@ -74,30 +76,46 @@ PcFactory::PcFactory() :
   //  nullptr /* audio_mixer */,
   //  webrtc::AudioProcessingBuilder().Create() /* audio_processing */);
 
-  //_peerConnectionFactory = webrtc::CreateModularPeerConnectionFactory(std::move(_pcf_deps));
+  _peerConnectionFactory = webrtc::CreateModularPeerConnectionFactory(std::move(_pcf_deps));
 
-  _networkThread = rtc::Thread::CreateWithSocketServer();
-  _networkThread->Start();
-  _workerThread = rtc::Thread::Create();
-  _workerThread->Start();
-  _signalingThread = rtc::Thread::Create();
-  _signalingThread->Start();
+  //_networkThread = rtc::Thread::CreateWithSocketServer();
+  //_networkThread->Start();
+  //_workerThread = rtc::Thread::Create();
+  //_workerThread->Start();
+  //_signalingThread = rtc::Thread::Create();
+  //_signalingThread->Start();
 
-  _fakeAudioCapture = FakeAudioCaptureModule::Create();
+  //_fakeAudioCapture = FakeAudioCaptureModule::Create();
+  //_fakeAudioCapture->Init();
 
-  _peerConnectionFactory = webrtc::CreatePeerConnectionFactory(
-    _networkThread.get() /* network_thread */,
-    _workerThread.get() /* worker_thread */,
-    _signalingThread.get() /* signaling_thread */,
-    //nullptr /* default_adm */,
-    //webrtc::AudioDeviceModuleForTest::CreateForTest(webrtc::AudioDeviceModule::AudioLayer::kDummyAudio, webrtc::CreateDefaultTaskQueueFactory().release()),
-    rtc::scoped_refptr<webrtc::AudioDeviceModule>(_fakeAudioCapture),
-    webrtc::CreateAudioEncoderFactory<webrtc::AudioEncoderG711>(),
-    webrtc::CreateAudioDecoderFactory<webrtc::AudioDecoderG711>(),
-    webrtc::CreateBuiltinVideoEncoderFactory(),
-    webrtc::CreateBuiltinVideoDecoderFactory(),
-    nullptr /* audio_mixer */,
-    nullptr); //webrtc::AudioProcessingBuilder().Create() /* audio_processing */);
+  ////auto adm = webrtc::AudioDeviceModule::Create(
+  ////  webrtc::AudioDeviceModule::kDummyAudio,
+  ////  webrtc::CreateDefaultTaskQueueFactory().get());
+  //
+  //_peerConnectionFactory = webrtc::CreatePeerConnectionFactory(
+  //  _networkThread.get() /* network_thread */,
+  //  _workerThread.get() /* worker_thread */,
+  //  _signalingThread.get() /* signaling_thread */,
+  //   webrtc::AudioDeviceModuleForTest::CreateForTest(webrtc::AudioDeviceModule::AudioLayer::kDummyAudio, webrtc::CreateDefaultTaskQueueFactory().release()),
+  //  //rtc::scoped_refptr<webrtc::AudioDeviceModule>(_fakeAudioCapture),
+  //  webrtc::CreateAudioEncoderFactory<webrtc::AudioEncoderG711>(),
+  //  webrtc::CreateAudioDecoderFactory<webrtc::AudioDecoderG711>(),
+  //  nullptr, //webrtc::CreateBuiltinVideoEncoderFactory(),
+  //  nullptr, //webrtc::CreateBuiltinVideoDecoderFactory(),
+  //  nullptr /* audio_mixer */,
+  //  nullptr); //webrtc::AudioProcessingBuilder().Create() /* audio_processing */);
+
+  //_peerConnectionFactory = webrtc::CreatePeerConnectionFactory(
+  //  _networkThread.get() /* network_thread */,
+  //  _workerThread.get() /* worker_thread */,
+  //  _signalingThread.get() /* signaling_thread */,
+  //  nullptr /* default_adm */,
+  //  webrtc::CreateBuiltinAudioEncoderFactory(),
+  //  webrtc::CreateBuiltinAudioDecoderFactory(),
+  //  nullptr, //webrtc::CreateBuiltinVideoEncoderFactory(),
+  //  nullptr, //webrtc::CreateBuiltinVideoDecoderFactory(),
+  //  nullptr /* audio_mixer */,
+  //  nullptr /* audio_processing */);
 }
 
 PcFactory::~PcFactory()
@@ -118,12 +136,15 @@ std::string PcFactory::CreatePeerConnection(const char* buffer, int length) {
 
   webrtc::PeerConnectionInterface::RTCConfiguration config;
   config.sdp_semantics = webrtc::SdpSemantics::kUnifiedPlan;
-  config.enable_dtls_srtp = true;
+  //config.enable_dtls_srtp = true;
 
   auto observer = new rtc::RefCountedObject<PcObserver>();
 
   auto pcOrError = _peerConnectionFactory->CreatePeerConnectionOrError(
     config, webrtc::PeerConnectionDependencies(observer));
+
+  /*auto pcOrError = _peerConnectionFactory->CreatePeerConnectionOrError(
+    config, webrtc::PeerConnectionDependencies(observer.get()));*/
 
   rtc::scoped_refptr<webrtc::PeerConnectionInterface> pc = nullptr;
 
@@ -145,14 +166,15 @@ std::string PcFactory::CreatePeerConnection(const char* buffer, int length) {
     }
     else {
       std::cout << "Setting remote description on peer connection." << std::endl;
-      auto setRemoteObserver = new rtc::RefCountedObject<SetRemoteSdpObserver>();
+      //auto setRemoteObserver = new rtc::RefCountedObject<SetRemoteSdpObserver>();
+      auto setRemoteObserver = rtc::scoped_refptr<SetRemoteSdpObserver>();
       pc->SetRemoteDescription(remoteOffer->Clone(), setRemoteObserver);
 
       std::mutex mtx;
       std::condition_variable cv;
       bool isReady = false;
 
-      auto createObs = new rtc::RefCountedObject<CreateSdpObserver>(mtx, cv, isReady);
+      auto createObs = rtc::scoped_refptr<CreateSdpObserver>(new rtc::RefCountedObject<CreateSdpObserver>(mtx, cv, isReady));
       pc->SetLocalDescription(createObs);
 
       std::unique_lock<std::mutex> lck(mtx);

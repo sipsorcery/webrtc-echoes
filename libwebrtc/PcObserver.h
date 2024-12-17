@@ -25,7 +25,9 @@
 #include <thread>
 
 class PcObserver :
-  public webrtc::PeerConnectionObserver
+  public webrtc::PeerConnectionObserver,
+  public rtc::RefCountInterface
+
 { 
 public:
   void OnSignalingChange(webrtc::PeerConnectionInterface::SignalingState new_state);
@@ -39,6 +41,8 @@ public:
     rtc::scoped_refptr<webrtc::RtpTransceiverInterface> transceiver);
   void OnConnectionChange(
     webrtc::PeerConnectionInterface::PeerConnectionState new_state);
+  virtual void AddRef() const = 0;
+  //virtual webrtc::RefCountReleaseStatus Release() const = 0;
 };
 
 class SetRemoteSdpObserver :

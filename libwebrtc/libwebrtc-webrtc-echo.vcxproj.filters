@@ -24,10 +24,10 @@
     <ClCompile Include="PcObserver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HttpSimpleServer.cpp">
+    <ClCompile Include="fake_audio_capture_module.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fake_audio_capture_module.cc">
+    <ClCompile Include="HttpSimpleServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -46,9 +46,9 @@ int main()
   }
 #endif
 
-  std::cout << "libevent version " << event_get_version() << "." << std::endl;
+ std::cout << "libevent version " << event_get_version() << "." << std::endl;
 
-  rtc::LogMessage::LogToDebug(rtc::LoggingSeverity::WARNING);
+  rtc::LogMessage::LogToDebug(rtc::LoggingSeverity::LS_WARNING);
 
   {
     HttpSimpleServer httpSvr;
@@ -56,7 +56,7 @@ int main()
 
     PcFactory pcFactory;
     HttpSimpleServer::SetPeerConnectionFactory(&pcFactory);
-
+    
     httpSvr.Run();
 
     std::cout << "Stopping HTTP server..." << std::endl;
