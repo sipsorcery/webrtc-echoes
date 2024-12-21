@@ -75,5 +75,5 @@ for serverKey in serverKeys:
             resultChar = '✔' if results_dict[serverKey][clientKey] == '0' else '✘'
             print(f'| {resultChar: <7}', end='')
         else:
-            print(f'| {" ":<7}', end='')
+            print(f'| {"✘":<7}', end='')
     print('|')
