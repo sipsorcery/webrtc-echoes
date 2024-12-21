@@ -50,13 +50,13 @@ Test run at 2024-12-21 21:29:16.628961
 | webrtc-rs    | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
 | werift       | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
 ## Data Channel Echo Test Results
-Test run at 2024-12-21 21:25:07.791706
+Test run at 2024-12-21 21:38:52.660238
 
 | Server       | libdatachannel | werift |
 |--------|--------|--------|
-| libdatachannel | ✔      | ✔      |
-| sipsorcery   | ✔      | ✔      |
-| werift       | ✔      | ✔      |
+| libdatachannel | ![https://img.shields.io/badge/-✔-green](https://img.shields.io/badge/-✔-green) | ![https://img.shields.io/badge/-✔-green](https://img.shields.io/badge/-✔-green) |
+| sipsorcery   | ![https://img.shields.io/badge/-✔-green](https://img.shields.io/badge/-✔-green) | ![https://img.shields.io/badge/-✔-green](https://img.shields.io/badge/-✔-green) |
+| werift       | ![https://img.shields.io/badge/-✔-green](https://img.shields.io/badge/-✔-green) | ![https://img.shields.io/badge/-✔-green](https://img.shields.io/badge/-✔-green) |
 ## Get Started
 
 If you are interested in adding a library to this project the recommended steps are listed below. The steps don't necessarily have to be completed in any specific order.
