@@ -9,6 +9,7 @@
 *
 * History:
 * 08 Mar 2021	Aaron Clauson	  Created, Dublin, Ireland.
+* 21 Dec 2024 Aaron Clauson   Updated for libwebrtc version m132.
 *
 * License: Public Domain (no warranty, use at own risk)
 /******************************************************************************/
@@ -43,8 +44,12 @@ public:
 
 class SetRemoteSdpObserver :
   public webrtc::SetRemoteDescriptionObserverInterface
-
 {
+public: 
+  static rtc::scoped_refptr<SetRemoteSdpObserver> Create() {
+    return rtc::scoped_refptr<SetRemoteSdpObserver>(new rtc::RefCountedObject<SetRemoteSdpObserver>());
+  }
+
   void OnSetRemoteDescriptionComplete(webrtc::RTCError error)
   {
     std::cout << "OnSetRemoteDescriptionComplete ok ? " << std::boolalpha << error.ok() << "." << std::endl;
@@ -55,9 +60,14 @@ class CreateSdpObserver :
   public webrtc::SetLocalDescriptionObserverInterface
 {
 public:
+
+  static rtc::scoped_refptr<CreateSdpObserver> Create(std::mutex& mtx, std::condition_variable& cv, bool& isReady) {
+    return rtc::scoped_refptr<CreateSdpObserver>(new rtc::RefCountedObject<CreateSdpObserver>(mtx, cv, isReady));
+  }
   
   CreateSdpObserver(std::mutex& mtx, std::condition_variable& cv, bool& isReady)
     : _mtx(mtx), _cv(cv), _isReady(isReady) {
+    std::cout << "CreateSdpObserver Constructor." << std::endl;
   }
 
   ~CreateSdpObserver() {
@@ -80,6 +90,58 @@ private:
   std::mutex& _mtx;
   std::condition_variable& _cv;
   bool& _isReady;
+};
+
+class SetRemoteDescriptionObserver : public webrtc::SetSessionDescriptionObserver {
+public:
+
+  static rtc::scoped_refptr<SetRemoteDescriptionObserver> Create() {
+    return rtc::scoped_refptr<SetRemoteDescriptionObserver>(new rtc::RefCountedObject<SetRemoteDescriptionObserver>());
+  }
+
+  SetRemoteDescriptionObserver() {
+    std::cout << "SetRemoteDescriptionObserver Constructor." << std::endl;
+  }
+
+  void OnSuccess() override {
+    std::cout << "SetRemoteDescriptionObserver::OnSuccess" << std::endl;
+  }
+
+  void OnFailure(webrtc::RTCError error) override {
+    std::cerr << "SetRemoteDescriptionObserver::OnFailure: " << error.message() << std::endl;
+  }
+};
+
+class SetLocalDescriptionObserver : public webrtc::SetSessionDescriptionObserver {
+public:
+
+  static rtc::scoped_refptr<SetLocalDescriptionObserver> Create() {
+    return rtc::scoped_refptr<SetLocalDescriptionObserver>(new rtc::RefCountedObject<SetLocalDescriptionObserver>());
+  }
+
+  void OnSuccess() override {
+    std::cout << "SetLocalDescriptionObserver::OnSuccess" << std::endl;
+  }
+
+  void OnFailure(webrtc::RTCError error) override {
+    std::cerr << "SetLocalDescriptionObserver::OnFailure: " << error.message() << std::endl;
+  }
+};
+
+class CreateAnswerObserver : public webrtc::CreateSessionDescriptionObserver {
+public:
+
+  static std::unique_ptr<CreateAnswerObserver> Create() {
+    return std::unique_ptr<CreateAnswerObserver>();
+  }
+
+  void OnSuccess(webrtc::SessionDescriptionInterface* desc) override {
+    std::cout << "CreateAnswerObserver::OnSuccess" << std::endl;
+  }
+
+  void OnFailure(webrtc::RTCError error) override {
+    std::cerr << "CreateAnswerObserver::OnFailure: " << error.message() << std::endl;
+  }
 };
 
 #endif

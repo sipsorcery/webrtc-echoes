@@ -8,6 +8,7 @@
 *
 * History:
 * 08 Mar 2021	Aaron Clauson	  Created, Dublin, Ireland.
+* 21 Dec 2024 Aaron Clauson   Updated for libwebrtc version m132.
 *
 * License: Public Domain (no warranty, use at own risk)
 /******************************************************************************/
@@ -23,8 +24,6 @@ HttpSimpleServer::HttpSimpleServer() :
 {
 #ifdef _WIN32
   evthread_use_windows_threads();
-#else
-  //evthread_use_pthreads();
 #endif
 
   /* Initialise libevent HTTP server. */
@@ -107,7 +106,6 @@ void HttpSimpleServer::OnHttpRequest(struct evhttp_request* req, void* arg)
   size_t http_req_body_len{ 0 };
   char* http_req_buffer = nullptr;
   struct evbuffer* resp_buffer;
-  int resp_lock = 0;
 
   printf("Received HTTP request for %s.\n", uri);
 
@@ -137,12 +135,13 @@ void HttpSimpleServer::OnHttpRequest(struct evhttp_request* req, void* arg)
       printf("HTTP request body length %zu.\n", http_req_body_len);
 
       std::string offerJson(http_req_buffer, http_req_body_len);
-      std::cout << offerJson << std::endl;
+      //std::cout << offerJson << std::endl;
 
       if (_pcFactory != nullptr) {
-        std::string answer = _pcFactory->CreatePeerConnection(http_req_buffer, http_req_body_len);
+       std::string answer = _pcFactory->CreatePeerConnection(http_req_buffer, http_req_body_len);
+       std::cout << "Answer: " << answer << std::endl;
         evhttp_add_header(req->output_headers, "Content-type", "application/json");
-        evbuffer_add_printf(resp_buffer, answer.c_str());
+        evbuffer_add_printf(resp_buffer, "%s", answer.c_str());
         evhttp_send_reply(req, 200, "OK", resp_buffer);
       }
       else {

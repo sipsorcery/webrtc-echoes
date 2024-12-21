@@ -151,7 +151,7 @@ jobs:
           
       - name: Replace Peer Connection Test Results in README
         run: |
-          # Read the new content from DPeerConnection_test_results.md
+          # Read the new content from PeerConnection_test_results.md
           new_content="$(<PeerConnection_test_results.md)"
           
           # Use awk to replace content between the markers
