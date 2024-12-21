@@ -100,7 +100,7 @@ namespace webrtc_echo
 
             logger.LogDebug($"Performing test {testType} to {echoServerUrl}.");
 
-            var pc = CreatePeerConnection();
+            var pc = await CreatePeerConnection();
             var offer = pc.createOffer();
             await pc.setLocalDescription(offer);
 
@@ -199,7 +199,7 @@ namespace webrtc_echo
             return (success) ? SUCCESS_RESULT : FAILURE_RESULT;
         }
 
-        private static RTCPeerConnection CreatePeerConnection()
+        private static async Task<RTCPeerConnection> CreatePeerConnection()
         {
             RTCConfiguration config = new RTCConfiguration
             {
@@ -211,7 +211,7 @@ namespace webrtc_echo
             MediaStreamTrack audioTrack = new MediaStreamTrack(SDPWellKnownMediaFormatsEnum.PCMU);
             pc.addTrack(audioTrack);
 
-            //var dc = await pc.createDataChannel("sipsocery-dc");
+            var dc = await pc.createDataChannel("sipsocery-dc");
 
             pc.onicecandidateerror += (candidate, error) => logger.LogWarning($"Error adding remote ICE candidate. {error} {candidate}");
             pc.OnTimeout += (mediaType) => logger.LogWarning($"Timeout for {mediaType}.");
