@@ -72,8 +72,11 @@ for serverKey in serverKeys:
     print(f'| {serverKey: <12} ', end='')
     for clientKey in clientKeys:
         if clientKey in results_dict[serverKey]:
-            resultChar = '✔' if results_dict[serverKey][clientKey] == '0' else '✘'
-            print(f'| {resultChar: <7}', end='')
+            badge_url = "https://img.shields.io/badge/-✔-green" if results_dict[serverKey][clientKey] == '0' else "https://img.shields.io/badge/-✘-red"
+            resultChar = f'![{badge_url}]({badge_url})'
+            print(f'| {resultChar} ', end='')
         else:
-            print(f'| {"✘":<7}', end='')
+            badge_url = "https://img.shields.io/badge/-✘-red"
+            resultChar = f'![{badge_url}]({badge_url})'
+            print(f'| {resultChar} ', end='')
     print('|')
