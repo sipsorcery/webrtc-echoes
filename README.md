@@ -24,7 +24,7 @@ Additional libraries/applications that currently have a Server implementation ar
   - [gstreamer](https://gstreamer.freedesktop.org/) `master` branch, commit ID `637b0d8dc25b660d3b05370e60a95249a5228a39` 20 Aug 2021 (gst-build commit ID `ebcca1e5ead27cab1eafc028332b1984c84b10b2` 26 Mar 2021).
   - [janus](https://janus.conf.meetecho.com/) version `0.10.7`, commit ID `04229be3eeceb28dbc57a70a57928aab223895a5`.
   - [kurento](https://www.kurento.org/) version `6.16.1~1.g907a859`.
-  - [libwebrtc](https://webrtc.googlesource.com/src/) `m90` branch, commit ID `a4da76a880d31f012038ac721ac4abc7ea3ffa2d`, commit date `Fri Apr 9 21:03:39 2021 -0700`.
+  - [libwebrtc](https://webrtc.googlesource.com/src/) `m132` branch, commit ID `f632fe9be9ce5cef5fcbfd42995271cb3fbb077d`, commit date `Tue Dec 10 09:27:33 2024 +0100`.
 
 ## Interoperability Tests
 

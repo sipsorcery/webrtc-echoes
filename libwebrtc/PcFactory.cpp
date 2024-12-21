@@ -38,6 +38,7 @@
 #include <api/video_codecs/video_encoder_factory.h>
 #include <media/engine/webrtc_media_engine.h>
 #include "api/enable_media.h"
+#include "fake_audio_capture_module.h"
 
 #include <iostream>
 #include <sstream>
@@ -53,11 +54,6 @@ PcFactory::PcFactory() :
   SignalingThread = rtc::Thread::Create();
   SignalingThread->Start();
 
-  _networkThread = rtc::Thread::CreateWithSocketServer();
-  _networkThread->Start();
-  _workerThread = rtc::Thread::Create();
-  _workerThread->Start();
-
   webrtc::AudioProcessing::Config apmConfig;
   apmConfig.gain_controller1.enabled = false;
   apmConfig.gain_controller2.enabled = false;
@@ -66,17 +62,11 @@ PcFactory::PcFactory() :
    webrtc::PeerConnectionFactoryDependencies _pcf_deps;
   _pcf_deps.task_queue_factory = webrtc::CreateDefaultTaskQueueFactory();
   _pcf_deps.signaling_thread = SignalingThread.get();
-  _pcf_deps.network_thread = _networkThread.get();
-  _pcf_deps.worker_thread = _workerThread.get();
   _pcf_deps.event_log_factory = std::make_unique<webrtc::RtcEventLogFactory>(_pcf_deps.task_queue_factory.get());
   _pcf_deps.audio_encoder_factory = webrtc::CreateBuiltinAudioEncoderFactory();
   _pcf_deps.audio_decoder_factory = webrtc::CreateBuiltinAudioDecoderFactory();
-  //_pcf_deps.adm = rtc::scoped_refptr<webrtc::AudioDeviceModule>(FakeAudioCaptureModule::Create());
-
-  webrtc::AudioProcessing::Config config;
-  config.gain_controller1.enabled = false;
-  config.gain_controller2.enabled = false;
-  _pcf_deps.audio_processing = std::move(apm);
+  _pcf_deps.adm = rtc::scoped_refptr<webrtc::AudioDeviceModule>(FakeAudioCaptureModule::Create());
+  _pcf_deps.audio_processing = apm; // Gets moved in EnableMedia.
 
   webrtc::EnableMedia(_pcf_deps);
 

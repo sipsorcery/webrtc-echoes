@@ -10,7 +10,7 @@ If the build fails:
 
 2. `docker run -it --init --rm libwebrtc-builder:m132`
 
-## Building end application docker image
+## Building echo application docker image
 
 The application image. It builds the application on an instance of the builder image and then copies the binary to a new ubuntu image and installs the required shared library packages.
 
@@ -22,7 +22,7 @@ If the build fails:
 
 2. `docker run -it --init --rm libwebrtc-webrtc-echo:m132`
 
-## Running docker image
+## Running echo application docker image
 
 `docker run -it --init --rm -p 8080:8080 libwebrtc-webrtc-echo:m132`
 
@@ -54,6 +54,8 @@ src> ninja -C out/Default
 ````
 
 Update Dec 2024 for version m132.
+
+NOTE: Only the clang build chain is now supported for the libwebrtc build. To use webrtc.lib with Visual Studio the clang build chain can be installed via the Visual Studio Installer and then selected as the option in the project settings.
 
 Install the Google depot tools as per https://webrtc.googlesource.com/src/+/main/docs/native-code/development/prerequisite-sw/.
 

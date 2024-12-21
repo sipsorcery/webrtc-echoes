@@ -28,7 +28,6 @@
 #include "call/call_config.h"
 #include "pc/media_factory.h"
 #include "rtc_base/checks.h"
-//#include <pc/test/fake_audio_capture_module.h>
 
 #include <condition_variable>
 #include <memory>
@@ -40,11 +39,17 @@ public:
   PcFactory();
   ~PcFactory();
   std::string CreatePeerConnection(const char* buffer, int length);
+
+  /* The thread logic is now tricky. I was not able to get even a basic peer connection
+  * example working on Windows in debug mode due to the failing thread checks, see
+  * https://groups.google.com/u/2/g/discuss-webrtc/c/HG9hzDP2djA
+// From peer_connection_interface.h line 1632 
+// If `network_thread` or `worker_thread` are null, the PeerConnectionFactory
+// will create the necessary thread internally. If `signaling_thread` is null,
+// the PeerConnectionFactory will use the thread on which this method is called
+// as the signaling thread, wrapping it in an rtc::Thread object if needed.
+  */
   std::unique_ptr<rtc::Thread> SignalingThread;
-  std::unique_ptr<rtc::Thread> _networkThread;
-  std::unique_ptr<rtc::Thread> _workerThread;
-  //rtc::scoped_refptr<webrtc::AudioDeviceModule> _fakeAudioCapture;
-  //rtc::scoped_refptr<webrtc::AudioDeviceModule> _fakeAudioModule;
 
 private:
   rtc::scoped_refptr<webrtc::PeerConnectionFactoryInterface> _peerConnectionFactory;

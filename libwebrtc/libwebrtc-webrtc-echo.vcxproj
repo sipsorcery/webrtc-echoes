@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="fake_audio_capture_module.cc" />
     <ClCompile Include="HttpSimpleServer.cpp" />
     <ClCompile Include="libwebrtc-webrtc-echo.cpp" />
     <ClCompile Include="PcFactory.cpp" />
@@ -180,6 +181,7 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="fake_audio_capture_module.h" />
     <ClInclude Include="HttpSimpleServer.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="PcFactory.h" />
