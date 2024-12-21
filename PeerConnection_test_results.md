@@ -1,4 +1,4 @@
-Test run at 2024-11-15 21:40:38.879065
+Test run at 2024-12-21 21:16:54.354645
 
 | Server       | aiortc | libdatachannel | pion | sipsorcery | webrtc-rs | werift |
 |--------|--------|--------|--------|--------|--------|--------|
@@ -7,7 +7,7 @@ Test run at 2024-11-15 21:40:38.879065
 | janus        | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
 | kurento      | ✔      | ✔      |        | ✔      |        | ✔      |
 | libdatachannel | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
-| libwebrtc    | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
+| libwebrtc    | ✔      |        |        | ✔      |        |        |
 | pion         | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
 | sipsorcery   | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
 | webrtc-rs    | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
