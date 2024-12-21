@@ -19,6 +19,7 @@
 using System;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -99,9 +100,11 @@ namespace webrtc_echo
 
             logger.LogDebug($"Performing test {testType} to {echoServerUrl}.");
 
-            var pc = await CreatePeerConnection();
+            var pc = CreatePeerConnection();
             var offer = pc.createOffer();
             await pc.setLocalDescription(offer);
+
+            logger.LogDebug("Offer SDP:\r\n" + offer.sdp);
 
             bool success = false;
             ManualResetEventSlim testComplete = new ManualResetEventSlim();
@@ -180,6 +183,8 @@ namespace webrtc_echo
 
             pc.OnClosed += testComplete.Set;
 
+            await pc.Start();
+
             logger.LogDebug($"Test timeout is {pcTimeout} seconds.");
             testComplete.Wait(pcTimeout * 1000);
 
@@ -194,7 +199,7 @@ namespace webrtc_echo
             return (success) ? SUCCESS_RESULT : FAILURE_RESULT;
         }
 
-        private static async Task<RTCPeerConnection> CreatePeerConnection()
+        private static RTCPeerConnection CreatePeerConnection()
         {
             RTCConfiguration config = new RTCConfiguration
             {
@@ -206,7 +211,7 @@ namespace webrtc_echo
             MediaStreamTrack audioTrack = new MediaStreamTrack(SDPWellKnownMediaFormatsEnum.PCMU);
             pc.addTrack(audioTrack);
 
-            var dc = await pc.createDataChannel("sipsocery-dc");
+            //var dc = await pc.createDataChannel("sipsocery-dc");
 
             pc.onicecandidateerror += (candidate, error) => logger.LogWarning($"Error adding remote ICE candidate. {error} {candidate}");
             pc.OnTimeout += (mediaType) => logger.LogWarning($"Timeout for {mediaType}.");
@@ -215,6 +220,7 @@ namespace webrtc_echo
             pc.OnReceiveReport += (re, media, rr) => logger.LogDebug($"RTCP Receive for {media} from {re}\n{rr.GetDebugSummary()}");
             pc.OnSendReport += (media, sr) => logger.LogDebug($"RTCP Send for {media}\n{sr.GetDebugSummary()}");
             pc.OnRtcpBye += (reason) => logger.LogDebug($"RTCP BYE receive, reason: {(string.IsNullOrWhiteSpace(reason) ? "<none>" : reason)}.");
+            pc.GetRtpChannel().OnStunMessageReceived += (msg, ep, isRelay) => logger.LogDebug($"STUN {msg.Header.MessageType} received from {ep}.");
 
             pc.onsignalingstatechange += () =>
             {

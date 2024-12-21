@@ -10,6 +10,7 @@
 *
 * History:
 * 08 Mar 2021	Aaron Clauson	  Created, Dublin, Ireland.
+* 21 Dec 2024 Aaron Clauson   Updated for libwebrtc version m132.
 *
 * License: Public Domain (no warranty, use at own risk)
 /******************************************************************************/
@@ -47,7 +48,6 @@ private:
   event_base* _evtBase;
   evhttp* _httpSvr;
   event* _signalEvent;
-  std::thread _httpSvrThread;
   bool _isDisposed;
   
   static PcFactory* _pcFactory;
