@@ -50,13 +50,13 @@ Test run at 2024-12-21 21:16:54.354645
 | webrtc-rs    | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
 | werift       | ✔      | ✔      | ✔      | ✔      | ✔      | ✔      |
 ## Data Channel Echo Test Results
-Test run at 2024-12-21 21:10:45.744765
+Test run at 2024-12-21 21:25:07.791706
 
-| Server       | libdatachannel | sipsorcery | werift |
-|--------|--------|--------|--------|
-| libdatachannel | ✔      | ✔      | ✔      |
-| sipsorcery   | ✔      | ✔      | ✔      |
-| werift       | ✔      | ✔      | ✔      |
+| Server       | libdatachannel | werift |
+|--------|--------|--------|
+| libdatachannel | ✔      | ✔      |
+| sipsorcery   | ✔      | ✔      |
+| werift       | ✔      | ✔      |
 ## Get Started
 
 If you are interested in adding a library to this project the recommended steps are listed below. The steps don't necessarily have to be completed in any specific order.

@@ -1,7 +1,7 @@
-Test run at 2024-12-21 21:10:45.744765
+Test run at 2024-12-21 21:25:07.791706
 
-| Server       | libdatachannel | sipsorcery | werift |
-|--------|--------|--------|--------|
-| libdatachannel | ✔      | ✔      | ✔      |
-| sipsorcery   | ✔      | ✔      | ✔      |
-| werift       | ✔      | ✔      | ✔      |
+| Server       | libdatachannel | werift |
+|--------|--------|--------|
+| libdatachannel | ✔      | ✔      |
+| sipsorcery   | ✔      | ✔      |
+| werift       | ✔      | ✔      |
