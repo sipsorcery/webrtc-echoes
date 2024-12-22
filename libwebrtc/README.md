@@ -116,7 +116,7 @@ src$ gclient sync --force
 And then:
 
 ````
-src$ gn gen out/Default --args="is_component_build=false use_custom_libcxx=false use_custom_libcxx_for_host=false rtc_enable_protobuf=false"
+src$ gn gen out/Default --args="use_custom_libcxx=false"
 src$ gn args out/Default --list --short --overrides-only
 src$ ninja -C out/Default
 src$ out/Default/webrtc_lib_link_test

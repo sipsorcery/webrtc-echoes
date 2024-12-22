@@ -191,8 +191,8 @@ namespace webrtc_echo
 
         public async Task<RTCPeerConnection> GotOffer(RTCSessionDescriptionInit offer)
         {
-            logger.LogTrace($"SDP offer received.");
-            logger.LogTrace(offer.sdp);
+            logger.LogDebug($"SDP offer received.");
+            logger.LogDebug(offer.sdp);
 
             var pc = new RTCPeerConnection();
 
@@ -253,8 +253,8 @@ namespace webrtc_echo
                 var answer = pc.createAnswer();
                 await pc.setLocalDescription(answer);
 
-                logger.LogTrace($"SDP answer created.");
-                logger.LogTrace(answer.sdp);
+                logger.LogDebug($"SDP answer created.");
+                logger.LogDebug(answer.sdp);
 
                 return pc;
             }

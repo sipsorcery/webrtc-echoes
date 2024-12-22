@@ -61,9 +61,9 @@ Test run at 2024-12-21 22:16:22.531491
 
 If you are interested in adding a library to this project the recommended steps are listed below. The steps don't necessarily have to be completed in any specific order.
 
- - Write a Peer Connection Test Client application according to the [specification](doc/EchoTestSpecification.md#client-peer-operation) or base it off an [existing application](doc/EchoTestSpecification.md#view-the-code).
+ - Write a Peer Connection Test Client application according to the [specification](doc/PeerConnectionTestSpecification.md#client-peer-operation) or base it off an [existing application](doc/PeerConnectionTestSpecification.md#view-the-code).
 
- - Test your client by building and running one of the [Peer Connection Test Servers](https://github.com/sipsorcery/webrtc-echoes/blob/master/doc/EchoTestSpecification.md#view-the-code) or you can use one of the [Peer Connection Test Server Docker Images](https://github.com/sipsorcery?tab=packages&q=webrtc):
+ - Test your client by building and running one of the [Peer Connection Test Servers](doc/PeerConnectionTestSpecification.md#view-the-code) or you can use one of the [Peer Connection Test Server Docker Images](https://github.com/sipsorcery?tab=packages&q=webrtc):
 
 ````
 docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/aiortc-webrtc-echo
@@ -81,5 +81,13 @@ docker run -it --rm --init -p 8080:8080 ghcr.io/sipsorcery/werift-webrtc-echo
 - If you encounter any problems open an [Issue](https://github.com/sipsorcery/webrtc-echoes/issues). When done submit a [Pull Request](https://github.com/sipsorcery/webrtc-echoes/pulls) for your application.
 
 - Repeat the process for a [Peer Connection Test Server](doc/PeerConnectionTestSpecification.md#server-peer-operation).
+
+- Servers can also be tested with docker images:
+
+````
+docker run --entrypoint "/client.sh" ghcr.io/sipsorcery/pion-webrtc-echo http://host.docker.internal:8080/offer
+docker run --entrypoint "/client.sh" ghcr.io/sipsorcery/sipsorcery-webrtc-echo http://host.docker.internal:8080/offer
+etc...
+````
 
 - Create a [Dockerfile](doc/EchoTestDockerRequirements.md) and add a Pull Request for it so your Peer Connection Test application(s) can be included in the automated testing.

@@ -65,6 +65,8 @@ PcFactory::PcFactory() :
   _pcf_deps.event_log_factory = std::make_unique<webrtc::RtcEventLogFactory>(_pcf_deps.task_queue_factory.get());
   _pcf_deps.audio_encoder_factory = webrtc::CreateBuiltinAudioEncoderFactory();
   _pcf_deps.audio_decoder_factory = webrtc::CreateBuiltinAudioDecoderFactory();
+  //_pcf_deps.video_encoder_factory = webrtc::CreateBuiltinVideoEncoderFactory(); // Missing symbol in m132 build (tried everything). 
+  //_pcf_deps.video_decoder_factory = webrtc::CreateBuiltinVideoDecoderFactory(); // Missing symbol in m132 build (tried everything). 
   _pcf_deps.adm = rtc::scoped_refptr<webrtc::AudioDeviceModule>(FakeAudioCaptureModule::Create());
   _pcf_deps.audio_processing = apm; // Gets moved in EnableMedia.
 
