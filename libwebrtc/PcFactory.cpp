@@ -32,13 +32,15 @@
 #include <api/peer_connection_interface.h>
 #include <api/rtc_event_log/rtc_event_log_factory.h>
 #include <api/task_queue/default_task_queue_factory.h>
-#include <api/video_codecs/builtin_video_decoder_factory.h>
-#include <api/video_codecs/builtin_video_encoder_factory.h>
-#include <api/video_codecs/video_decoder_factory.h>
-#include <api/video_codecs/video_encoder_factory.h>
 #include <media/engine/webrtc_media_engine.h>
 #include "api/enable_media.h"
 #include "fake_audio_capture_module.h"
+#include <api/video_codecs/video_decoder_factory_template.h>
+#include <api/video_codecs/video_encoder_factory_template.h>
+#include <api/video_codecs/video_decoder_factory_template_libvpx_vp8_adapter.h>
+#include <api/video_codecs/video_encoder_factory_template_libvpx_vp8_adapter.h>
+#include <api/video_codecs/video_decoder_factory_template_libvpx_vp9_adapter.h>
+#include <api/video_codecs/video_encoder_factory_template_libvpx_vp9_adapter.h>
 
 #include <iostream>
 #include <sstream>
@@ -65,8 +67,8 @@ PcFactory::PcFactory() :
   _pcf_deps.event_log_factory = std::make_unique<webrtc::RtcEventLogFactory>(_pcf_deps.task_queue_factory.get());
   _pcf_deps.audio_encoder_factory = webrtc::CreateBuiltinAudioEncoderFactory();
   _pcf_deps.audio_decoder_factory = webrtc::CreateBuiltinAudioDecoderFactory();
-  //_pcf_deps.video_encoder_factory = webrtc::CreateBuiltinVideoEncoderFactory(); // Missing symbol in m132 build (tried everything). 
-  //_pcf_deps.video_decoder_factory = webrtc::CreateBuiltinVideoDecoderFactory(); // Missing symbol in m132 build (tried everything). 
+  _pcf_deps.video_encoder_factory = std::make_unique<webrtc::VideoEncoderFactoryTemplate<webrtc::LibvpxVp8EncoderTemplateAdapter>>();
+  _pcf_deps.video_decoder_factory = std::make_unique<webrtc::VideoDecoderFactoryTemplate<webrtc::LibvpxVp8DecoderTemplateAdapter>>();
   _pcf_deps.adm = rtc::scoped_refptr<webrtc::AudioDeviceModule>(FakeAudioCaptureModule::Create());
   _pcf_deps.audio_processing = apm; // Gets moved in EnableMedia.
 
