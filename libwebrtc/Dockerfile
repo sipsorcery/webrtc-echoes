@@ -7,6 +7,7 @@ RUN apt update && DEBIAN_FRONTEND="noninteractive" apt install -y \
 
 RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-18 100
 RUN update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-18 100
+RUN update-alternatives --install /usr/bin/llvm-nm llvm-nm /usr/bin/llvm-nm-18 100
 RUN update-alternatives --install /usr/bin/ld ld /usr/bin/ld.lld-18 100
 
 COPY --from=builder /src/webrtc-checkout/src /src/webrtc-checkout/src

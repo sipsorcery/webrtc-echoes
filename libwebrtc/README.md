@@ -70,7 +70,7 @@ c:\dev\webrtc-checkout\src> rmdir /q /s out\Default
 # Setting use_custom_libcxx=false is critical. If it is true, the build uses the libc++ standard library from the third-party source tree, 
 # making it incompatible when linking with Visual Studio. By setting it to false, the MSVC standard library will be used (e.g msvcp140.dll), 
 # ensuring that Visual Studio can properly resolve all the required symbols.
-c:\dev\webrtc-checkout\src> gn gen out/Default --args="is_debug=false rtc_include_tests=false treat_warnings_as_errors=false use_custom_libcxx=false"
+c:\dev\webrtc-checkout\src> gn gen out/Default --args="is_debug=false rtc_include_tests=false treat_warnings_as_errors=false use_custom_libcxx=false use_rtti=true"
 c:\dev\webrtc-checkout\src> autoninja -C out/Default # DON'T use "ninja all -C out/Default", as listed on the build instructions site, it attempts to build everything in the out/Default directory rather than just libwebrtc.
 # The resultant webrtc.lib should be in out/Default/obj.
 # Note as an added bonus vcpkg installed binaries that are build the the standard msbuild toolcahin, e.g. cl and ld, are compatible with the clang and lld-ld linker.
