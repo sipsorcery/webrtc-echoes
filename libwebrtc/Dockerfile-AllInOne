@@ -1,0 +1,40 @@
+FROM ubuntu:20.04
+
+# Install packages for libwebrtc build and app dependencies.
+ENV DEBIAN_FRONTEND=noninteractive
+RUN echo "tzdata tzdata/Areas select Europe" | debconf-set-selections && \
+    echo "tzdata tzdata/Zones/Europe select Dublin" | debconf-set-selections
+RUN apt update && apt install -y tzdata	
+RUN echo "keyboard-configuration keyboard-configuration/layoutcode string us" | debconf-set-selections && \
+    echo "keyboard-configuration keyboard-configuration/modelcode string pc105" | debconf-set-selections
+RUN apt update && apt install -y keyboard-configuration
+RUN apt update && apt install -y curl git lsb-release python3 python-is-python3 sudo wget xz-utils file
+RUN apt update && DEBIAN_FRONTEND="noninteractive" apt install -y \
+  build-essential cmake libglib2.0-dev libx11-dev libevent-dev clang-18 lld-18
+
+# Install depot_tools
+WORKDIR /src 
+
+# https://webrtc.googlesource.com/src/+/refs/heads/master/docs/native-code/development/prerequisite-sw/index.md
+RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git --depth 1 depot_tools
+ENV PATH="/src/depot_tools:${PATH}"
+
+# See the README.md file in the same directory as this docker build file for more explanations and links.
+WORKDIR /src/webrtc-checkout
+RUN fetch --nohooks webrtc
+WORKDIR /src/webrtc-checkout/src
+RUN git fetch --all
+RUN git checkout remotes/branch-heads/6834 -b m132 # 6834 == m132, see https://chromiumdash.appspot.com/branches.
+RUN gclient sync
+RUN build/install-build-deps.sh
+
+WORKDIR /src/libwebrtc-webrtc-echo
+COPY ["CMakeLists.txt", "fake_audio_capture_module.*", "HttpSimpleServer.*", "json.hpp", "libwebrtc-webrtc-echo.cpp", "PcFactory.*", "PcObserver.*", "./"]
+
+WORKDIR /src
+
+RUN gn gen out/Default --args='is_debug=false rtc_include_tests=false treat_warnings_as_errors=false use_custom_libcxx=false use_rtti=true'
+RUN autoninja -C out/Default
+
+WORKDIR /src/libwebrtc-webrtc-echo/build
+RUN cmake .. && make VERBOSE=1 && cp libwebrtc-webrtc-echo /
